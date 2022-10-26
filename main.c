@@ -15,6 +15,8 @@ void boucleDeJeu(SDL_Renderer* renderer){
             break;
         }
 
+        
+
         //Rafraichissement de l'ecran
         SDL_RenderClear(renderer);
         SDL_RenderPresent(renderer);
@@ -30,19 +32,19 @@ int main(){
 
     SDL_Window* fenetre;
     SDL_Renderer* renderer;
+    player* joueur = initPLayer();
 
     if(SDL_CreateWindowAndRenderer(1280, 720, SDL_WINDOW_SHOWN | SDL_WINDOW_INPUT_FOCUS, &fenetre, &renderer)){
         printf("Echec de creation de fenetre/renderer : %s", SDL_GetError());
         return -1;
     }
-
     SDL_SetWindowTitle(fenetre, "Project A");
     SDL_SetRenderDrawColor(renderer, 32, 34, 37, SDL_ALPHA_OPAQUE);
 
+    //initWindow(fenetre, renderer);
+
     boucleDeJeu(renderer);
 
-    SDL_DestroyRenderer(renderer);
-    SDL_DestroyWindow(fenetre);
-    SDL_Quit();
+    endSDL(fenetre, renderer);
     return 0; 
 }

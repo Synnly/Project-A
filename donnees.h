@@ -44,12 +44,14 @@ typedef struct enemy_t enemy;
 
 struct listEnemy_t{
     enemy* Enemy;
-    listEnemy* next;
+    struct listEnemy_t * next;
 };
 
 typedef struct listEnemy_t listEnemy;
 
 /* ---------- Getter / Setter ---------- */
+
+/* ----- Bloc ----- */
 
 /* 
     @brief Retourne la coordonne X du bloc
@@ -117,6 +119,7 @@ int setBlocObstacle(bloc * Bloc);
 */
 int setBlocNotObstacle(bloc * Bloc);
 
+/* ----- Player ----- */
 
 /*
     @brief Retourne la coordonnée X du joueur
@@ -208,6 +211,7 @@ int setPlayerWeaponType(player * Player, int weaponType);
 */
 int setPlayerMoney(player* Player, int money);
 
+/* ----- Enemy ----- */
 
 /*
     @brief Retourne la coordonnée X de l'ennemi
@@ -284,6 +288,7 @@ int setEnemySpeed(enemy * Enemy, int speed);
 */
 int setEnemyType(enemy * Enemy, int type);
 
+/* ----- listEnemy ----- */
 
 /**
  * @brief Retourne l'ennemi de la liste chainée
@@ -347,5 +352,7 @@ enemy initEnemy(int posX, int posY, int life);
     @return La liste chainées des ennemis
 */
 listEnemy initListEnemy(int nb);
+
+
 
 #endif
