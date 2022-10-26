@@ -209,13 +209,6 @@ int setPlayerWeaponType(player * Player, int weaponType);
 int setPlayerMoney(player* Player, int money);
 
 
-
-
-
-
-
-
-
 /*
     @brief Retourne la coordonnée X de l'ennemi
     @param Enemy L'ennemi
