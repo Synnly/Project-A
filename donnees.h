@@ -12,16 +12,16 @@
 
 /* ---------- Structures de donnees ---------- */
 
-struct Bloc{    // Structure d'un bloc obstacle
+struct bloc_t{    // Structure d'un bloc obstacle
     int posX;
     int posY;
-    int type;
+    int type;   //0 bloc classique, 1 bloc 
     int isObstacle;     // 1 si le bloc est un obstacle, 0 sinon
 };
 
-typedef struct Bloc bloc;
+typedef struct bloc_t bloc;
 
-struct Player{      //Structure du joueur
+struct player_t{      //Structure du joueur
     int posX;
     int posY;
     int life;
@@ -30,9 +30,9 @@ struct Player{      //Structure du joueur
     int money;
 };
 
-typedef struct Player player;
+typedef struct player_t player;
 
-struct Enemy{       //Structure d'un ennemi
+struct enemy_t{       //Structure d'un ennemi
     int posX;
     int posY;
     int life;
@@ -40,14 +40,14 @@ struct Enemy{       //Structure d'un ennemi
     int type;
 };
 
-typedef struct Enemy enemy;
+typedef struct enemy_t enemy;
 
-struct ListEnemy{
-    enemy Enemy;
-    listEnemy next;
+struct listEnemy_t{
+    enemy* Enemy;
+    listEnemy* next;
 };
 
-typedef struct ListEnemy listEnemy;
+typedef struct listEnemy_t listEnemy;
 
 /* ---------- Getter / Setter ---------- */
 
@@ -207,6 +207,120 @@ int setPlayerWeaponType(player * Player, int weaponType);
     @return -1 en cas d'échec, 0 sinon
 */
 int setPlayerMoney(player* Player, int money);
+
+
+
+
+
+
+
+
+
+/*
+    @brief Retourne la coordonnée X de l'ennemi
+    @param Enemy L'ennemi
+    @return Sa coordonnée X
+*/
+int getEnemyPosX(enemy * Enemy);
+
+/*
+    @brief Retourne la coordonnée Y de l'ennemi
+    @param Enemy L'ennemi
+    @return Sa coordonnée Y
+*/
+int getEnemyPosY(enemy * Enemy);
+
+/*
+    @brief Retourne la vie restante de l'ennemi
+    @param Enemy L'ennemi
+    @return Sa quatitié de vie restante
+*/
+int getEnemyLife(enemy * Enemy);
+
+/*
+    @brief Retourne la vitesse de l'ennemi
+    @param Enemy L'ennemi
+    @return Sa vitesse
+*/
+int getEnemySpeed(enemy * Enemy);
+
+/*
+    @brief Retourne le type de l'ennemi
+    @param Enemy L'ennemi
+    @return Son type
+*/
+int getEnemyType(enemy * Enemy);
+
+/*
+    @brief Modifie la coordonnée X de l'ennemi
+    @param Enemy L'ennemi
+    @param posX Sa coordonnée X
+    @return -1 en cas d'échec, 0 sinon
+*/
+int setEnemyPosX(enemy * Enemy, int posX);
+
+/*
+    @brief Modifie la coordonnée Y de l'ennemi
+    @param Enemy L'ennemi
+    @param posY Sa coordonnée Y
+    @return -1 en cas d'échec, 0 sinon
+*/
+int setEnemyPosY(enemy * Enemy, int posY);
+
+/*
+    @brief Modifie la vie restante de l'ennemi
+    @param Enemy L'ennemi
+    @param life Sa vie restante
+    @return -1 en cas d'échec, 0 sinon
+*/
+int setEnemyLife(enemy * Enemy, int life);
+
+/*
+    @brief Modifie la vitesse de l'ennemi
+    @param Enemy L'ennemi
+    @param speed Sa vitesse
+    @return -1 en cas d'échec, 0 sinon
+*/
+int setEnemySpeed(enemy * Enemy, int speed);
+
+/*
+    @brief Modifie le type de l'ennemi
+    @param Enemy L'ennemi
+    @param type Son type
+    @return -1 en cas d'échec, 0 sinon
+*/
+int setEnemyType(enemy * Enemy, int type);
+
+
+/**
+ * @brief Retourne l'ennemi de la liste chainée
+ * @param ListEnemy La liste
+ * @return L'ennemi
+ */
+int getEnemy(listEnemy * ListEnemy);
+
+/**
+ * @brief Retourne la liste chainee suivante
+ * @param ListEnemy La liste
+ * @return La liste suivante
+ */
+int getNext(listEnemy * ListEnemy);
+
+/**
+ * @brief Modifie l'ennemi de la liste chainée
+ * @param ListEnemy La liste
+ * @param Enemy L'ennemi
+ * @return L'ennemi
+ */
+int setEnemy(listEnemy * ListEnemy, enemy * Enemy);
+
+/**
+ * @brief Modifie la liste chainee suivante
+ * @param ListEnemy La liste
+ * @param ListEnemyNext La liste suivante
+ * @return L'ennemi
+ */
+int setNext(listEnemy * ListEnemy, listEnemy * ListEnemyNext);
 
 
 /* ---------- Fonctions ---------- */
