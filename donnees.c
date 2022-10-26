@@ -49,27 +49,82 @@ int setBlocNotObstacle(bloc * Bloc){
 }
 
 
+int getPlayerPosX(player* Player){return Player->posX;}
+int getPlayerPosY(player* Player){return Player->posY;}
+int getPlayerLife(player* Player){return Player->life;}
+int getPlayerSpeed(player* Player){return Player->speed;}
+int getPlayerWeaponType(player* Player){return Player->weaponType;}
+int getPlayerMoney(player* Player){return Player->money;}
+
+int setPlayerPosX(player* Player, int posX){
+    Player->posX = posX;
+    if(getPlayerPosX(Player) == posX){
+        return 0;
+    }
+    return -1;
+}
+
+int setPlayerPosY(player* Player, int posY){
+    Player->posY = posY;
+    if(getPlayerPosY(Player) == posY){
+        return 0;
+    }
+    return -1;
+}
+
+int setPlayerLife(player* Player, int life){
+    Player->life = life;
+    if(getPlayerLife(Player) == life){
+        return 0;
+    }
+    return -1;
+}
+
+int setPlayerSpeed(player* Player, int speed){
+    Player->speed = speed;
+    if(getPlayerSpeed(Player) == speed){
+        return 0;
+    }
+    return -1;
+}
+
+int setPlayerWeaponType(player* Player, int weapontype){
+    Player->weaponType = weapontype;
+    if(getPlayerWeaponType(Player) == weapontype){
+        return 0;
+    }
+    return -1;
+}
+
+int setPlayerMoney(player* Player, int money){
+    Player->money = money;
+    if(getPlayerMoney(Player) == money){
+        return 0;
+    }
+    return -1;
+}
+
 /* -------- Fonctions -------- */
 
 bloc initBloc(int posX, int posY, int type){
     bloc Bloc;
-    Bloc.posX = posX;
-    Bloc.posY = posY;
-    Bloc.type = type;
-    Bloc.isObstacle = 0;
+    setBlocPosX(&Bloc,posX);
+    setBlocPosY(&Bloc,posY);
+    setBlocType(&Bloc,type);
+    setBlocNotObstacle(&Bloc);
     return Bloc;
 }
 
 player initPLayer(){
     player Player;
     // Placage du joueur au centre de l'ecran
-    Player.posX = SCREEN_WIDTH/2 - PLAYER_SIZE/2;
-    Player.posY = SCREEN_HEIGHT/2 - PLAYER_SIZE/2;
+    setPlayerPosX(&Player,SCREEN_WIDTH/2 - PLAYER_SIZE/2); 
+    setPlayerPosY(&Player,SCREEN_HEIGHT/2 - PLAYER_SIZE/2);
 
-    Player.life = PLAYER_LIFE;
-    Player.speed = PLAYER_SPEED;
-    Player.weaponType = PISTOL_TYPE;
-    Player.money = 0;
+    setPlayerLife(&Player,PLAYER_LIFE);
+    setPlayerSpeed(&Player,PLAYER_SPEED);
+    setPlayerWeaponType(&Player,PISTOL_TYPE);
+    setPlayerMoney(&Player,0);
     return Player;
 }
 

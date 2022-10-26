@@ -200,6 +200,13 @@ int setPlayerSpeed(player * Player, int speed);
 */
 int setPlayerWeaponType(player * Player, int weaponType);
 
+/*
+    @brief Modifie le montant de l'argent du joueur
+    @param Player le joueur
+    @param money le nouveau montant de l'argent du joueur
+    @return -1 en cas d'échec, 0 sinon
+*/
+int setPlayerMoney(player* Player, int money);
 
 
 /* ---------- Fonctions ---------- */
