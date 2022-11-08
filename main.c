@@ -6,22 +6,26 @@
 #define SDL_MAIN_HANDLED
 
 // Boucle de jeu
-void boucleDeJeu(SDL_Renderer* renderer){
-    while(1){
+void boucleDeJeu(SDL_Renderer* renderer, player* player){
+    int is_playing = 1;
+    while(is_playing){
         SDL_Event event;
 
-        //Fermeture du jeu
-        if((SDL_PollEvent(&event) && (event.type==SDL_QUIT)) || (event.type = SDL_KEYDOWN && event.key.keysym.sym == SDLK_ESCAPE)){
-            break;
-        }
+        // Gestion des evenements
+        handleEvents(&event, &is_playing, player);
 
-        
+        //Fermeture du jeu
+        if(!is_playing){break;}
+
+        printf("x : %d, y : %d\n", getPlayerPosX(player), getPlayerPosY(player));
+
 
         //Rafraichissement de l'ecran
         SDL_RenderClear(renderer);
         SDL_RenderPresent(renderer);
     }
 }
+
 
 int main(){
     SDL_SetMainReady();
@@ -32,8 +36,9 @@ int main(){
 
     SDL_Window* fenetre;
     SDL_Renderer* renderer;
-    player* joueur = initPLayer();
+    player joueur = initPLayer();
 
+    // Creation de la fenetre
     if(SDL_CreateWindowAndRenderer(1280, 720, SDL_WINDOW_SHOWN | SDL_WINDOW_INPUT_FOCUS, &fenetre, &renderer)){
         printf("Echec de creation de fenetre/renderer : %s", SDL_GetError());
         return -1;
@@ -41,9 +46,8 @@ int main(){
     SDL_SetWindowTitle(fenetre, "Project A");
     SDL_SetRenderDrawColor(renderer, 32, 34, 37, SDL_ALPHA_OPAQUE);
 
-    //initWindow(fenetre, renderer);
 
-    boucleDeJeu(renderer);
+    boucleDeJeu(renderer, &joueur);
 
     endSDL(fenetre, renderer);
     return 0; 

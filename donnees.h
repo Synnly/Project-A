@@ -353,6 +353,12 @@ enemy initEnemy(int posX, int posY, int life);
 */
 listEnemy initListEnemy(int nb);
 
-
+/**
+ * @brief Gere les entrees clavier, souris et fenetre
+ * @param event Les evenements
+ * @param is_playing Variable qui traque si le jeu est en cours ou non
+ * @param player Le joueur
+ */
+void handleEvents(SDL_Event* event, int* is_playing, player* player);
 
 #endif

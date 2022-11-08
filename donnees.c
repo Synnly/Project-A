@@ -145,3 +145,50 @@ enemy initEnemy(int posX, int posY, int type){
     }
     return Ennemi;
 }
+
+
+void handleEvents(SDL_Event* event, int* is_playing, player* player){
+
+    // Fermeture du jeu    
+    if((SDL_PollEvent(event) && (event->type==SDL_QUIT))){*is_playing = 0;}
+
+    if(event->type == SDL_KEYDOWN){
+        switch (event->key.keysym.sym)
+        {
+        
+        /*
+        TO DO : Syteme de deplacement "continu" -> le joueur continue de se deplacer immediatement apres avoir 
+        appuyé sur la touche et tant que la touche est maintenue au lieu de devoir attendre quelques instants
+        -> implémentation avec playerXVelocity et while SDL_KEYDOWN ? 
+        */
+
+        case SDLK_LEFT:
+            if(getPlayerPosX(player)>=PLAYER_SPEED){     // Bordure gauche
+                setPlayerPosX(player, getPlayerPosX(player)-PLAYER_SPEED);
+            }
+            break;
+        
+        case SDLK_RIGHT:
+            if(getPlayerPosX(player)<SCREEN_WIDTH-PLAYER_SIZE){     // Bordure droite
+                setPlayerPosX(player, getPlayerPosX(player)+PLAYER_SPEED);
+            }
+            break;
+
+        case SDLK_DOWN:
+            if(getPlayerPosY(player)<SCREEN_HEIGHT-PLAYER_SIZE){     // Bordure bas
+                setPlayerPosY(player, getPlayerPosY(player)+PLAYER_SPEED);
+            }
+            break;
+
+        case SDLK_UP:
+            if(getPlayerPosY(player)>=PLAYER_SPEED){     // Bordure haut
+                setPlayerPosY(player, getPlayerPosY(player)-PLAYER_SPEED);
+            }
+            break;
+        
+        default:
+            break;
+        }
+    }  
+}
+
