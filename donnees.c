@@ -167,40 +167,55 @@ int fpsCap(Uint32 start, Uint32* end){
 
 
 void handleEvents(SDL_Event* event, int* is_playing, player* player, double dt){
-
+    SDL_PumpEvents();
     // Fermeture du jeu    
     if((SDL_PollEvent(event) && (event->type==SDL_QUIT))){*is_playing = 0;}
 
-    if(event->type == SDL_KEYDOWN){
-        switch (event->key.keysym.sym)
-        {
+    const Uint8 *keystates = SDL_GetKeyboardState(NULL);
+
+    if((keystates[SDL_SCANCODE_LEFT] && keystates[SDL_SCANCODE_UP])){ // Déplacement en haut à gauche
+
+        setPlayerPosX(player, max(0, getPlayerPosX(player)-PLAYER_SPEED*dt));
+        setPlayerPosY(player, max(0,getPlayerPosY(player)-PLAYER_SPEED*dt));
+
+    }else if((keystates[SDL_SCANCODE_LEFT] && keystates[SDL_SCANCODE_DOWN])){ // Déplaceent en bas à gauche
+
+        setPlayerPosX(player, max(0, getPlayerPosX(player)-PLAYER_SPEED*dt));
+        setPlayerPosY(player, min(SCREEN_HEIGHT - PLAYER_SIZE,getPlayerPosY(player) + PLAYER_SPEED*dt));
+
+    }else if((keystates[SDL_SCANCODE_RIGHT] && keystates[SDL_SCANCODE_UP])){ // Déplacement en haut à droite
+
+        setPlayerPosX(player, min(SCREEN_WIDTH - PLAYER_SIZE,getPlayerPosX(player) + PLAYER_SPEED*dt));
+        setPlayerPosY(player, max(0,getPlayerPosY(player)-PLAYER_SPEED*dt));
+
+    }else if((keystates[SDL_SCANCODE_RIGHT] && keystates[SDL_SCANCODE_DOWN])){ // Déplacement en bas à droite
+
+        setPlayerPosX(player, min(SCREEN_WIDTH - PLAYER_SIZE,getPlayerPosX(player) + PLAYER_SPEED*dt));
+        setPlayerPosY(player, min(SCREEN_HEIGHT - PLAYER_SIZE,getPlayerPosY(player) + PLAYER_SPEED*dt));
+
+    }else if(keystates[SDL_SCANCODE_LEFT]){ // Déplacement à gauche
+
+        setPlayerPosX(player, max(0, getPlayerPosX(player)-PLAYER_SPEED*dt));
+
+    }else if(keystates[SDL_SCANCODE_UP]){ // Déplacement en haut
+
+        setPlayerPosY(player, max(0,getPlayerPosY(player)-PLAYER_SPEED*dt));
+
+    }else if(keystates[SDL_SCANCODE_RIGHT]){ // Déplacement à droite
+
+        setPlayerPosX(player, min(SCREEN_WIDTH - PLAYER_SIZE,getPlayerPosX(player) + PLAYER_SPEED*dt));
+
+    }else if(keystates[SDL_SCANCODE_DOWN]){ // Déplacement en bas
+
+        setPlayerPosY(player, min(SCREEN_HEIGHT - PLAYER_SIZE,getPlayerPosY(player) + PLAYER_SPEED*dt));
+
+    }
         
         /*
         TO DO : Syteme de deplacement "continu" -> le joueur continue de se deplacer immediatement apres avoir 
         appuyé sur la touche et tant que la touche est maintenue au lieu de devoir attendre quelques instants
         -> implémentation avec playerXVelocity et while SDL_KEYDOWN ? 
         */
-
-        case SDLK_LEFT:
-            setPlayerPosX(player, max(0, getPlayerPosX(player)-PLAYER_SPEED*dt));
-            break;
-        
-        case SDLK_RIGHT:
-            setPlayerPosX(player, min(SCREEN_WIDTH - PLAYER_SIZE,getPlayerPosX(player) + PLAYER_SPEED*dt));
-            break;
-
-        case SDLK_DOWN:
-            setPlayerPosY(player, min(SCREEN_HEIGHT - PLAYER_SIZE,getPlayerPosY(player) + PLAYER_SPEED*dt));
-            break;
-
-        case SDLK_UP:
-            setPlayerPosY(player, max(0,getPlayerPosY(player)-PLAYER_SPEED*dt));
-            break;
-        
-        default:
-            break;
-        }
-    }  
 }
 
 float max(float val1, float val2){
