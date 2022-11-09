@@ -1,7 +1,7 @@
 CC = gcc
 CFLAGS = -Wall -W -std=c99 -g
 LIBS = -L./SDL2_ttf/.libs
-LDFLAGS = `sdl2-config --cflags --libs` -lSDL2_ttf
+LDFLAGS = `sdl2-config --cflags --libs` -lSDL2_ttf -lm
 INCLUDES = -I./SDL2_ttf
 EXEC = main
 SRC = main.c graphismes.c donnees.c

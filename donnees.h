@@ -396,5 +396,11 @@ float max(float val1, float val2);
  */
 float min(float val1, float val2);
 
+/**
+ * @brief Retourne la longueur de l'adjacent d'un triangle rectangle isocèle d'hypoténuse c
+ * @param c L'hypoténuse
+ * @return La longueur de l'adjacent
+ */
+float pythagore(float c);
 
 #endif
