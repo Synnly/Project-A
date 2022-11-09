@@ -49,24 +49,24 @@ int setBlocNotObstacle(bloc * Bloc){
 }
 
 
-int getPlayerPosX(player* Player){return Player->posX;}
-int getPlayerPosY(player* Player){return Player->posY;}
+float getPlayerPosX(player* Player){return Player->posX;}
+float getPlayerPosY(player* Player){return Player->posY;}
 int getPlayerLife(player* Player){return Player->life;}
 int getPlayerSpeed(player* Player){return Player->speed;}
 int getPlayerWeaponType(player* Player){return Player->weaponType;}
 int getPlayerMoney(player* Player){return Player->money;}
 
-int setPlayerPosX(player* Player, int posX){
+int setPlayerPosX(player* Player, float posX){
     Player->posX = posX;
-    if(getPlayerPosX(Player) == posX){
+    if(abs(getPlayerPosX(Player) - posX) >= EPSILON){
         return 0;
     }
     return -1;
 }
 
-int setPlayerPosY(player* Player, int posY){
+int setPlayerPosY(player* Player, float posY){
     Player->posY = posY;
-    if(getPlayerPosY(Player) == posY){
+    if(abs(getPlayerPosY(Player) - posY) >= EPSILON){
         return 0;
     }
     return -1;
@@ -146,8 +146,27 @@ enemy initEnemy(int posX, int posY, int type){
     return Ennemi;
 }
 
+int fpsCounter(int* fps, int* fpstimer){
+    int fpsNow = SDL_GetTicks();
+    if(fpsNow > *fpstimer + 1000){
+        printf("%d fps\n",*fps);
+        *fpstimer = fpsNow;
+        *fps = 0;
+    }
+}
 
-void handleEvents(SDL_Event* event, int* is_playing, player* player){
+int fpsCap(Uint32 start, Uint32* end){
+    *end = SDL_GetTicks();
+    if (*end-start < 1000/FPS) {
+        SDL_Delay(1);
+        return 1;
+    }
+    return 0;
+}
+
+
+
+void handleEvents(SDL_Event* event, int* is_playing, player* player, double dt){
 
     // Fermeture du jeu    
     if((SDL_PollEvent(event) && (event->type==SDL_QUIT))){*is_playing = 0;}
@@ -163,32 +182,38 @@ void handleEvents(SDL_Event* event, int* is_playing, player* player){
         */
 
         case SDLK_LEFT:
-            if(getPlayerPosX(player)>=PLAYER_SPEED){     // Bordure gauche
-                setPlayerPosX(player, getPlayerPosX(player)-PLAYER_SPEED);
-            }
+            setPlayerPosX(player, max(0, getPlayerPosX(player)-PLAYER_SPEED*dt));
             break;
         
         case SDLK_RIGHT:
-            if(getPlayerPosX(player)<SCREEN_WIDTH-PLAYER_SIZE){     // Bordure droite
-                setPlayerPosX(player, getPlayerPosX(player)+PLAYER_SPEED);
-            }
+            setPlayerPosX(player, min(SCREEN_WIDTH - PLAYER_SIZE,getPlayerPosX(player) + PLAYER_SPEED*dt));
             break;
 
         case SDLK_DOWN:
-            if(getPlayerPosY(player)<SCREEN_HEIGHT-PLAYER_SIZE){     // Bordure bas
-                setPlayerPosY(player, getPlayerPosY(player)+PLAYER_SPEED);
-            }
+            setPlayerPosY(player, min(SCREEN_HEIGHT - PLAYER_SIZE,getPlayerPosY(player) + PLAYER_SPEED*dt));
             break;
 
         case SDLK_UP:
-            if(getPlayerPosY(player)>=PLAYER_SPEED){     // Bordure haut
-                setPlayerPosY(player, getPlayerPosY(player)-PLAYER_SPEED);
-            }
+            setPlayerPosY(player, max(0,getPlayerPosY(player)-PLAYER_SPEED*dt));
             break;
         
         default:
             break;
         }
     }  
+}
+
+float max(float val1, float val2){
+    if(val1>=val2){
+        return val1;
+    }
+    return val2;
+}
+
+float min(float val1, float val2){
+    if(val1<=val2){
+        return val1;
+    }
+    return val2;
 }
 

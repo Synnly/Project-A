@@ -1,11 +1,13 @@
 #ifndef DONNEES_H
 #define DONNEES_H
 
+#define EPSILON 0.0000001
+#define FPS 60
 #define SCREEN_WIDTH 1280
 #define SCREEN_HEIGHT 720
 #define PLAYER_SIZE 40
 #define PLAYER_LIFE 100
-#define PLAYER_SPEED 5
+#define PLAYER_SPEED 200
 #define PISTOL_TYPE 0
 
 #include <SDL2/SDL.h>
@@ -22,8 +24,8 @@ struct bloc_t{    // Structure d'un bloc obstacle
 typedef struct bloc_t bloc;
 
 struct player_t{      //Structure du joueur
-    int posX;
-    int posY;
+    float posX;
+    float posY;
     int life;
     int speed;
     int weaponType;
@@ -126,14 +128,14 @@ int setBlocNotObstacle(bloc * Bloc);
     @param Player Le joueur
     @return Sa coordonnée X
 */
-int getPlayerPosX(player * Player);
+float getPlayerPosX(player * Player);
 
 /*
     @brief Retourne la coordonnée Y du joueur
     @param Player Le joueur
     @return Sa coordonnée Y
 */
-int getPlayerPosY(player * Player);
+float getPlayerPosY(player * Player);
 
 /*
     @brief Retourne la vie restante du joueur
@@ -169,7 +171,7 @@ int getPlayerMoney(player * Player);
     @param posX Sa coordonnée X
     @return -1 en cas d'échec, 0 sinon
 */
-int setPlayerPosX(player * Player, int posX);
+int setPlayerPosX(player * Player, float posX);
 
 /*
     @brief Modifie la coordonnée Y du joueur
@@ -177,7 +179,7 @@ int setPlayerPosX(player * Player, int posX);
     @param posY Sa coordonnée Y
     @return -1 en cas d'échec, 0 sinon
 */
-int setPlayerPosY(player * Player, int posY);
+int setPlayerPosY(player * Player, float posY);
 
 /*
     @brief Modifie la vie restante du joueur
@@ -354,11 +356,45 @@ enemy initEnemy(int posX, int posY, int life);
 listEnemy initListEnemy(int nb);
 
 /**
+ * @brief Donne le nombre de fps
+ * @param fps le nombre d'image par seconde
+ * @param fpstimer l'image de la dernière seconde
+ * @return le nombre de fps
+ */
+int fpsCounter(int* fps, int* fpstimer);
+
+/**
+ * @brief Limite le nombre de fps à 60
+ * @param start le tick de départ
+ * @param end le tick actuel
+ * @return 1 si on depasse les 60 fps et 0 sinon
+ */
+int fpsCap(Uint32 start, Uint32* end);
+
+/**
  * @brief Gere les entrees clavier, souris et fenetre
  * @param event Les evenements
  * @param is_playing Variable qui traque si le jeu est en cours ou non
  * @param player Le joueur
+ * @param dt intervalle de temps
  */
-void handleEvents(SDL_Event* event, int* is_playing, player* player);
+void handleEvents(SDL_Event* event, int* is_playing, player* player, double dt);
+
+/**
+ * @brief Renvoie la valeur max entre deux valeurs
+ * @param val1 la première valeur
+ * @param val2 la deuxième valeur
+ * @return le max entre les deux valeurs
+ */
+float max(float val1, float val2);
+
+/**
+ * @brief Renvoie la valeur min entre deux valeurs
+ * @param val1 la première valeur
+ * @param val2 la deuxième valeur
+ * @return le min entre les deux valeurs
+ */
+float min(float val1, float val2);
+
 
 #endif
