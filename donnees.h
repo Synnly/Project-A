@@ -35,8 +35,8 @@ struct player_t{      //Structure du joueur
 typedef struct player_t player;
 
 struct enemy_t{       //Structure d'un ennemi
-    int posX;
-    int posY;
+    float posX;
+    float posY;
     int life;
     int speed;
     int type;
@@ -220,14 +220,14 @@ int setPlayerMoney(player* Player, int money);
     @param Enemy L'ennemi
     @return Sa coordonnée X
 */
-int getEnemyPosX(enemy * Enemy);
+float getEnemyPosX(enemy * Enemy);
 
 /*
     @brief Retourne la coordonnée Y de l'ennemi
     @param Enemy L'ennemi
     @return Sa coordonnée Y
 */
-int getEnemyPosY(enemy * Enemy);
+float getEnemyPosY(enemy * Enemy);
 
 /*
     @brief Retourne la vie restante de l'ennemi
@@ -256,7 +256,7 @@ int getEnemyType(enemy * Enemy);
     @param posX Sa coordonnée X
     @return -1 en cas d'échec, 0 sinon
 */
-int setEnemyPosX(enemy * Enemy, int posX);
+int setEnemyPosX(enemy * Enemy, float posX);
 
 /*
     @brief Modifie la coordonnée Y de l'ennemi
@@ -264,7 +264,7 @@ int setEnemyPosX(enemy * Enemy, int posX);
     @param posY Sa coordonnée Y
     @return -1 en cas d'échec, 0 sinon
 */
-int setEnemyPosY(enemy * Enemy, int posY);
+int setEnemyPosY(enemy * Enemy, float posY);
 
 /*
     @brief Modifie la vie restante de l'ennemi
@@ -359,9 +359,8 @@ listEnemy initListEnemy(int nb);
  * @brief Donne le nombre de fps
  * @param fps le nombre d'image par seconde
  * @param fpstimer l'image de la dernière seconde
- * @return le nombre de fps
  */
-int fpsCounter(int* fps, int* fpstimer);
+void fpsCounter(int* fps, int* fpstimer);
 
 /**
  * @brief Limite le nombre de fps à 60
@@ -402,5 +401,13 @@ float min(float val1, float val2);
  * @return La longueur de l'adjacent
  */
 float pythagore(float c);
+
+/**
+ * @brief Déplace l'ennemi vers le joueur
+ * @param enemy L'ennemi
+ * @param player Le joueur
+ * @param dt L'intervalle de temps
+ */
+void moveToPlayer(enemy* enemy, player* player, double dt);
 
 #endif

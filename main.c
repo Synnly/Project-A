@@ -3,7 +3,6 @@
 #include "graphismes.h"
 #include "donnees.h"
 #include <stdio.h>
-#include <time.h>
 #define SDL_MAIN_HANDLED
 
 // Boucle de jeu
@@ -12,29 +11,34 @@ void boucleDeJeu(SDL_Renderer* renderer, player* player){
     int fps = 0;
     int fpstimer = 0;
     Uint32 start = SDL_GetTicks();
-    Uint32 end = SDL_GetTicks();
+
+    enemy ennemi = initEnemy(256, 84, PLAYER_LIFE);
 
     while(is_playing){
+        Uint32 end = SDL_GetTicks();
 
         //Cap à 60 fps
         if(fpsCap(start,&end)) {continue;}
 
-        SDL_Event event;
-
         // Gestion des evenements
+        SDL_Event event;
         handleEvents(&event, &is_playing, player, (end-start)/1000.);
 
         //Fermeture du jeu
         if(!is_playing){break;}
 
-        //printf("x : %d, y : %d\n", getPlayerPosX(player), getPlayerPosY(player));
-        
 
         //Rafraichissement de l'ecran
         SDL_RenderClear(renderer);
 
+        moveToPlayer(&ennemi, player, (end-start)/1000.);
+
         //Affichage du joueur
         drawSprite(renderer, (int)getPlayerPosX(player), (int)getPlayerPosY(player), PLAYER_SIZE, PLAYER_SIZE, "assets/img/player.bmp");
+        drawSprite(renderer, (int)getEnemyPosX(&ennemi), (int)getEnemyPosY(&ennemi), PLAYER_SIZE, PLAYER_SIZE, "assets/img/enemy.bmp");
+
+        //printf("x %f, y %f\n", getEnemyPosX(&ennemi), getEnemyPosY(&ennemi));
+        //printf("x : %f, y : %f\n", getPlayerPosX(player), getPlayerPosY(player));
 
         SDL_RenderPresent(renderer);
         
@@ -42,7 +46,6 @@ void boucleDeJeu(SDL_Renderer* renderer, player* player){
         fps++;
         start = end;
         fpsCounter(&fps,&fpstimer);
-
     }
 }
 

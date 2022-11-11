@@ -4,6 +4,8 @@
 
 /* ---------- Getter / Setter -------- */
 
+/* ----- Bloc ----- */
+
 int getBlocPosX(bloc * Bloc){return Bloc->posX;}
 int getBlocPosY(bloc * Bloc){return Bloc->posY;}
 int getBlocType(bloc * Bloc){return Bloc->type;}
@@ -49,6 +51,7 @@ int setBlocNotObstacle(bloc * Bloc){
     return -1;
 }
 
+/* ----- Player ----- */
 
 float getPlayerPosX(player* Player){return Player->posX;}
 float getPlayerPosY(player* Player){return Player->posY;}
@@ -59,7 +62,7 @@ int getPlayerMoney(player* Player){return Player->money;}
 
 int setPlayerPosX(player* Player, float posX){
     Player->posX = posX;
-    if(abs(getPlayerPosX(Player) - posX) >= EPSILON){
+    if(fabs(getPlayerPosX(Player) - posX) >= EPSILON){
         return 0;
     }
     return -1;
@@ -67,7 +70,7 @@ int setPlayerPosX(player* Player, float posX){
 
 int setPlayerPosY(player* Player, float posY){
     Player->posY = posY;
-    if(abs(getPlayerPosY(Player) - posY) >= EPSILON){
+    if(fabs(getPlayerPosY(Player) - posY) >= EPSILON){
         return 0;
     }
     return -1;
@@ -100,6 +103,54 @@ int setPlayerWeaponType(player* Player, int weapontype){
 int setPlayerMoney(player* Player, int money){
     Player->money = money;
     if(getPlayerMoney(Player) == money){
+        return 0;
+    }
+    return -1;
+}
+
+/* ----- Enemy ----- */
+
+float getEnemyPosX(enemy* Enemy){return Enemy->posX;}
+float getEnemyPosY(enemy* Enemy){return Enemy->posY;}
+int getEnemyLife(enemy* Enemy){return Enemy->life;}
+int getEnemySpeed(enemy* Enemy){return Enemy->speed;}
+int getEnemyType(enemy* Enemy){return Enemy->type;}
+
+int setEnemyPosX(enemy* Enemy, float posX){
+    Enemy->posX = posX;
+    if(fabs(getEnemyPosX(Enemy) - posX) >= EPSILON){
+        return 0;
+    }
+    return -1;
+}
+
+int setEnemyPosY(enemy* Enemy, float posY){
+    Enemy->posY = posY;
+    if(fabs(getEnemyPosY(Enemy) - posY) >= EPSILON){
+        return 0;
+    }
+    return -1;
+}
+
+int setEnemyLife(enemy* Enemy, int life){
+    Enemy->life = life;
+    if(getEnemyLife(Enemy) == life){
+        return 0;
+    }
+    return -1;
+}
+
+int setEnemySpeed(enemy* Enemy, int speed){
+    Enemy->speed = speed;
+    if(getEnemySpeed(Enemy) == speed){
+        return 0;
+    }
+    return -1;
+}
+
+int setEnemyType(enemy* Enemy, int type){
+    Enemy->type = type;
+    if(getEnemyType(Enemy) == type){
         return 0;
     }
     return -1;
@@ -142,12 +193,12 @@ enemy initEnemy(int posX, int posY, int type){
 
         default:
             Ennemi.life = PLAYER_LIFE;
-            Ennemi.speed = PLAYER_SPEED;
+            Ennemi.speed = PLAYER_SPEED/2;
     }
     return Ennemi;
 }
 
-int fpsCounter(int* fps, int* fpstimer){
+void fpsCounter(int* fps, int* fpstimer){
     int fpsNow = SDL_GetTicks();
     if(fpsNow > *fpstimer + 1000){
         printf("%d fps\n",*fps);
@@ -159,22 +210,25 @@ int fpsCounter(int* fps, int* fpstimer){
 int fpsCap(Uint32 start, Uint32* end){
     *end = SDL_GetTicks();
     if (*end-start < 1000/FPS) {
-        SDL_Delay(1);
         return 1;
     }
     return 0;
 }
 
 
-
 void handleEvents(SDL_Event* event, int* is_playing, player* player, double dt){
-    SDL_PumpEvents();
-    // Fermeture du jeu    
-    if((SDL_PollEvent(event) && (event->type==SDL_QUIT))){*is_playing = 0;}
+
+    // On retire tous les evenements sauf l'indication de fermer le jeu
+    SDL_FlushEvents(SDL_APP_TERMINATING, SDL_USEREVENT);
 
     const Uint8 *keystates = SDL_GetKeyboardState(NULL);
 
-    if(((keystates[SDL_SCANCODE_LEFT]  || keystates[SDL_SCANCODE_A]) && (keystates[SDL_SCANCODE_UP] || keystates[SDL_SCANCODE_W]))){ // Déplacement en haut à gauche
+    // Fermeture du jeu
+    if(SDL_PollEvent(event) && ((event->type==SDL_QUIT) || keystates[SDL_SCANCODE_ESCAPE])){
+
+        *is_playing = 0;
+
+    }else if(((keystates[SDL_SCANCODE_LEFT]  || keystates[SDL_SCANCODE_A]) && (keystates[SDL_SCANCODE_UP] || keystates[SDL_SCANCODE_W]))){ // Déplacement en haut à gauche
 
         setPlayerPosX(player, max(0, getPlayerPosX(player)-pythagore(PLAYER_SPEED*dt)));
         setPlayerPosY(player, max(0, getPlayerPosY(player)-pythagore(PLAYER_SPEED*dt)));
@@ -211,12 +265,7 @@ void handleEvents(SDL_Event* event, int* is_playing, player* player, double dt){
         setPlayerPosY(player, min(SCREEN_HEIGHT - PLAYER_SIZE,getPlayerPosY(player) + PLAYER_SPEED*dt));
 
     }
-        
-        /*
-        TO DO : Syteme de deplacement "continu" -> le joueur continue de se deplacer immediatement apres avoir 
-        appuyé sur la touche et tant que la touche est maintenue au lieu de devoir attendre quelques instants
-        -> implémentation avec playerXVelocity et while SDL_KEYDOWN ? 
-        */
+
 }
 
 float max(float val1, float val2){
@@ -224,9 +273,6 @@ float max(float val1, float val2){
         return val1;
     }
     return val2;
-}
-float pythagore(float c) {
-    return sqrt((pow(c , 2)/2));
 }
 
 float min(float val1, float val2){
@@ -236,3 +282,21 @@ float min(float val1, float val2){
     return val2;
 }
 
+float pythagore(float c) {
+    return sqrt((pow(c , 2)/2));
+}
+
+void moveToPlayer(enemy* enemy, player* player, double dt){
+    //Distance de l'ennemi au joueur
+    float distToPlayer = sqrt(pow(getPlayerPosX(player) - getEnemyPosX(enemy), 2) + pow(getPlayerPosY(player) - getEnemyPosY(enemy), 2));
+
+    //Pourcentage de la distance que l'ennemi peut parcourir en dt s
+    float prctDist = (getEnemySpeed(enemy)*dt)/distToPlayer;
+
+    //Distance a parcourir dans chaque axe
+    float distX = (getPlayerPosX(player)- getEnemyPosX(enemy))*prctDist;
+    float distY = (getPlayerPosY(player)- getEnemyPosY(enemy))*prctDist;
+
+    setEnemyPosX(enemy, getEnemyPosX(enemy)+distX);
+    setEnemyPosY(enemy, getEnemyPosY(enemy)+distY);
+}
