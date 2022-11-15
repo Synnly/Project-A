@@ -1,6 +1,8 @@
 #include <SDL2/SDL.h>
 #include "donnees.h"
 #include <math.h>
+#include <stdlib.h>
+#include <time.h>
 
 /* ---------- Getter / Setter -------- */
 
@@ -156,6 +158,27 @@ int setEnemyType(enemy* Enemy, int type){
     return -1;
 }
 
+/* ----- listEnemy ----- */
+
+enemy* getEnemy(listEnemy * ListEnemy){return ListEnemy->Enemy;}
+listEnemy* getNext(listEnemy * ListEnemy){return ListEnemy->next;}
+
+int setEnemy(listEnemy * ListEnemy, enemy * enemy){
+    ListEnemy->Enemy = enemy;
+    if(ListEnemy->Enemy == enemy){
+        return 0;
+    }
+    return -1;
+}
+
+int setNext(listEnemy * ListEnemy, listEnemy * ListEnemyNext){
+    ListEnemy->next = ListEnemyNext;
+    if(ListEnemy->next == ListEnemyNext){
+        return 0;
+    }
+    return -1;
+}
+
 /* -------- Fonctions -------- */
 
 bloc initBloc(int posX, int posY, int type){
@@ -180,10 +203,10 @@ player initPLayer(){
     return Player;
 }
 
-enemy initEnemy(int posX, int posY, int type){
+enemy initEnemy(float posX, float posY, int type){
     enemy Ennemi;
-    Ennemi.posX = posX;
-    Ennemi.posY = posY;
+    setEnemyPosX(&Ennemi, posX);
+    setEnemyPosY(&Ennemi, posY);
 
     switch(type){
         
@@ -195,8 +218,51 @@ enemy initEnemy(int posX, int posY, int type){
             Ennemi.life = PLAYER_LIFE;
             Ennemi.speed = PLAYER_SPEED/2;
     }
+
+    setEnemyType(&Ennemi, type);
     return Ennemi;
 }
+
+listEnemy initListEnemy(int nb){
+    srand(time(0));
+
+    listEnemy ListeEnnemis;
+    listEnemy* current = &ListeEnnemis;
+    enemy Ennemi;
+
+    float posX, posY;
+
+    // Premier maillon
+    if(nb>0) {
+
+        //Position aléatoire
+        posX = rand() % (SCREEN_WIDTH - PLAYER_SIZE + 1);
+        posY = rand() % (SCREEN_HEIGHT - PLAYER_SIZE + 1);
+
+        //Initialisation et attribution de l'ennemi
+        Ennemi = initEnemy(posX, posY, 1);
+
+        setEnemy(current, &Ennemi);
+
+
+        //Autres maillons
+        for(int i = 0; i<nb-1; i++){
+            //Maillon suivant
+            listEnemy nextListe;
+            setNext(current, &nextListe);
+            current = getNext(current);
+
+            posX = rand() % (SCREEN_WIDTH-PLAYER_SIZE+1);
+            posY = rand() % (SCREEN_HEIGHT-PLAYER_SIZE+1);
+
+            Ennemi = initEnemy(posX, posY, 1);
+            setEnemy(current, &Ennemi);
+        }
+    }
+    return ListeEnnemis;
+}
+
+
 
 void fpsCounter(int* fps, int* fpstimer){
     int fpsNow = SDL_GetTicks();

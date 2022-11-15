@@ -297,20 +297,20 @@ int setEnemyType(enemy * Enemy, int type);
  * @param ListEnemy La liste
  * @return L'ennemi
  */
-int getEnemy(listEnemy * ListEnemy);
+enemy* getEnemy(listEnemy * ListEnemy);
 
 /**
  * @brief Retourne la liste chainee suivante
  * @param ListEnemy La liste
  * @return La liste suivante
  */
-int getNext(listEnemy * ListEnemy);
+listEnemy* getNext(listEnemy * ListEnemy);
 
 /**
  * @brief Modifie l'ennemi de la liste chainée
  * @param ListEnemy La liste
  * @param Enemy L'ennemi
- * @return L'ennemi
+ * @return -1 en cas d'échec, 0 sinon
  */
 int setEnemy(listEnemy * ListEnemy, enemy * Enemy);
 
@@ -318,7 +318,7 @@ int setEnemy(listEnemy * ListEnemy, enemy * Enemy);
  * @brief Modifie la liste chainee suivante
  * @param ListEnemy La liste
  * @param ListEnemyNext La liste suivante
- * @return L'ennemi
+ * @return -1 en cas d'échec, 0 sinon
  */
 int setNext(listEnemy * ListEnemy, listEnemy * ListEnemyNext);
 
@@ -346,7 +346,7 @@ player initPLayer();
     @param posY Sa coordonnée Y
     @param type Son type
 */
-enemy initEnemy(int posX, int posY, int life);
+enemy initEnemy(float posX, float posY, int type);
 
 /*
     @brief Initialise une liste chainée de nb ennemis
