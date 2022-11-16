@@ -170,15 +170,11 @@ void setEnemyTexture(enemy* Enemy, SDL_Texture* texture){
 
 /* ----- listEnemy ----- */
 
-enemy* getEnemy(listEnemy * ListEnemy){return ListEnemy->Enemy;}
+enemy* getEnemy(listEnemy * ListEnemy){return &(ListEnemy->Enemy);}
 listEnemy* getNext(listEnemy * ListEnemy){return ListEnemy->next;}
 
-int setEnemy(listEnemy * ListEnemy, enemy * enemy){
-    ListEnemy->Enemy = enemy;
-    if(ListEnemy->Enemy == enemy){
-        return 0;
-    }
-    return -1;
+void setEnemy(listEnemy *ListEnemy, enemy Enemy) {
+    ListEnemy->Enemy = Enemy;
 }
 
 int setNext(listEnemy * ListEnemy, listEnemy * ListEnemyNext){
@@ -187,6 +183,17 @@ int setNext(listEnemy * ListEnemy, listEnemy * ListEnemyNext){
         return 0;
     }
     return -1;
+}
+
+int isEmpty(listEnemy* ListEnnemy){
+    return (ListEnnemy == NULL);
+}
+
+void freeListEnemy(listEnemy* ListeEnnemis){
+    if(!isEmpty(ListeEnnemis)){
+        freeListEnemy(getNext(ListeEnnemis));
+        free(ListeEnnemis);
+    }
 }
 
 /* -------- Fonctions -------- */
@@ -234,42 +241,48 @@ enemy initEnemy(float posX, float posY, int type){
 }
 
 listEnemy initListEnemy(int nb){
-    srand(time(0));
-
-    listEnemy ListeEnnemis;
-    listEnemy* current = &ListeEnnemis;
-    enemy Ennemi;
-
-    float posX, posY;
+    listEnemy* ListeEnnemis;
 
     // Premier maillon
     if(nb>0) {
+
+        // Générateur d'aléatoire
+        srand(time(0));
+
+        float posX, posY;
+        listEnemy* CurrentListEnnemis;
+        ListeEnnemis = malloc(sizeof(listEnemy));
+        CurrentListEnnemis = ListeEnnemis;
+
+        //Premiers maillons
+        for(int i = 0; i<nb-1; i++){
+
+            //Position aléatoire
+            posX = rand() % (SCREEN_WIDTH - PLAYER_SIZE + 1);
+            posY = rand() % (SCREEN_HEIGHT - PLAYER_SIZE + 1);
+
+            //Initialisation et attribution de l'ennemi
+            setEnemy(CurrentListEnnemis, initEnemy(posX, posY, 1));
+
+            //Initialisation et attribution du prochain maillon
+            setNext(CurrentListEnnemis, malloc(sizeof(listEnemy)));
+
+            printf("x : %f, y : %f\n", getEnemyPosX(getEnemy(CurrentListEnnemis)), getEnemyPosX(getEnemy(CurrentListEnnemis)));
+            CurrentListEnnemis = getNext(CurrentListEnnemis);
+        }
 
         //Position aléatoire
         posX = rand() % (SCREEN_WIDTH - PLAYER_SIZE + 1);
         posY = rand() % (SCREEN_HEIGHT - PLAYER_SIZE + 1);
 
         //Initialisation et attribution de l'ennemi
-        Ennemi = initEnemy(posX, posY, 1);
+        setEnemy(CurrentListEnnemis, initEnemy(posX, posY, 1));
 
-        setEnemy(current, &Ennemi);
+        setNext(CurrentListEnnemis, NULL);
 
-
-        //Autres maillons
-        for(int i = 0; i<nb-1; i++){
-            //Maillon suivant
-            listEnemy nextListe;
-            setNext(current, &nextListe);
-            current = getNext(current);
-
-            posX = rand() % (SCREEN_WIDTH-PLAYER_SIZE+1);
-            posY = rand() % (SCREEN_HEIGHT-PLAYER_SIZE+1);
-
-            Ennemi = initEnemy(posX, posY, 1);
-            setEnemy(current, &Ennemi);
-        }
+        printf("x : %f, y : %f\n", getEnemyPosX(getEnemy(CurrentListEnnemis)), getEnemyPosX(getEnemy(CurrentListEnnemis)));
     }
-    return ListeEnnemis;
+    return *ListeEnnemis;
 }
 
 
@@ -375,4 +388,11 @@ void moveToPlayer(enemy* enemy, player* player, double dt){
 
     setEnemyPosX(enemy, getEnemyPosX(enemy)+distX);
     setEnemyPosY(enemy, getEnemyPosY(enemy)+distY);
+}
+
+void moveListEnemyToPlayer(listEnemy* ListeEnnemis, player* player, double dt){
+    if(!isEmpty(ListeEnnemis)){
+        moveToPlayer(getEnemy(ListeEnnemis), player, dt);
+        moveListEnemyToPlayer(getNext(ListeEnnemis), player, dt);
+    }
 }

@@ -12,13 +12,7 @@ void boucleDeJeu(SDL_Renderer* renderer, player* player, listEnemy* listeEnnemis
     int fpstimer = 0;
     Uint32 start = SDL_GetTicks();
 
-    
-    float x, y;
-    x = getEnemyPosX(getEnemy(listeEnnemis));
-    y = getEnemyPosY(getEnemy(listeEnnemis));
-    printf("%f, %f\n", x, y);
-
-    initTextures(renderer,player,getEnemy(listeEnnemis));
+    initTextures(renderer,player,listeEnnemis);
 
     while(is_playing){
         Uint32 end = SDL_GetTicks();
@@ -36,18 +30,14 @@ void boucleDeJeu(SDL_Renderer* renderer, player* player, listEnemy* listeEnnemis
         //Rafraichissement de l'ecran
         SDL_RenderClear(renderer);
 
-        moveToPlayer(getEnemy(listeEnnemis), player, (end-start)/1000.);
+        moveListEnemyToPlayer(listeEnnemis, player, (end-start)/1000.);
 
-        x = getEnemyPosX(getEnemy(listeEnnemis));
-        y = getEnemyPosY(getEnemy(listeEnnemis));
-        printf("%f, %f\n", x, y);
+        //printf("%f, %f\n", getEnemyPosX(getEnemy(listeEnnemis)), getEnemyPosY(getEnemy(listeEnnemis)));
+        //printf("%f, %f\n----------------\n", getEnemyPosX(getNext(getEnemy(listeEnnemis))), getEnemyPosY(getNext(getEnemy(listeEnnemis))));
 
         //Affichage du joueur
         drawSprite(renderer, (int)getPlayerPosX(player), (int)getPlayerPosY(player), PLAYER_SIZE, PLAYER_SIZE, getPlayerTexture(player));
-        drawSprite(renderer, (int)getEnemyPosX(getEnemy(listeEnnemis)), (int)getEnemyPosY(getEnemy(listeEnnemis)), PLAYER_SIZE, PLAYER_SIZE, getEnemyTexture(getEnemy(listeEnnemis)));
-
-        //printf("x %f, y %f\n", getEnemyPosX(&ennemi), getEnemyPosY(&ennemi));
-        //printf("x : %f, y : %f\n", getPlayerPosX(player), getPlayerPosY(player));
+        drawListEnemySprites(renderer, listeEnnemis);
 
         SDL_RenderPresent(renderer);
         
@@ -69,7 +59,7 @@ int main(){
     SDL_Window* fenetre;
     SDL_Renderer* renderer;
     player joueur = initPLayer();
-    listEnemy listeEnnemis = initListEnemy(1);
+    listEnemy listeEnnemis = initListEnemy(3);
   
 
     // Creation de la fenetre
@@ -81,7 +71,7 @@ int main(){
     SDL_SetRenderDrawColor(renderer, 32, 34, 37, SDL_ALPHA_OPAQUE);
 
     boucleDeJeu(renderer, &joueur, &listeEnnemis);
-
-    endSDL(fenetre, renderer, &joueur, getEnemy(&listeEnnemis));
+    endSDL(fenetre, renderer, &joueur, &listeEnnemis);
+    freeListEnemy(&listeEnnemis);
     return 0; 
 }

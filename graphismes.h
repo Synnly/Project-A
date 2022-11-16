@@ -6,13 +6,27 @@
 #include "donnees.h"
 
 /**
- * @brief Ferme la fenetre et quite sdl
- * @param fenetre La fenetre
+ * @brief Charge un sprite
  * @param renderer Le renderer
- * @param Player Le joueur
- * @param Enemy L'ennemi
+ * @param file L'emplacement et le nom du fichier au format BMP (ex : dossier1/dossier2/fichier.bmp)
+ * @return le sprite
  */
-void endSDL(SDL_Window* fenetre, SDL_Renderer* renderer, player* Player, enemy* Enemy);
+SDL_Texture* loadSprite(SDL_Renderer* renderer, const char* file);
+
+/**
+ * @brief Initialise la texture de tous les ennemis
+ * @param renderer Le renderer
+ * @param ListeEnnemis La liste des ennemis
+ */
+void initListEnemyTextures(SDL_Renderer* renderer, listEnemy* ListeEnnemis);
+
+/**
+ * @brief initialise les textures
+ * @param renderer le renderer
+ * @param player le joueur
+ * @param ListeEnnemis La liste des ennemis
+ */
+void initTextures(SDL_Renderer* renderer, player* Player, listEnemy* ListeEnnemis);
 
 /**
  * @brief Affiche le sprite à l'écran
@@ -25,18 +39,20 @@ void endSDL(SDL_Window* fenetre, SDL_Renderer* renderer, player* Player, enemy* 
 void drawSprite(SDL_Renderer* renderer, int x, int y, int w, int h, SDL_Texture* texture);
 
 /**
- * @brief Charge un sprite
+ * @Brief Affiche le sprite de tous les ennemis à l'écran
  * @param renderer Le renderer
- * @param file L'emplacement et le nom du fichier au format BMP (ex : dossier1/dossier2/fichier.bmp)
- * @return le sprite
+ * @param ListeEnnemis  La liste des ennemis
  */
-SDL_Texture* loadSprite(SDL_Renderer* renderer, const char* file);
+void drawListEnemySprites(SDL_Renderer* renderer, listEnemy* ListeEnnemis);
+
 
 /**
- * @brief initialise les textures
- * @param renderer le renderer
- * @param player le joueur
- * @param enemy l'ennemi
+ * @brief Ferme la fenetre et quite sdl
+ * @param fenetre La fenetre
+ * @param renderer Le renderer
+ * @param Player Le joueur
+ * @param ListeEnnemis La liste des ennemis
  */
-void initTextures(SDL_Renderer* renderer, player* Player, enemy* Enemy);
+void endSDL(SDL_Window* fenetre, SDL_Renderer* renderer, player* Player, listEnemy* ListeEnnemis);
+
 #endif

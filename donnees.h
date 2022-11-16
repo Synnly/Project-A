@@ -47,7 +47,7 @@ struct enemy_t{       //Structure d'un ennemi
 typedef struct enemy_t enemy;
 
 struct listEnemy_t{
-    enemy* Enemy;
+    enemy Enemy;
     struct listEnemy_t * next;
 };
 
@@ -344,9 +344,8 @@ listEnemy* getNext(listEnemy * ListEnemy);
  * @brief Modifie l'ennemi de la liste chainée
  * @param ListEnemy La liste
  * @param Enemy L'ennemi
- * @return -1 en cas d'échec, 0 sinon
  */
-int setEnemy(listEnemy * ListEnemy, enemy * Enemy);
+void setEnemy(listEnemy * ListEnemy, enemy Enemy);
 
 /**
  * @brief Modifie la liste chainee suivante
@@ -355,6 +354,19 @@ int setEnemy(listEnemy * ListEnemy, enemy * Enemy);
  * @return -1 en cas d'échec, 0 sinon
  */
 int setNext(listEnemy * ListEnemy, listEnemy * ListEnemyNext);
+
+/**
+ * @brief Indique si la liste est vide
+ * @param ListEnnemy La liste
+ * @return 1 si la liste est vide, 0 sinon
+ */
+int isEmpty(listEnemy* ListEnnemy);
+
+/**
+ * @brief Libere la liste
+ * @param ListeEnnemis La liste d'ennemis
+ */
+void freeListEnemy(listEnemy* ListeEnnemis);
 
 
 /* ---------- Fonctions ---------- */
@@ -443,5 +455,13 @@ float pythagore(float c);
  * @param dt L'intervalle de temps
  */
 void moveToPlayer(enemy* enemy, player* player, double dt);
+
+/**
+ * @brief Deplace tous les ennemis vers le joueur
+ * @param ListeEnnemis La liste des ennemis
+ * @param player Le joueur
+ * @param dt L'intervalle de temps
+ */
+void moveListEnemyToPlayer(listEnemy* ListeEnnemis, player* player, double dt);
 
 #endif
