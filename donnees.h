@@ -30,6 +30,7 @@ struct player_t{      //Structure du joueur
     int speed;
     int weaponType;
     int money;
+    SDL_Texture* texture;
 };
 
 typedef struct player_t player;
@@ -40,6 +41,7 @@ struct enemy_t{       //Structure d'un ennemi
     int life;
     int speed;
     int type;
+    SDL_Texture* texture;
 };
 
 typedef struct enemy_t enemy;
@@ -165,6 +167,14 @@ int getPlayerWeaponType(player * Player);
 */
 int getPlayerMoney(player * Player);
 
+/**
+ * @brief Retourne la texture du sprite du joueur
+ * @param player le joueur
+ * @return la texture
+ */
+SDL_Texture* getPlayerTexture(player* Player);
+
+
 /*
     @brief Modifie la coordonnée X du joueur
     @param Player Le joueur
@@ -213,6 +223,14 @@ int setPlayerWeaponType(player * Player, int weaponType);
 */
 int setPlayerMoney(player* Player, int money);
 
+/**
+ * @brief Met à jour la texture du sprite du joueur
+ * @param player le joueur
+ * @param texture la texture
+ */
+void setPlayerTexture(player* Player, SDL_Texture* texture);
+
+
 /* ----- Enemy ----- */
 
 /*
@@ -249,6 +267,14 @@ int getEnemySpeed(enemy * Enemy);
     @return Son type
 */
 int getEnemyType(enemy * Enemy);
+
+/**
+ * @brief Retourne la texture du sprite de l'ennemi
+ * @param Enemy l'ennemi
+ * @return la texture
+ */
+SDL_Texture* getEnemyTexture(enemy* Enemy);
+
 
 /*
     @brief Modifie la coordonnée X de l'ennemi
@@ -289,6 +315,14 @@ int setEnemySpeed(enemy * Enemy, int speed);
     @return -1 en cas d'échec, 0 sinon
 */
 int setEnemyType(enemy * Enemy, int type);
+
+/**
+ * @brief Met à jour la texture du sprite de l'ennemi
+ * @param Enemy l'ennemi
+ * @param texture la texture
+ */
+void setEnemyTexture(enemy* Enemy, SDL_Texture* texture);
+
 
 /* ----- listEnemy ----- */
 

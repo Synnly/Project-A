@@ -61,6 +61,7 @@ int getPlayerLife(player* Player){return Player->life;}
 int getPlayerSpeed(player* Player){return Player->speed;}
 int getPlayerWeaponType(player* Player){return Player->weaponType;}
 int getPlayerMoney(player* Player){return Player->money;}
+SDL_Texture* getPlayerTexture(player* Player){return Player->texture;}
 
 int setPlayerPosX(player* Player, float posX){
     Player->posX = posX;
@@ -110,6 +111,10 @@ int setPlayerMoney(player* Player, int money){
     return -1;
 }
 
+void setPlayerTexture(player* Player, SDL_Texture* texture){
+    Player->texture = texture;
+}
+
 /* ----- Enemy ----- */
 
 float getEnemyPosX(enemy* Enemy){return Enemy->posX;}
@@ -117,6 +122,7 @@ float getEnemyPosY(enemy* Enemy){return Enemy->posY;}
 int getEnemyLife(enemy* Enemy){return Enemy->life;}
 int getEnemySpeed(enemy* Enemy){return Enemy->speed;}
 int getEnemyType(enemy* Enemy){return Enemy->type;}
+SDL_Texture* getEnemyTexture(enemy* Enemy){return Enemy->texture;}
 
 int setEnemyPosX(enemy* Enemy, float posX){
     Enemy->posX = posX;
@@ -156,6 +162,10 @@ int setEnemyType(enemy* Enemy, int type){
         return 0;
     }
     return -1;
+}
+
+void setEnemyTexture(enemy* Enemy, SDL_Texture* texture){
+    Enemy->texture = texture;
 }
 
 /* ----- listEnemy ----- */
@@ -215,8 +225,8 @@ enemy initEnemy(float posX, float posY, int type){
             break;
 
         default:
-            Ennemi.life = PLAYER_LIFE;
-            Ennemi.speed = PLAYER_SPEED/2;
+            setEnemyLife(&Ennemi,PLAYER_LIFE);
+            setEnemySpeed(&Ennemi,PLAYER_SPEED/2);
     }
 
     setEnemyType(&Ennemi, type);

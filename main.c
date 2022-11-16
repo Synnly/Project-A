@@ -6,17 +6,19 @@
 #define SDL_MAIN_HANDLED
 
 // Boucle de jeu
-void boucleDeJeu(SDL_Renderer* renderer, player* player){
+void boucleDeJeu(SDL_Renderer* renderer, player* player, listEnemy* listeEnnemis){
     int is_playing = 1;
     int fps = 0;
     int fpstimer = 0;
     Uint32 start = SDL_GetTicks();
 
-    listEnemy listeEnnemis = initListEnemy(1);
+    
     float x, y;
-    x = getEnemyPosX(getEnemy(&listeEnnemis));
-    y = getEnemyPosY(getEnemy(&listeEnnemis));
+    x = getEnemyPosX(getEnemy(listeEnnemis));
+    y = getEnemyPosY(getEnemy(listeEnnemis));
     printf("%f, %f\n", x, y);
+
+    initTextures(renderer,player,getEnemy(listeEnnemis));
 
     while(is_playing){
         Uint32 end = SDL_GetTicks();
@@ -34,15 +36,15 @@ void boucleDeJeu(SDL_Renderer* renderer, player* player){
         //Rafraichissement de l'ecran
         SDL_RenderClear(renderer);
 
-        //moveToPlayer(getEnemy(&listeEnnemis), player, (end-start)/1000.);
+        moveToPlayer(getEnemy(listeEnnemis), player, (end-start)/1000.);
 
-        x = getEnemyPosX(getEnemy(&listeEnnemis));
-        y = getEnemyPosY(getEnemy(&listeEnnemis));
+        x = getEnemyPosX(getEnemy(listeEnnemis));
+        y = getEnemyPosY(getEnemy(listeEnnemis));
         printf("%f, %f\n", x, y);
 
         //Affichage du joueur
-        drawSprite(renderer, (int)getPlayerPosX(player), (int)getPlayerPosY(player), PLAYER_SIZE, PLAYER_SIZE, "assets/img/player.bmp");
-        drawSprite(renderer, (int)getEnemyPosX(getEnemy(&listeEnnemis)), (int)getEnemyPosY(getEnemy(&listeEnnemis)), PLAYER_SIZE, PLAYER_SIZE, "assets/img/enemy.bmp");
+        drawSprite(renderer, (int)getPlayerPosX(player), (int)getPlayerPosY(player), PLAYER_SIZE, PLAYER_SIZE, getPlayerTexture(player));
+        drawSprite(renderer, (int)getEnemyPosX(getEnemy(listeEnnemis)), (int)getEnemyPosY(getEnemy(listeEnnemis)), PLAYER_SIZE, PLAYER_SIZE, getEnemyTexture(getEnemy(listeEnnemis)));
 
         //printf("x %f, y %f\n", getEnemyPosX(&ennemi), getEnemyPosY(&ennemi));
         //printf("x : %f, y : %f\n", getPlayerPosX(player), getPlayerPosY(player));
@@ -67,6 +69,7 @@ int main(){
     SDL_Window* fenetre;
     SDL_Renderer* renderer;
     player joueur = initPLayer();
+    listEnemy listeEnnemis = initListEnemy(1);
   
 
     // Creation de la fenetre
@@ -77,8 +80,8 @@ int main(){
     SDL_SetWindowTitle(fenetre, "Project A");
     SDL_SetRenderDrawColor(renderer, 32, 34, 37, SDL_ALPHA_OPAQUE);
 
-    boucleDeJeu(renderer, &joueur);
+    boucleDeJeu(renderer, &joueur, &listeEnnemis);
 
-    endSDL(fenetre, renderer);
+    endSDL(fenetre, renderer, &joueur, getEnemy(&listeEnnemis));
     return 0; 
 }
