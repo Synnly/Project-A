@@ -6,24 +6,71 @@
 
 /* ---------- Getter / Setter -------- */
 
-/* ----- Bloc ----- */
+/* ----- Sprite ----- */
 
-int getBlocPosX(bloc * Bloc){return Bloc->posX;}
-int getBlocPosY(bloc * Bloc){return Bloc->posY;}
-int getBlocType(bloc * Bloc){return Bloc->type;}
-int getBlocIsObstacle(bloc * Bloc){return Bloc->isObstacle;}
+float getSpritePosX(sprite* Sprite){return Sprite->posX;}
+float getSpritePosY(sprite* Sprite){return Sprite->posY;}
+int getSpriteHeight(sprite* Sprite){return Sprite->height;}
+int getSpriteWidth(sprite* Sprite){return Sprite->width;}
+SDL_Texture* getSpriteTexture(sprite* Sprite){return Sprite->texture;}
 
-int setBlocPosX(bloc * Bloc, int posX){
-    Bloc->posX = posX;
-    if(getBlocPosX(Bloc) == posX){
+int setSpritePosX(sprite* Sprite, float posX){
+    Sprite->posX = posX;
+    if(fabs(getSpritePosX(Sprite) - posX) >= EPSILON){
         return 0;
     }
     return -1;
 }
 
-int setBlocPosY(bloc * Bloc, int posY){
-    Bloc->posY = posY;
-    if(getBlocPosY(Bloc) == posY){
+int setSpritePosY(sprite* Sprite, float posY) {
+    Sprite->posY = posY;
+    if (fabs(getSpritePosY(Sprite) - posY) >= EPSILON) {
+        return 0;
+    }
+    return -1;
+}
+
+
+int setSpriteHeight(sprite* Sprite, int height){
+    Sprite->height = height;
+    if((getSpritePosY(Sprite) - height) == 0) {
+        return 0;
+    }
+    return -1;
+}
+
+int setSpriteWidth(sprite* Sprite, int width){
+    Sprite->width = width;
+    if((getSpritePosY(Sprite) - width) == 0) {
+        return 0;
+    }
+    return -1;
+}
+
+void setSpriteTexture(sprite* Sprite, SDL_Texture* texture){
+    Sprite->texture = texture;
+}
+
+/* ----- Bloc ----- */
+
+float getBlocPosX(bloc * Bloc){return getSpritePosX(getBlocSprite(Bloc));}
+float getBlocPosY(bloc * Bloc){return getSpritePosY(getBlocSprite(Bloc));}
+int getBlocType(bloc * Bloc){return Bloc->type;}
+int getBlocIsObstacle(bloc * Bloc){return Bloc->isObstacle;}
+SDL_Texture* getBlocTexture(bloc* Bloc){return getSpriteTexture(getBlocSprite(Bloc));}
+sprite* getBlocSprite(bloc* Bloc){return &(Bloc->sprite);}
+
+int setBlocPosX(bloc* Bloc, float posX){
+    setSpritePosX(getBlocSprite(Bloc),  posX);
+    if(fabs(getBlocPosX(Bloc) - posX) >= EPSILON){
+        return 0;
+    }
+    return -1;
+}
+
+int setBlocPosY(bloc* Bloc, float posY){
+    setSpritePosY(getBlocSprite(Bloc),  posY);
+    if(fabs(getBlocPosY(Bloc) - posY) >= EPSILON){
         return 0;
     }
     return -1;
@@ -53,18 +100,27 @@ int setBlocNotObstacle(bloc * Bloc){
     return -1;
 }
 
+void setBlocTexture(bloc* Bloc, SDL_Texture* texture){
+    setSpriteTexture(getBlocSprite(Bloc), texture);
+}
+
+void setBlocSprite(bloc* Bloc, sprite* Sprite){
+    Bloc->sprite = *Sprite;
+}
+
 /* ----- Player ----- */
 
-float getPlayerPosX(player* Player){return Player->posX;}
-float getPlayerPosY(player* Player){return Player->posY;}
+float getPlayerPosX(player* Player){return getSpritePosX(getPlayerSprite(Player));}
+float getPlayerPosY(player* Player){return getSpritePosY(getPlayerSprite(Player));}
 int getPlayerLife(player* Player){return Player->life;}
 int getPlayerSpeed(player* Player){return Player->speed;}
 int getPlayerWeaponType(player* Player){return Player->weaponType;}
 int getPlayerMoney(player* Player){return Player->money;}
-SDL_Texture* getPlayerTexture(player* Player){return Player->texture;}
+SDL_Texture* getPlayerTexture(player* Player){return getSpriteTexture(getPlayerSprite(Player));}
+sprite* getPlayerSprite(player* Player){return &(Player->sprite);}
 
 int setPlayerPosX(player* Player, float posX){
-    Player->posX = posX;
+    setSpritePosX(getPlayerSprite(Player),  posX);
     if(fabs(getPlayerPosX(Player) - posX) >= EPSILON){
         return 0;
     }
@@ -72,7 +128,7 @@ int setPlayerPosX(player* Player, float posX){
 }
 
 int setPlayerPosY(player* Player, float posY){
-    Player->posY = posY;
+    setSpritePosY(getPlayerSprite(Player),  posY);
     if(fabs(getPlayerPosY(Player) - posY) >= EPSILON){
         return 0;
     }
@@ -112,20 +168,25 @@ int setPlayerMoney(player* Player, int money){
 }
 
 void setPlayerTexture(player* Player, SDL_Texture* texture){
-    Player->texture = texture;
+    setSpriteTexture(getPlayerSprite(Player),  texture);
+}
+
+void setPlayerSprite(player* Player, sprite* Sprite){
+    Player->sprite = *Sprite;
 }
 
 /* ----- Enemy ----- */
 
-float getEnemyPosX(enemy* Enemy){return Enemy->posX;}
-float getEnemyPosY(enemy* Enemy){return Enemy->posY;}
+float getEnemyPosX(enemy* Enemy){return getSpritePosX(getEnemySprite(Enemy));}
+float getEnemyPosY(enemy* Enemy){return getSpritePosY(getEnemySprite(Enemy));}
 int getEnemyLife(enemy* Enemy){return Enemy->life;}
 int getEnemySpeed(enemy* Enemy){return Enemy->speed;}
 int getEnemyType(enemy* Enemy){return Enemy->type;}
-SDL_Texture* getEnemyTexture(enemy* Enemy){return Enemy->texture;}
+SDL_Texture* getEnemyTexture(enemy* Enemy){return getSpriteTexture(getEnemySprite(Enemy));}
+sprite* getEnemySprite(enemy* Enemy){return &(Enemy->sprite);}
 
 int setEnemyPosX(enemy* Enemy, float posX){
-    Enemy->posX = posX;
+    setSpritePosX(getEnemySprite(Enemy), posX);
     if(fabs(getEnemyPosX(Enemy) - posX) >= EPSILON){
         return 0;
     }
@@ -133,7 +194,7 @@ int setEnemyPosX(enemy* Enemy, float posX){
 }
 
 int setEnemyPosY(enemy* Enemy, float posY){
-    Enemy->posY = posY;
+    setSpritePosY(getEnemySprite(Enemy), posY);
     if(fabs(getEnemyPosY(Enemy) - posY) >= EPSILON){
         return 0;
     }
@@ -165,7 +226,11 @@ int setEnemyType(enemy* Enemy, int type){
 }
 
 void setEnemyTexture(enemy* Enemy, SDL_Texture* texture){
-    Enemy->texture = texture;
+    setSpriteTexture(getEnemySprite(Enemy), texture);;
+}
+
+void setEnemySprite(enemy * Enemy, sprite* Sprite){
+    Enemy->sprite = *Sprite;
 }
 
 /* ----- listEnemy ----- */
@@ -198,10 +263,21 @@ void freeListEnemy(listEnemy* ListeEnnemis){
 
 /* -------- Fonctions -------- */
 
+/* ----- Initialisation ----- */
+
+sprite initSprite(float posX, float posY, int height, int width){
+    sprite Sprite;
+    setSpritePosX(&Sprite, posX);
+    setSpritePosY(&Sprite, posY);
+    setSpriteHeight(&Sprite, height);
+    setSpriteWidth(&Sprite, width);
+    return Sprite;
+}
+
 bloc initBloc(int posX, int posY, int type){
     bloc Bloc;
-    setBlocPosX(&Bloc,posX);
-    setBlocPosY(&Bloc,posY);
+    sprite Sprite = initSprite(posX, posY, PLAYER_SIZE, PLAYER_SIZE);
+    setBlocSprite(&Bloc, &Sprite);
     setBlocType(&Bloc,type);
     setBlocNotObstacle(&Bloc);
     return Bloc;
@@ -209,10 +285,9 @@ bloc initBloc(int posX, int posY, int type){
 
 player initPLayer(){
     player Player;
-    // Placage du joueur au centre de l'ecran
-    setPlayerPosX(&Player,SCREEN_WIDTH/2 - PLAYER_SIZE/2); 
-    setPlayerPosY(&Player,SCREEN_HEIGHT/2 - PLAYER_SIZE/2);
+    sprite Sprite = initSprite(SCREEN_WIDTH/2 - PLAYER_SIZE/2, SCREEN_HEIGHT/2 - PLAYER_SIZE/2, PLAYER_SIZE, PLAYER_SIZE);
 
+    setPlayerSprite(&Player, &Sprite);
     setPlayerLife(&Player,PLAYER_LIFE);
     setPlayerSpeed(&Player,PLAYER_SPEED);
     setPlayerWeaponType(&Player,PISTOL_TYPE);
@@ -222,8 +297,8 @@ player initPLayer(){
 
 enemy initEnemy(float posX, float posY, int type){
     enemy Ennemi;
-    setEnemyPosX(&Ennemi, posX);
-    setEnemyPosY(&Ennemi, posY);
+    sprite Sprite = initSprite(posX, posY, PLAYER_SIZE, PLAYER_SIZE);
+    setEnemySprite(&Ennemi, &Sprite);
 
     switch(type){
         
@@ -267,7 +342,6 @@ listEnemy initListEnemy(int nb){
             //Initialisation et attribution du prochain maillon
             setNext(CurrentListEnnemis, malloc(sizeof(listEnemy)));
 
-            printf("x : %f, y : %f\n", getEnemyPosX(getEnemy(CurrentListEnnemis)), getEnemyPosX(getEnemy(CurrentListEnnemis)));
             CurrentListEnnemis = getNext(CurrentListEnnemis);
         }
 
@@ -280,12 +354,11 @@ listEnemy initListEnemy(int nb){
 
         setNext(CurrentListEnnemis, NULL);
 
-        printf("x : %f, y : %f\n", getEnemyPosX(getEnemy(CurrentListEnnemis)), getEnemyPosX(getEnemy(CurrentListEnnemis)));
     }
     return *ListeEnnemis;
 }
 
-
+/* ----- FPS ----- */
 
 void fpsCounter(int* fps, int* fpstimer){
     int fpsNow = SDL_GetTicks();
@@ -304,6 +377,7 @@ int fpsCap(Uint32 start, Uint32* end){
     return 0;
 }
 
+/* ----- Autres ----- */
 
 void handleEvents(SDL_Event* event, int* is_playing, player* player, double dt){
 

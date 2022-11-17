@@ -9,14 +9,24 @@
 #define PLAYER_LIFE 100
 #define PLAYER_SPEED 200
 #define PISTOL_TYPE 0
+#define NB_ENNEMIS 5
 
 #include <SDL2/SDL.h>
 
 /* ---------- Structures de donnees ---------- */
 
+struct sprite_t{
+    float posX;
+    float posY;
+    int height;
+    int width;
+    SDL_Texture* texture;
+};
+
+typedef struct sprite_t sprite;
+
 struct bloc_t{    // Structure d'un bloc obstacle
-    int posX;
-    int posY;
+    sprite sprite;
     int type;   //0 bloc classique, 1 bloc 
     int isObstacle;     // 1 si le bloc est un obstacle, 0 sinon
 };
@@ -24,24 +34,20 @@ struct bloc_t{    // Structure d'un bloc obstacle
 typedef struct bloc_t bloc;
 
 struct player_t{      //Structure du joueur
-    float posX;
-    float posY;
+    sprite sprite;
     int life;
     int speed;
     int weaponType;
     int money;
-    SDL_Texture* texture;
 };
 
 typedef struct player_t player;
 
 struct enemy_t{       //Structure d'un ennemi
-    float posX;
-    float posY;
+    sprite sprite;
     int life;
     int speed;
     int type;
-    SDL_Texture* texture;
 };
 
 typedef struct enemy_t enemy;
@@ -55,6 +61,82 @@ typedef struct listEnemy_t listEnemy;
 
 /* ---------- Getter / Setter ---------- */
 
+/* ----- Sprite ----- */
+
+/**
+ * @brief Retourne la coordonnée x du sprite
+ * @param Sprite Le sprite
+ * @return La coordonnée x;
+ */
+float getSpritePosX(sprite* Sprite);
+
+/**
+ * @brief Retourne la coordonnée y du sprite
+ * @param Sprite Le sprite
+ * @return La coordonnée y;
+ */
+float getSpritePosY(sprite* Sprite);
+
+/**
+ * @brief Retourne la hauteur du sprite
+ * @param Sprite Le sprite
+ * @return La hauteur;
+ */
+int getSpriteHeight(sprite* Sprite);
+
+/**
+ * @brief Retourne la largeur du sprite
+ * @param Sprite Le sprite
+ * @return La largeur;
+ */
+int getSpriteWidth(sprite* Sprite);
+
+/**
+ * @brief Retourne la texture du sprite
+ * @param Sprite Le sprite
+ * @return La texture
+ */
+SDL_Texture* getSpriteTexture(sprite* Sprite);
+
+/**
+ * @brief Modifie la coordonnée X du joueur
+ * @param Sprite Le sprite
+ * @param posX Sa coordonnée X
+ * @return -1 en cas d'échec, 0 sinon
+*/
+int setSpritePosX(sprite* Sprite, float posX);
+
+/**
+ * @brief Modifie la coordonnée Y du joueur
+ * @param Sprite Le sprite
+ * @param posY Sa coordonnée Y
+ * @return -1 en cas d'échec, 0 sinon
+*/
+int setSpritePosY(sprite* Sprite, float posY);
+
+/**
+ * @brief Modifie la hauteur du sprite
+ * @param Sprite Le sprite
+ * @param height Sa hauteur
+ * @return -1 en cas d'échec, 0 sinon
+*/
+int setSpriteHeight(sprite* Sprite, int height);
+
+/**
+ * @brief Modifie la largeur du sprite
+ * @param Sprite Le sprite
+ * @param height Sa largeur
+ * @return -1 en cas d'échec, 0 sinon
+*/
+int setSpriteWidth(sprite* Sprite, int width);
+
+/**
+ * @brief Met à jour la texture du sprite
+ * @param Sprite Le sprite
+ * @param texture la texture
+ */
+void setSpriteTexture(sprite* Sprite, SDL_Texture* texture);
+
 /* ----- Bloc ----- */
 
 /* 
@@ -62,19 +144,19 @@ typedef struct listEnemy_t listEnemy;
     @param Bloc Le bloc
     @return La coordonnée X
 */ 
-int getBlocPosX(bloc * Bloc);
+float getBlocPosX(bloc * Bloc);
 
 /* 
     @brief Retourne la coordonne Y du bloc
     @param Bloc Le bloc
     @return La coordonnée Y
 */ 
-int getBlocPosY(bloc * Bloc);
+float getBlocPosY(bloc * Bloc);
 
 /* 
     @brief Retourne le type du bloc
     @param Bloc Le bloc
-    @return 0 = Mur; 1 = Entrée d'ennemis; 2 = Zone de soin
+    @return 0 = Mur, 1 = Entrée d'ennemis, 2 = Zone de soin
 */ 
 int getBlocType(bloc * Bloc);
 
@@ -85,13 +167,20 @@ int getBlocType(bloc * Bloc);
 */ 
 int getBlocIsObstacle(bloc * Bloc);
 
+/**
+ * @brief Retourne le sprite
+ * @param Bloc Le bloc
+ * @return Le sprite
+ */
+sprite* getBlocSprite(bloc* Bloc);
+
 /* 
     @brief Modifie la coordonnée X du bloc
     @param Bloc Le bloc
     @param posX Sa nouvelle coordonnée X
     @return -1 en cas d'echec, 0 sinon
 */
-int setBlocPosX(bloc * Bloc, int posX);
+int setBlocPosX(bloc * Bloc, float posX);
 
 /* 
     @brief Modifie la coordonnée Y du bloc
@@ -99,7 +188,7 @@ int setBlocPosX(bloc * Bloc, int posX);
     @param posY Sa nouvelle coordonnée Y
     @return -1 en cas d'echec, 0 sinon
 */
-int setBlocPosY(bloc * Bloc, int posY);
+int setBlocPosY(bloc * Bloc, float posY);
 
 /* 
     @brief Modifie le type du bloc
@@ -122,6 +211,13 @@ int setBlocObstacle(bloc * Bloc);
     @return -1 en cas d'echec, 0 sinon
 */
 int setBlocNotObstacle(bloc * Bloc);
+
+/**
+ * @brief Modifie le sprite
+ * @param Bloc Le bloc
+ * @param Sprite Le sprite
+ */
+void setBlocSprite(bloc* Bloc, sprite* Sprite);
 
 /* ----- Player ----- */
 
@@ -174,6 +270,12 @@ int getPlayerMoney(player * Player);
  */
 SDL_Texture* getPlayerTexture(player* Player);
 
+/**
+ * @brief Retourne le sprite
+ * @param Player Le joueur
+ * @return Le sprite
+ */
+sprite* getPlayerSprite(player* PLayer);
 
 /*
     @brief Modifie la coordonnée X du joueur
@@ -230,6 +332,12 @@ int setPlayerMoney(player* Player, int money);
  */
 void setPlayerTexture(player* Player, SDL_Texture* texture);
 
+/**
+ * @brief Modifie le sprite
+ * @param Player Le joueur
+ * @param Sprite Le sprite
+ */
+void setPlayerSprite(player* Player, sprite* Sprite);
 
 /* ----- Enemy ----- */
 
@@ -274,6 +382,13 @@ int getEnemyType(enemy * Enemy);
  * @return la texture
  */
 SDL_Texture* getEnemyTexture(enemy* Enemy);
+
+/**
+ * @brief Retourne le sprite
+ * @param Enemy L'ennemi
+ * @return Le sprite
+ */
+sprite* getEnemySprite(enemy* Enemy);
 
 
 /*
@@ -323,6 +438,13 @@ int setEnemyType(enemy * Enemy, int type);
  */
 void setEnemyTexture(enemy* Enemy, SDL_Texture* texture);
 
+/**
+ * @brief Modifie le sprite
+ * @param Enemy L'ennemi
+ * @param Sprite Le sprite
+ * @return Le sprite
+ */
+void setEnemySprite(enemy* Enemy, sprite* Sprite);
 
 /* ----- listEnemy ----- */
 
@@ -371,6 +493,18 @@ void freeListEnemy(listEnemy* ListeEnnemis);
 
 /* ---------- Fonctions ---------- */
 
+/* ----- Initialisation ----- */
+
+/**
+ * @brief Initialise un sprite
+ * @param posX Sa position X
+ * @param posY Sa position Y
+ * @param height Sa hauteur
+ * @param width Sa largeur
+ * @return
+ */
+sprite initSprite(float posX, float posY, int height, int width);
+
 /*
     @brief Initialise un bloc non-obstacle
     @param posX Sa coordonnée X
@@ -401,6 +535,8 @@ enemy initEnemy(float posX, float posY, int type);
 */
 listEnemy initListEnemy(int nb);
 
+/* ----- FPS ----- */
+
 /**
  * @brief Donne le nombre de fps
  * @param fps le nombre d'image par seconde
@@ -415,6 +551,8 @@ void fpsCounter(int* fps, int* fpstimer);
  * @return 1 si on depasse les 60 fps et 0 sinon
  */
 int fpsCap(Uint32 start, Uint32* end);
+
+/* ----- Autres ----- */
 
 /**
  * @brief Gere les entrees clavier, souris et fenetre

@@ -59,7 +59,7 @@ int main(){
     SDL_Window* fenetre;
     SDL_Renderer* renderer;
     player joueur = initPLayer();
-    listEnemy listeEnnemis = initListEnemy(3);
+    listEnemy listeEnnemis = initListEnemy(NB_ENNEMIS);
   
 
     // Creation de la fenetre
