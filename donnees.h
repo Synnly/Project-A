@@ -675,4 +675,20 @@ void moveToPlayer(enemy* enemy, player* player, double dt);
  */
 void moveListEnemyToPlayer(listEnemy* ListeEnnemis, player* player, double dt);
 
+/**
+ * @brief Indique si deux sprites sont en collision
+ * @param Sprite1 Le premier sprite
+ * @param Sprite2 LE deuxième sprite
+ * @return 1 si ils sont en collision, 0 sinon
+ */
+int inCollision(sprite* Sprite1, sprite* Sprite2);
+
+/**
+ * @brief Indique si f1 et f2 sont égaux à epsilon pès
+ * @param f1 Le premier réel
+ * @param f2 Le deuxième réel
+ * @return 1 si ils sont égaux, 0 sinon
+ */
+int floatEquals(float f1, float f2);
+
 #endif

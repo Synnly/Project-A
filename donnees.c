@@ -318,7 +318,7 @@ listBloc initListBloc(){
     for(int i = 0; i <= SCREEN_WIDTH - PLAYER_SIZE; i+= PLAYER_SIZE){
         for(int j = 0; j <= SCREEN_HEIGHT - PLAYER_SIZE; j+= PLAYER_SIZE){
             if((i == 0 || i == SCREEN_WIDTH) && (j == 0 || j == SCREEN_HEIGHT)){
-                
+
                 //Attribution du bloc
                 setBloc(CurrentListeBlocs, initBloc(i,j,OBSTACLE_TYPE));
 
@@ -527,7 +527,55 @@ void moveToPlayer(enemy* enemy, player* player, double dt){
 
 void moveListEnemyToPlayer(listEnemy* ListeEnnemis, player* player, double dt){
     if(!isEmptyLE(ListeEnnemis)){
-        moveToPlayer(getEnemy(ListeEnnemis), player, dt);
+        if(!inCollision(getPlayerSprite(player), getEnemySprite(getEnemy(ListeEnnemis)))) {
+            moveToPlayer(getEnemy(ListeEnnemis), player, dt);
+        }
         moveListEnemyToPlayer(getNextE(ListeEnnemis), player, dt);
     }
+}
+
+int inCollision(sprite* Sprite1, sprite* Sprite2) {
+    float x1 = getSpritePosX(Sprite1);
+    float x2 = getSpritePosX(Sprite2);
+    float y1 = getSpritePosY(Sprite1);
+    float y2 = getSpritePosY(Sprite2);
+    float w1 = (float) getSpriteWidth(Sprite1);
+    float w2 = (float) getSpriteWidth(Sprite2);
+    float h1 = (float) getSpriteHeight(Sprite1);
+    float h2 = (float) getSpriteHeight(Sprite2);
+
+    // Coin bas-droite (sprite1) contre/dans l'autre (sprite2)
+    if (((x1 + w1 > x2 || floatEquals(x1 + w1, x2)) && (y1 + w1 > y2 || floatEquals(y1 + h1, y2)) &&
+
+         // Distance entre les deux points < h1 et < w1
+         (fabs(x1 + w1 - x2) < w1 || floatEquals(x1 + w1 - x2, w1)) &&
+         (fabs(y1 + w1 - y2) < h1 || floatEquals(y1 + w1 - h2, h1))) ||
+
+        // Coin bas-gauche contre/dans l'autre
+        ((x1 < x2 + w2 || floatEquals(x1, x2 + w2)) && (y1 + h1 > y2 || floatEquals(y1 + h1, y2)) &&
+
+         // Distance entre les deux points < h1 et < w1
+         (fabs(x2 + w2 - x1) < w1 || floatEquals(x2 + w2 - x1, w1)) &&
+         (fabs(y1 + h1 - y2) < h1 || floatEquals(y1 + h1 - y2, h1))) ||
+
+        // Coin haut-droite contre/dans l'autre
+        ((x1 + w1 > x2 || floatEquals(x1 + w1, x2)) && (y1 < y2 + h2 || floatEquals(y1, y2 + h2)) &&
+
+         // Distance entre les deux points < h1 et < w1
+         (fabs(x1 + w1 - x2) < w1 || floatEquals(x1 + w1 - x2, w1)) &&
+         (fabs(y2 + h2 - y1) < h1 || floatEquals(y2 + h2 - y1, h1))) ||
+
+        // Coin haut-gauche contre/dans l'autre
+        ((x1 < x2 + w2 || floatEquals(x1, x2 + w2)) && (y1 < y2 + h2 || floatEquals(y1, y2 + h2)) &&
+
+         // Distance entre les deux points < h1 et < w1
+         (fabs(x2 + w2 - x1) < w1 || floatEquals(x2 + w2 - x1, w1)) &&
+         (fabs(y2 + h2 - y1) < h1 || floatEquals(y2 + h2 - y1, h1)))) {
+        return 1;
+    }
+    return 0;
+}
+
+int floatEquals(float f1, float f2){
+    return fabs(f1-f2)<EPSILON;
 }
