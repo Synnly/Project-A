@@ -56,7 +56,7 @@ void setSpriteTexture(sprite* Sprite, SDL_Texture* texture){
 float getBlocPosX(bloc * Bloc){return getSpritePosX(getBlocSprite(Bloc));}
 float getBlocPosY(bloc * Bloc){return getSpritePosY(getBlocSprite(Bloc));}
 int getBlocType(bloc * Bloc){return Bloc->type;}
-int getBlocIsObstacle(bloc * Bloc){return Bloc->isObstacle;}
+int getBlocIsObstacle(bloc * Bloc){return Bloc->type == OBSTACLE_TYPE;}
 SDL_Texture* getBlocTexture(bloc* Bloc){return getSpriteTexture(getBlocSprite(Bloc));}
 sprite* getBlocSprite(bloc* Bloc){return &(Bloc->sprite);}
 
@@ -106,6 +106,34 @@ void setBlocTexture(bloc* Bloc, SDL_Texture* texture){
 
 void setBlocSprite(bloc* Bloc, sprite* Sprite){
     Bloc->sprite = *Sprite;
+}
+
+/* ----- listBlock -----*/
+
+bloc* getBloc(listBloc * ListeBlocs){return &(ListeBlocs->Bloc);}
+listBloc* getNextB(listBloc * ListeBlocs){return ListeBlocs->next;}
+
+void setBloc(listBloc *ListeBlocs, bloc Bloc) {
+    ListeBlocs->Bloc = Bloc;
+}
+
+int setNextB(listBloc * ListeBlocs, listBloc * ListeBlocNext){
+    ListeBlocs->next = ListeBlocNext;
+    if(ListeBlocs->next == ListeBlocNext){
+        return 0;
+    }
+    return -1;
+}
+
+int isEmptyLB(listBloc* ListeBloc){
+    return (ListeBloc == NULL);
+}
+
+void freeListBloc(listBloc* ListeBlocs){
+    if(!isEmptyLB(ListeBlocs)){
+        freeListBloc(getNextB(ListeBlocs));
+        free(ListeBlocs);
+    }
 }
 
 /* ----- Player ----- */
@@ -236,13 +264,13 @@ void setEnemySprite(enemy * Enemy, sprite* Sprite){
 /* ----- listEnemy ----- */
 
 enemy* getEnemy(listEnemy * ListEnemy){return &(ListEnemy->Enemy);}
-listEnemy* getNext(listEnemy * ListEnemy){return ListEnemy->next;}
+listEnemy* getNextE(listEnemy * ListEnemy){return ListEnemy->next;}
 
 void setEnemy(listEnemy *ListEnemy, enemy Enemy) {
     ListEnemy->Enemy = Enemy;
 }
 
-int setNext(listEnemy * ListEnemy, listEnemy * ListEnemyNext){
+int setNextE(listEnemy * ListEnemy, listEnemy * ListEnemyNext){
     ListEnemy->next = ListEnemyNext;
     if(ListEnemy->next == ListEnemyNext){
         return 0;
@@ -250,13 +278,13 @@ int setNext(listEnemy * ListEnemy, listEnemy * ListEnemyNext){
     return -1;
 }
 
-int isEmpty(listEnemy* ListEnnemy){
+int isEmptyLE(listEnemy* ListEnnemy){
     return (ListEnnemy == NULL);
 }
 
 void freeListEnemy(listEnemy* ListeEnnemis){
-    if(!isEmpty(ListeEnnemis)){
-        freeListEnemy(getNext(ListeEnnemis));
+    if(!isEmptyLE(ListeEnnemis)){
+        freeListEnemy(getNextE(ListeEnnemis));
         free(ListeEnnemis);
     }
 }
@@ -279,8 +307,41 @@ bloc initBloc(int posX, int posY, int type){
     sprite Sprite = initSprite(posX, posY, PLAYER_SIZE, PLAYER_SIZE);
     setBlocSprite(&Bloc, &Sprite);
     setBlocType(&Bloc,type);
-    setBlocNotObstacle(&Bloc);
+    //setBlocNotObstacle(&Bloc);
     return Bloc;
+}
+
+listBloc initListBloc(){
+    listBloc* ListeBlocs = malloc(sizeof(listBloc));
+    listBloc* CurrentListeBlocs;
+    CurrentListeBlocs = ListeBlocs;
+    for(int i = 0; i <= SCREEN_WIDTH - PLAYER_SIZE; i+= PLAYER_SIZE){
+        for(int j = 0; j <= SCREEN_HEIGHT - PLAYER_SIZE; j+= PLAYER_SIZE){
+            if((i == 0 || i == SCREEN_WIDTH) && (j == 0 || j == SCREEN_HEIGHT)){
+                
+                //Attribution du bloc
+                setBloc(CurrentListeBlocs, initBloc(i,j,OBSTACLE_TYPE));
+
+                //Initialisation et attribution de la prochaine liste
+                setNextB(CurrentListeBlocs, malloc(sizeof(listBloc)));
+
+                CurrentListeBlocs = getNextB(CurrentListeBlocs);
+            }else{
+                //Attribution du bloc
+                setBloc(CurrentListeBlocs, initBloc(i,j,NOBSTACLE_TYPE));
+
+                //Initialisation et attribution de la prochaine liste
+                setNextB(CurrentListeBlocs, malloc(sizeof(listBloc)));
+
+                CurrentListeBlocs = getNextB(CurrentListeBlocs);
+            }
+        }
+    }
+    //Attribution du dernier bloc de la liste
+    setBloc(CurrentListeBlocs,initBloc(SCREEN_WIDTH-PLAYER_SIZE,SCREEN_HEIGHT-PLAYER_SIZE,OBSTACLE_TYPE));
+    setNextB(CurrentListeBlocs, NULL);
+    return *ListeBlocs;
+
 }
 
 player initPLayer(){
@@ -340,9 +401,9 @@ listEnemy initListEnemy(int nb){
             setEnemy(CurrentListEnnemis, initEnemy(posX, posY, 1));
 
             //Initialisation et attribution du prochain maillon
-            setNext(CurrentListEnnemis, malloc(sizeof(listEnemy)));
+            setNextE(CurrentListEnnemis, malloc(sizeof(listEnemy)));
 
-            CurrentListEnnemis = getNext(CurrentListEnnemis);
+            CurrentListEnnemis = getNextE(CurrentListEnnemis);
         }
 
         //Position aléatoire
@@ -352,7 +413,7 @@ listEnemy initListEnemy(int nb){
         //Initialisation et attribution de l'ennemi
         setEnemy(CurrentListEnnemis, initEnemy(posX, posY, 1));
 
-        setNext(CurrentListEnnemis, NULL);
+        setNextE(CurrentListEnnemis, NULL);
 
     }
     return *ListeEnnemis;
@@ -465,8 +526,8 @@ void moveToPlayer(enemy* enemy, player* player, double dt){
 }
 
 void moveListEnemyToPlayer(listEnemy* ListeEnnemis, player* player, double dt){
-    if(!isEmpty(ListeEnnemis)){
+    if(!isEmptyLE(ListeEnnemis)){
         moveToPlayer(getEnemy(ListeEnnemis), player, dt);
-        moveListEnemyToPlayer(getNext(ListeEnnemis), player, dt);
+        moveListEnemyToPlayer(getNextE(ListeEnnemis), player, dt);
     }
 }

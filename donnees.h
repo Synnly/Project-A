@@ -5,6 +5,8 @@
 #define FPS 60
 #define SCREEN_WIDTH 1280
 #define SCREEN_HEIGHT 720
+#define OBSTACLE_TYPE 1
+#define NOBSTACLE_TYPE 0
 #define PLAYER_SIZE 40
 #define PLAYER_LIFE 100
 #define PLAYER_SPEED 200
@@ -32,6 +34,13 @@ struct bloc_t{    // Structure d'un bloc obstacle
 };
 
 typedef struct bloc_t bloc;
+
+struct listBloc_t{
+    bloc Bloc;
+    struct listBloc_t* next;
+};
+
+typedef struct listBloc_t listBloc;
 
 struct player_t{      //Structure du joueur
     sprite sprite;
@@ -168,6 +177,12 @@ int getBlocType(bloc * Bloc);
 int getBlocIsObstacle(bloc * Bloc);
 
 /**
+ * @brief Retourne la texture du bloc
+ * @param Bloc le bloc
+ */
+SDL_Texture* getBlocTexture(bloc* Bloc);
+
+/**
  * @brief Retourne le sprite
  * @param Bloc Le bloc
  * @return Le sprite
@@ -213,11 +228,64 @@ int setBlocObstacle(bloc * Bloc);
 int setBlocNotObstacle(bloc * Bloc);
 
 /**
+ *@brief Met la texture du bloc
+ * @param Bloc Le bloc
+ *@param texture La texture
+ */
+void setBlocTexture(bloc* Bloc, SDL_Texture* texture);
+
+/**
  * @brief Modifie le sprite
  * @param Bloc Le bloc
  * @param Sprite Le sprite
  */
 void setBlocSprite(bloc* Bloc, sprite* Sprite);
+
+/* ----- listBloc -----*/
+
+/**
+ * @brief Retourne le bloc de la liste chainée
+ * @param ListeBlocs La liste
+ * @return L'ennemi
+ */
+bloc* getBloc(listBloc * ListeBlocs);
+
+/**
+ * @brief Retourne la liste chainee suivante
+ * @param ListeBlocs La liste
+ * @return La liste suivante
+ */
+listBloc* getNextB(listBloc * ListeBlocs);
+
+/**
+ * @brief Modifie le bloc de la liste chainée
+ * @param ListeBlocs La liste
+ * @param Bloc Le bloc
+ */
+void setBloc(listBloc * ListeBlocs, bloc Bloc);
+
+/**
+ * @brief Modifie la liste chainee suivante
+ * @param ListeBlocs La liste
+ * @param ListeBlocNext La liste suivante
+ * @return -1 en cas d'échec, 0 sinon
+ */
+int setNextB(listBloc * ListeBlocs, listBloc * ListeBlocNext);
+
+/**
+ * @brief Indique si la liste est vide
+ * @param ListeBlocs La liste
+ * @return 1 si la liste est vide, 0 sinon
+ */
+int isEmptyLB(listBloc* ListeBlocs);
+
+/**
+ * @brief Libere la liste
+ * @param ListeBlocs La liste de blocs
+ */
+void freeListBloc(listBloc* ListeBlocs);
+
+
 
 /* ----- Player ----- */
 
@@ -460,7 +528,7 @@ enemy* getEnemy(listEnemy * ListEnemy);
  * @param ListEnemy La liste
  * @return La liste suivante
  */
-listEnemy* getNext(listEnemy * ListEnemy);
+listEnemy* getNextE(listEnemy * ListEnemy);
 
 /**
  * @brief Modifie l'ennemi de la liste chainée
@@ -475,14 +543,14 @@ void setEnemy(listEnemy * ListEnemy, enemy Enemy);
  * @param ListEnemyNext La liste suivante
  * @return -1 en cas d'échec, 0 sinon
  */
-int setNext(listEnemy * ListEnemy, listEnemy * ListEnemyNext);
+int setNextE(listEnemy * ListEnemy, listEnemy * ListEnemyNext);
 
 /**
  * @brief Indique si la liste est vide
  * @param ListEnnemy La liste
  * @return 1 si la liste est vide, 0 sinon
  */
-int isEmpty(listEnemy* ListEnnemy);
+int isEmptyLE(listEnemy* ListEnnemy);
 
 /**
  * @brief Libere la liste
@@ -513,6 +581,11 @@ sprite initSprite(float posX, float posY, int height, int width);
     @return Le bloc
 */
 bloc initBloc(int posX, int posY, int type);
+
+/**
+ * @brief Initialise la liste des blocs
+ */
+ listBloc initListBloc();
 
 /*
     @brief Initialise un joueur

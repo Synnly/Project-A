@@ -14,6 +14,13 @@
 SDL_Texture* loadSprite(SDL_Renderer* renderer, const char* file);
 
 /**
+ * @brief Initialise la texture de tous les blocs
+ * @param renderer Le renderer
+ * @param ListeBlocs La liste des blocs
+ */
+void initListBlocTextures(SDL_Renderer* renderer, listBloc* ListeBlocs);
+
+/**
  * @brief Initialise la texture de tous les ennemis
  * @param renderer Le renderer
  * @param ListeEnnemis La liste des ennemis
@@ -25,8 +32,9 @@ void initListEnemyTextures(SDL_Renderer* renderer, listEnemy* ListeEnnemis);
  * @param renderer le renderer
  * @param player le joueur
  * @param ListeEnnemis La liste des ennemis
+ * @param ListeBlocs la liste des blocs
  */
-void initTextures(SDL_Renderer* renderer, player* Player, listEnemy* ListeEnnemis);
+void initTextures(SDL_Renderer* renderer, player* Player, listEnemy* ListeEnnemis, listBloc* ListeBlocs);
 
 /**
  * @brief Affiche le sprite à l'écran
@@ -39,11 +47,30 @@ void initTextures(SDL_Renderer* renderer, player* Player, listEnemy* ListeEnnemi
 void drawSprite(SDL_Renderer* renderer, int x, int y, int w, int h, SDL_Texture* texture);
 
 /**
- * @Brief Affiche le sprite de tous les ennemis à l'écran
+ * @brief Affiche le sprite de tous les blocs à l'écran
+ * @param renderer Le renderer
+ * @param ListeBlocs  La liste des blocs
+ */
+void drawListBlocSprites(SDL_Renderer* renderer, listBloc* ListeBlocs);
+
+/**
+ * @brief Detruit le sprite de tous les blocs
+ * @param ListeBlocs la liste des blocs
+ */
+void destroyListBlocTextures(listBloc* ListeBlocs);
+
+/**
+ * @brief Affiche le sprite de tous les ennemis à l'écran
  * @param renderer Le renderer
  * @param ListeEnnemis  La liste des ennemis
  */
 void drawListEnemySprites(SDL_Renderer* renderer, listEnemy* ListeEnnemis);
+
+/**
+ * @brief Détruit le sprite de tous les ennemis
+ * @param ListeEnnemis la liste des ennemis
+ */
+void destroyListEnemyTextures(listEnemy* ListeEnnemis);
 
 
 /**
@@ -52,7 +79,8 @@ void drawListEnemySprites(SDL_Renderer* renderer, listEnemy* ListeEnnemis);
  * @param renderer Le renderer
  * @param Player Le joueur
  * @param ListeEnnemis La liste des ennemis
+ * @param ListeBlocs la liste des blocs
  */
-void endSDL(SDL_Window* fenetre, SDL_Renderer* renderer, player* Player, listEnemy* ListeEnnemis);
+void endSDL(SDL_Window* fenetre, SDL_Renderer* renderer, player* Player, listEnemy* ListeEnnemis, listBloc* ListeBlocs);
 
 #endif
