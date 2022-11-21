@@ -22,7 +22,7 @@ void boucleDeJeu(SDL_Renderer* renderer, player* player, listEnemy* listeEnnemis
 
         // Gestion des evenements
         SDL_Event event;
-        handleEvents(&event, &is_playing, player, (end-start)/1000.);
+        handleEvents(&event, &is_playing, player, listeBlocs, (end-start)/1000.);
 
         //Fermeture du jeu
         if(!is_playing){break;}
@@ -37,7 +37,7 @@ void boucleDeJeu(SDL_Renderer* renderer, player* player, listEnemy* listeEnnemis
 
         //Affichage du joueur
         drawListBlocSprites(renderer, listeBlocs);
-        drawSprite(renderer, (int)getPlayerPosX(player), (int)getPlayerPosY(player), PLAYER_SIZE, PLAYER_SIZE, getPlayerTexture(player));
+        drawSprite(renderer, (int)getPlayerPosX(player), (int)getPlayerPosY(player), PLAYER_SIZE, PLAYER_SIZE, 0, getPlayerTexture(player));
         drawListEnemySprites(renderer, listeEnnemis);
 
         SDL_RenderPresent(renderer);

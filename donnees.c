@@ -56,7 +56,7 @@ void setSpriteTexture(sprite* Sprite, SDL_Texture* texture){
 float getBlocPosX(bloc * Bloc){return getSpritePosX(getBlocSprite(Bloc));}
 float getBlocPosY(bloc * Bloc){return getSpritePosY(getBlocSprite(Bloc));}
 int getBlocType(bloc * Bloc){return Bloc->type;}
-int getBlocIsObstacle(bloc * Bloc){return Bloc->type == OBSTACLE_TYPE;}
+int getBlocIsObstacle(bloc * Bloc){return Bloc->isObstacle == 1;}
 SDL_Texture* getBlocTexture(bloc* Bloc){return getSpriteTexture(getBlocSprite(Bloc));}
 sprite* getBlocSprite(bloc* Bloc){return &(Bloc->sprite);}
 
@@ -307,7 +307,7 @@ bloc initBloc(int posX, int posY, int type){
     sprite Sprite = initSprite(posX, posY, PLAYER_SIZE, PLAYER_SIZE);
     setBlocSprite(&Bloc, &Sprite);
     setBlocType(&Bloc,type);
-    //setBlocNotObstacle(&Bloc);
+    setBlocNotObstacle(&Bloc);
     return Bloc;
 }
 
@@ -317,10 +317,11 @@ listBloc initListBloc(){
     CurrentListeBlocs = ListeBlocs;
     for(int i = 0; i <= SCREEN_WIDTH - PLAYER_SIZE; i+= PLAYER_SIZE){
         for(int j = 0; j <= SCREEN_HEIGHT - PLAYER_SIZE; j+= PLAYER_SIZE){
-            if((i == 0 || i == SCREEN_WIDTH) && (j == 0 || j == SCREEN_HEIGHT)){
+            if((i == 0 || i == SCREEN_WIDTH - PLAYER_SIZE) || (j == 0 || j == SCREEN_HEIGHT - PLAYER_SIZE)){
 
                 //Attribution du bloc
-                setBloc(CurrentListeBlocs, initBloc(i,j,OBSTACLE_TYPE));
+                setBloc(CurrentListeBlocs, initBloc(i,j,BLOC_TYPE));
+                setBlocObstacle(getBloc(CurrentListeBlocs));
 
                 //Initialisation et attribution de la prochaine liste
                 setNextB(CurrentListeBlocs, malloc(sizeof(listBloc)));
@@ -328,7 +329,7 @@ listBloc initListBloc(){
                 CurrentListeBlocs = getNextB(CurrentListeBlocs);
             }else{
                 //Attribution du bloc
-                setBloc(CurrentListeBlocs, initBloc(i,j,NOBSTACLE_TYPE));
+                setBloc(CurrentListeBlocs, initBloc(i,j,BLOC_TYPE));
 
                 //Initialisation et attribution de la prochaine liste
                 setNextB(CurrentListeBlocs, malloc(sizeof(listBloc)));
@@ -338,7 +339,8 @@ listBloc initListBloc(){
         }
     }
     //Attribution du dernier bloc de la liste
-    setBloc(CurrentListeBlocs,initBloc(SCREEN_WIDTH-PLAYER_SIZE,SCREEN_HEIGHT-PLAYER_SIZE,OBSTACLE_TYPE));
+    setBloc(CurrentListeBlocs,initBloc(SCREEN_WIDTH-PLAYER_SIZE,SCREEN_HEIGHT-PLAYER_SIZE,BLOC_TYPE));
+    setBlocObstacle(getBloc(CurrentListeBlocs));
     setNextB(CurrentListeBlocs, NULL);
     return *ListeBlocs;
 
@@ -440,7 +442,7 @@ int fpsCap(Uint32 start, Uint32* end){
 
 /* ----- Autres ----- */
 
-void handleEvents(SDL_Event* event, int* is_playing, player* player, double dt){
+void handleEvents(SDL_Event* event, int* is_playing, player* player, listBloc* ListeBlocs, double dt){
 
     // On retire tous les evenements sauf l'indication de fermer le jeu
     SDL_FlushEvents(SDL_APP_TERMINATING, SDL_USEREVENT);
@@ -457,39 +459,74 @@ void handleEvents(SDL_Event* event, int* is_playing, player* player, double dt){
         setPlayerPosX(player, max(0, getPlayerPosX(player)-pythagore(PLAYER_SPEED*dt)));
         setPlayerPosY(player, max(0, getPlayerPosY(player)-pythagore(PLAYER_SPEED*dt)));
 
+        if(spriteCollidesWalls(getPlayerSprite(player),ListeBlocs)){
+            setPlayerPosX(player, min(SCREEN_WIDTH - PLAYER_SIZE,getPlayerPosX(player) + pythagore(PLAYER_SPEED*dt)));
+            setPlayerPosY(player, min(SCREEN_HEIGHT - PLAYER_SIZE,getPlayerPosY(player) + pythagore(PLAYER_SPEED*dt)));
+        }
+
     }else if(((keystates[SDL_SCANCODE_LEFT]  || keystates[SDL_SCANCODE_A]) && (keystates[SDL_SCANCODE_DOWN] || keystates[SDL_SCANCODE_S]))){ // Déplaceent en bas à gauche
 
         setPlayerPosX(player, max(0, getPlayerPosX(player)-pythagore(PLAYER_SPEED*dt)));
         setPlayerPosY(player, min(SCREEN_HEIGHT - PLAYER_SIZE,getPlayerPosY(player) + pythagore(PLAYER_SPEED*dt)));
+
+        if(spriteCollidesWalls(getPlayerSprite(player),ListeBlocs)){
+            setPlayerPosX(player, min(SCREEN_WIDTH - PLAYER_SIZE,getPlayerPosX(player) + pythagore(PLAYER_SPEED*dt)));
+            setPlayerPosY(player, max(0,getPlayerPosY(player)-pythagore(PLAYER_SPEED*dt)));
+        }
 
     }else if(((keystates[SDL_SCANCODE_RIGHT]  || keystates[SDL_SCANCODE_D]) && (keystates[SDL_SCANCODE_UP] || keystates[SDL_SCANCODE_W]))){ // Déplacement en haut à droite
 
         setPlayerPosX(player, min(SCREEN_WIDTH - PLAYER_SIZE,getPlayerPosX(player) + pythagore(PLAYER_SPEED*dt)));
         setPlayerPosY(player, max(0,getPlayerPosY(player)-pythagore(PLAYER_SPEED*dt)));
 
+        if(spriteCollidesWalls(getPlayerSprite(player),ListeBlocs)){
+            setPlayerPosX(player, max(0, getPlayerPosX(player)-pythagore(PLAYER_SPEED*dt)));
+            setPlayerPosY(player, min(SCREEN_HEIGHT - PLAYER_SIZE,getPlayerPosY(player) + pythagore(PLAYER_SPEED*dt)));
+        }
+
     }else if((keystates[SDL_SCANCODE_RIGHT] || keystates[SDL_SCANCODE_D]) && (keystates[SDL_SCANCODE_DOWN] || keystates[SDL_SCANCODE_S])){ // Déplacement en bas à droite
 
         setPlayerPosX(player, min(SCREEN_WIDTH - PLAYER_SIZE,getPlayerPosX(player) + pythagore(PLAYER_SPEED*dt)));
         setPlayerPosY(player, min(SCREEN_HEIGHT - PLAYER_SIZE,getPlayerPosY(player) + pythagore(PLAYER_SPEED*dt)));
 
+        if(spriteCollidesWalls(getPlayerSprite(player),ListeBlocs)){
+            setPlayerPosX(player, max(0, getPlayerPosX(player)-pythagore(PLAYER_SPEED*dt)));
+            setPlayerPosY(player, max(0, getPlayerPosY(player)-pythagore(PLAYER_SPEED*dt)));
+        }
+
     }else if(keystates[SDL_SCANCODE_LEFT] || keystates[SDL_SCANCODE_A]){ // Déplacement à gauche
 
         setPlayerPosX(player, max(0, getPlayerPosX(player)-PLAYER_SPEED*dt));
+
+        if(spriteCollidesWalls(getPlayerSprite(player),ListeBlocs)){
+            
+           setPlayerPosX(player, min(SCREEN_WIDTH - PLAYER_SIZE,getPlayerPosX(player) + PLAYER_SPEED*dt));
+        }
 
     }else if(keystates[SDL_SCANCODE_UP] || keystates[SDL_SCANCODE_W]){ // Déplacement en haut
 
         setPlayerPosY(player, max(0,getPlayerPosY(player)-PLAYER_SPEED*dt));
 
+        if(spriteCollidesWalls(getPlayerSprite(player),ListeBlocs)){
+            setPlayerPosY(player, min(SCREEN_HEIGHT - PLAYER_SIZE,getPlayerPosY(player) + PLAYER_SPEED*dt));
+        }
+
     }else if(keystates[SDL_SCANCODE_RIGHT] || keystates[SDL_SCANCODE_D]){ // Déplacement à droite
 
         setPlayerPosX(player, min(SCREEN_WIDTH - PLAYER_SIZE,getPlayerPosX(player) + PLAYER_SPEED*dt));
+
+        if(spriteCollidesWalls(getPlayerSprite(player),ListeBlocs)){
+            setPlayerPosX(player, max(0, getPlayerPosX(player)-PLAYER_SPEED*dt));
+        }
 
     }else if(keystates[SDL_SCANCODE_DOWN] || keystates[SDL_SCANCODE_S]){ // Déplacement en bas
 
         setPlayerPosY(player, min(SCREEN_HEIGHT - PLAYER_SIZE,getPlayerPosY(player) + PLAYER_SPEED*dt));
 
+        if(spriteCollidesWalls(getPlayerSprite(player),ListeBlocs)){
+            setPlayerPosY(player, max(0,getPlayerPosY(player)-PLAYER_SPEED*dt));
+        }
     }
-
 }
 
 float max(float val1, float val2){
@@ -578,4 +615,15 @@ int inCollision(sprite* Sprite1, sprite* Sprite2) {
 
 int floatEquals(float f1, float f2){
     return fabs(f1-f2)<EPSILON;
+}
+
+int spriteCollidesWalls(sprite* Sprite, listBloc* ListeBlocs){
+    if(!isEmptyLB(ListeBlocs)){
+        if(getBlocIsObstacle(getBloc(ListeBlocs))){
+            return inCollision(Sprite, getBlocSprite(getBloc(ListeBlocs))) || spriteCollidesWalls(Sprite, getNextB(ListeBlocs));
+        }else{
+            return spriteCollidesWalls(Sprite, getNextB(ListeBlocs));
+        }
+    }
+    return 0;
 }

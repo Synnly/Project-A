@@ -43,8 +43,10 @@ void initTextures(SDL_Renderer* renderer, player* Player, listEnemy* ListeEnnemi
  * @param y La coordonnée y
  * @param w La largeur
  * @param h La hauteur
+ * @param spriteIndex l'indice du sprite sur la sheet
+ * @param texture l'adresse de la texture du sprite
  */
-void drawSprite(SDL_Renderer* renderer, int x, int y, int w, int h, SDL_Texture* texture);
+void drawSprite(SDL_Renderer* renderer, int x, int y, int w, int h, int spriteIndex, SDL_Texture* texture);
 
 /**
  * @brief Affiche le sprite de tous les blocs à l'écran

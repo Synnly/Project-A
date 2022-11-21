@@ -12,11 +12,7 @@ SDL_Texture* loadSprite(SDL_Renderer* renderer, const char* file){
 
 void initListBlocTextures(SDL_Renderer* renderer, listBloc* ListeBlocs){
     if(!isEmptyLB(ListeBlocs)){
-        if(getBlocType(getBloc(ListeBlocs)) == OBSTACLE_TYPE){
-            setBlocTexture(getBloc(ListeBlocs),loadSprite(renderer, "assets/img/wall.bmp"));
-        }else{
-            setBlocTexture(getBloc(ListeBlocs),loadSprite(renderer, "assets/img/wall.bmp"));
-        }
+        setBlocTexture(getBloc(ListeBlocs),loadSprite(renderer, "assets/img/wall.bmp"));
         initListBlocTextures(renderer, getNextB(ListeBlocs));
     }
 }
@@ -39,14 +35,15 @@ void initTextures(SDL_Renderer* renderer, player* Player, listEnemy* ListeEnnemi
     initListEnemyTextures(renderer, ListeEnnemis);
 }
 
-void drawSprite(SDL_Renderer* renderer, int x, int y, int w, int h, SDL_Texture* textureSprite){
+void drawSprite(SDL_Renderer* renderer, int x, int y, int w, int h, int spriteIndex, SDL_Texture* textureSprite){
+    SDL_Rect src = {w*spriteIndex,0,w,h};
     SDL_Rect dest = {x, y, w, h};
-    SDL_RenderCopy(renderer,textureSprite,NULL,&dest);
+    SDL_RenderCopy(renderer,textureSprite,&src,&dest);
 }
 
 void drawListBlocSprites(SDL_Renderer* renderer, listBloc* ListeBlocs){
     if(!isEmptyLB(ListeBlocs)){
-        drawSprite(renderer, getBlocPosX(getBloc(ListeBlocs)),getBlocPosY(getBloc(ListeBlocs)),PLAYER_SIZE, PLAYER_SIZE, getBlocTexture(getBloc(ListeBlocs)));
+        drawSprite(renderer, getBlocPosX(getBloc(ListeBlocs)),getBlocPosY(getBloc(ListeBlocs)),PLAYER_SIZE, PLAYER_SIZE, getBlocIsObstacle(getBloc(ListeBlocs)),getBlocTexture(getBloc(ListeBlocs)));
         drawListBlocSprites(renderer, getNextB(ListeBlocs));
     }
 }
@@ -60,7 +57,7 @@ void destroyListBlocTextures(listBloc* ListeBlocs){
 
 void drawListEnemySprites(SDL_Renderer* renderer, listEnemy* ListeEnnemis){
     if(!isEmptyLE(ListeEnnemis)){
-        drawSprite(renderer, getEnemyPosX(getEnemy(ListeEnnemis)), getEnemyPosY(getEnemy(ListeEnnemis)), PLAYER_SIZE, PLAYER_SIZE, getEnemyTexture(getEnemy(ListeEnnemis)));
+        drawSprite(renderer, getEnemyPosX(getEnemy(ListeEnnemis)), getEnemyPosY(getEnemy(ListeEnnemis)), PLAYER_SIZE, PLAYER_SIZE, 0, getEnemyTexture(getEnemy(ListeEnnemis)));
         drawListEnemySprites(renderer, getNextE(ListeEnnemis));
     }
 }

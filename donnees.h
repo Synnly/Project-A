@@ -1,12 +1,11 @@
 #ifndef DONNEES_H
 #define DONNEES_H
 
-#define EPSILON 0.0000001
+#define EPSILON 1e-2
 #define FPS 60
 #define SCREEN_WIDTH 1280
 #define SCREEN_HEIGHT 720
-#define OBSTACLE_TYPE 1
-#define NOBSTACLE_TYPE 0
+#define BLOC_TYPE 0
 #define PLAYER_SIZE 40
 #define PLAYER_LIFE 100
 #define PLAYER_SPEED 200
@@ -632,9 +631,10 @@ int fpsCap(Uint32 start, Uint32* end);
  * @param event Les evenements
  * @param is_playing Variable qui traque si le jeu est en cours ou non
  * @param player Le joueur
+ * @param ListeBlocs la liste des blocs
  * @param dt intervalle de temps
  */
-void handleEvents(SDL_Event* event, int* is_playing, player* player, double dt);
+void handleEvents(SDL_Event* event, int* is_playing, player* player, listBloc* ListeBlocs, double dt);
 
 /**
  * @brief Renvoie la valeur max entre deux valeurs
@@ -690,5 +690,13 @@ int inCollision(sprite* Sprite1, sprite* Sprite2);
  * @return 1 si ils sont égaux, 0 sinon
  */
 int floatEquals(float f1, float f2);
+
+/**
+ * @brief Indique si un sprite et un bloc obstacle sont en collision
+ * @param Sprite Le sprite
+ * @param ListeBlocs la liste des blocs
+ * @return 1 si collision 0 sinon
+ */
+int spriteCollidesWalls(sprite* Sprite, listBloc* ListeBlocs);
 
 #endif
