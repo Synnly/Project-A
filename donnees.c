@@ -254,7 +254,7 @@ int setEnemyType(enemy* Enemy, int type){
 }
 
 void setEnemyTexture(enemy* Enemy, SDL_Texture* texture){
-    setSpriteTexture(getEnemySprite(Enemy), texture);;
+    setSpriteTexture(getEnemySprite(Enemy), texture);
 }
 
 void setEnemySprite(enemy * Enemy, sprite* Sprite){
@@ -287,6 +287,66 @@ void freeListEnemy(listEnemy* ListeEnnemis){
         freeListEnemy(getNextE(ListeEnnemis));
         free(ListeEnnemis);
     }
+}
+
+/* ----- bullet ----- */
+
+sprite* getBulletSprite(bullet* Balle){return Balle->sprite;}
+float getBulletPosX(bullet* Balle){return getSpritePosX(getBulletSprite(Balle));}
+float getBulletPosY(bullet* Balle){return getSpritePosY(getBulletSprite(Balle));}
+int getBulletHeight(bullet* Balle){return getSpriteHeight(getBulletSprite(Balle));}
+int getBulletWidth(bullet* Balle){return getSpriteWidth(getBulletSprite(Balle));}
+int getBulletXSpeed(bullet* Balle){return Balle->xspeed;}
+int getBulletYSpeed(bullet* Balle){return Balle->yspeed;}
+int getBulletType(bullet* Balle){return Balle->type;}
+SDL_Texture* getBulletTexture(bullet* Balle){return getSpriteTexture(getBulletSprite(Balle));}
+
+void setBulletSprite(sprite* Sprite, bullet* Balle){
+    Balle->sprite = Sprite;
+}
+
+int setBulletPosX(bullet* Balle, float posX){
+    setSpritePosX(getBulletSprite(Balle), posX);
+    if(fabs(getBulletPosX(Balle) - posX) >= EPSILON){
+        return 0;
+    }
+    return -1;
+}
+
+int setBulletPosY(bullet* Balle, float posY){
+    setSpritePosY(getBulletSprite(Balle), posY);
+    if(fabs(getBulletPosY(Balle) - posY) >= EPSILON){
+        return 0;
+    }
+    return -1;
+}
+
+int setBulletXSpeed(bullet* Balle, int xSpeed){
+    Balle->xspeed = xSpeed;
+    if(Balle->xspeed == xSpeed){
+        return 1;
+    }
+    return 0;
+}
+
+int setBulletYSpeed(bullet* Balle, int ySpeed){
+    Balle->yspeed = ySpeed;
+    if(Balle->yspeed == ySpeed){
+        return 1;
+    }
+    return 0;
+}
+
+int setBulletType(bullet* Balle, int type){
+    Balle->type = type;
+    if(Balle->type == type){
+        return 1;
+    }
+    return 0;
+}
+
+void setBulletTexture(bullet* Balle, SDL_Texture* texture){
+    setSpriteTexture(getBulletSprite(Balle),texture);
 }
 
 /* -------- Fonctions -------- */
