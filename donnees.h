@@ -690,7 +690,7 @@ void setBulletTexture(bullet* Balle, SDL_Texture* texture);
  * @param ListeBalles la liste de balles
  * @return la balle
  */
-bullet* getBullet(listbullet * ListeBalles);
+bullet* getBullet(listBullet * ListeBalles);
 
 /**
  * @brief Renvoie la liste de balles suivante
@@ -698,7 +698,7 @@ bullet* getBullet(listbullet * ListeBalles);
  * @param ListeBalles la liste de balles
  * @return la prochaine liste de balles
  */
-listBullet* getNextBullet(listbullet * ListeBalles);
+listBullet* getNextBullet(listBullet * ListeBalles);
 
 /**
  * @brief Met à jour la balle de la liste

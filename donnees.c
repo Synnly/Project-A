@@ -291,7 +291,7 @@ void freeListEnemy(listEnemy* ListeEnnemis){
 
 /* ----- bullet ----- */
 
-sprite* getBulletSprite(bullet* Balle){return Balle->sprite;}
+sprite* getBulletSprite(bullet* Balle){return &(Balle->sprite);}
 float getBulletPosX(bullet* Balle){return getSpritePosX(getBulletSprite(Balle));}
 float getBulletPosY(bullet* Balle){return getSpritePosY(getBulletSprite(Balle));}
 int getBulletHeight(bullet* Balle){return getSpriteHeight(getBulletSprite(Balle));}
@@ -302,7 +302,7 @@ int getBulletType(bullet* Balle){return Balle->type;}
 SDL_Texture* getBulletTexture(bullet* Balle){return getSpriteTexture(getBulletSprite(Balle));}
 
 void setBulletSprite(sprite* Sprite, bullet* Balle){
-    Balle->sprite = Sprite;
+    Balle->sprite = *Sprite;
 }
 
 int setBulletPosX(bullet* Balle, float posX){
@@ -351,11 +351,11 @@ void setBulletTexture(bullet* Balle, SDL_Texture* texture){
 
 /* ------ listBullet ------*/
 
-bullet* getBullet(listbullet * ListeBalles){return &(ListeBalles->Bullet);}
-listBullet* getNextBullet(listbullet * ListeBalles){return ListBalles->next;}
+bullet* getBullet(listBullet * ListeBalles){return &(ListeBalles->Bullet);}
+listBullet* getNextBullet(listBullet * ListeBalles){return ListeBalles->next;}
 
 void setBullet(listBullet *ListeBalles, bullet Balle) {
-    ListeBullet->Bullet = Balle;
+    ListeBalles->Bullet = Balle;
 }
 
 int setNextBullet(listBullet * ListeBalles, listBullet * ListeBallesNext){
