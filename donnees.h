@@ -9,6 +9,7 @@
 #define PLAYER_SIZE 40
 #define PLAYER_LIFE 100
 #define PLAYER_SPEED 200
+#define BULLET_SIZE 10
 #define PISTOL_TYPE 0
 #define NB_ENNEMIS 5
 
@@ -868,5 +869,28 @@ int floatEquals(float f1, float f2);
  * @return 1 si collision 0 sinon
  */
 int spriteCollidesWalls(sprite* Sprite, listBloc* ListeBlocs);
+
+/**
+ * @brief Ajoute une balle dans la liste de balles
+ * @param ListeBalles La liste de balles
+ * @param Balle la balle à ajouter
+ */
+void addBullet(listBullet* ListeBalles, bullet* Balle);
+
+/**
+ * @brief Compare deux balles
+ * @param Balle1 la première balle
+ * @param Balle2 la deuxième balle
+ * @return 1 si les deux balles sont les mêmes 0 sinon
+ */
+int isSameBullet(bullet* Balle1, bullet* Balle2);
+
+/**
+ * @brief Supprime une balle de la liste de balles
+ * @param ListeBalles la liste de balles
+ * @param Balle la balle à supprimer
+ * @return 1 si la balle a été supprimée, 0 si la balle n'est pas dans la liste, -1 si la liste ou la balle est vide
+ */
+int deleteBullet(listBullet* ListeBalles, bullet* Balle);
 
 #endif

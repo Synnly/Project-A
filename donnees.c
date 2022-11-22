@@ -509,6 +509,29 @@ listEnemy initListEnemy(int nb){
     return *ListeEnnemis;
 }
 
+bullet initBullet(float posX, float posY, int speedX, int speedY, int type){
+    bullet Balle;
+    sprite Sprite = initSprite(posX,posY,BULLET_SIZE,BULLET_SIZE);
+    setBulletSprite(&Sprite, &Balle);
+
+    switch (type){
+
+        //à compléter plus tard (avec un peu de chance)
+        case 0:
+            break;
+        default:
+            setBulletXSpeed(&Balle, speedX);
+            setBulletYSpeed(&Balle, speedY);
+    }
+    setBulletType(&Balle, type);
+    return Balle;
+}
+
+listBullet initListBullet(){
+    listBullet* ListeBalles = malloc(sizeof(listBullet));
+    return *ListeBalles;
+}
+
 /* ----- FPS ----- */
 
 void fpsCounter(int* fps, int* fpstimer){
@@ -614,6 +637,8 @@ void handleEvents(SDL_Event* event, int* is_playing, player* player, listBloc* L
         if(spriteCollidesWalls(getPlayerSprite(player),ListeBlocs)){
             setPlayerPosY(player, max(0,getPlayerPosY(player)-PLAYER_SPEED*dt));
         }
+    }else if (keystates[SDL_SCANCODE_SPACE]){
+        //bullet Bullet = initBullet();
     }
 }
 
@@ -711,6 +736,56 @@ int spriteCollidesWalls(sprite* Sprite, listBloc* ListeBlocs){
             return inCollision(Sprite, getBlocSprite(getBloc(ListeBlocs))) || spriteCollidesWalls(Sprite, getNextB(ListeBlocs));
         }else{
             return spriteCollidesWalls(Sprite, getNextB(ListeBlocs));
+        }
+    }
+    return 0;
+}
+
+void addBullet(listBullet* ListeBalles, bullet* Balle){
+    listBullet* ListeBulletNext = malloc(sizeof(listBullet));
+    setBullet(ListeBulletNext,*Balle);
+    if(!isEmptyListBullet(ListeBalles)){
+        addBullet(getNextBullet(ListeBalles),Balle);
+    }else{
+        setNextBullet(ListeBalles,ListeBulletNext);
+        setNextBullet(ListeBulletNext,NULL);
+    }
+}
+
+int isSameBullet(bullet* Balle1, bullet* Balle2){
+    if((getBulletPosX(Balle1) == getBulletPosX(Balle2)) && (getBulletPosY(Balle1) == getBulletPosY(Balle2)) &&
+        (getBulletHeight(Balle1) == getBulletHeight(Balle2)) && (getBulletWidth(Balle1) == getBulletWidth(Balle2)) &&
+        (getBulletXSpeed(Balle1) == getBulletXSpeed(Balle2)) && (getBulletYSpeed(Balle1) == getBulletYSpeed(Balle2)) &&
+        (getBulletType(Balle1) == getBulletType(Balle2))){
+            return 1;
+    }
+    return 0;
+}
+
+int deleteBullet(listBullet* ListeBalles, bullet* Balle){
+    if(isEmptyListBullet(ListeBalles) || Balle == NULL){
+        return -1;
+    }
+    listBullet* temp;
+    //La balle est la première de la liste
+    if(isSameBullet(Balle,getBullet(ListeBalles))){
+        temp = ListeBalles;
+        ListeBalles = getNextBullet(ListeBalles);
+        freeListBullet(temp);
+        return 1;
+    }else{ // On parcourt le reste de la liste pour trouver la bonne balle
+        listBullet* currentListBullet;
+        while(getNextBullet(currentListBullet)!=NULL){
+            //On a trouvé la balle
+            if(isSameBullet(Balle,getBullet(getNextBullet(currentListBullet)))){
+                temp = getNextBullet(currentListBullet);
+                //On supprime la balle
+                setNextBullet(currentListBullet,getNextBullet(getNextBullet(currentListBullet)));
+                freeListBullet(temp);
+                return 1;
+            }else{//La balle n'a pas été trouvée on passe à la suivante
+                currentListBullet = getNextBullet(currentListBullet);
+            }
         }
     }
     return 0;
