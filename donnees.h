@@ -778,6 +778,23 @@ enemy initEnemy(float posX, float posY, int type);
 */
 listEnemy initListEnemy(int nb);
 
+/**
+ * @brief initialise une balle
+ * @param posX la position en x de la balle
+ * @param posY la position en y de la balle
+ * @param speedX la vitesse en x de la balle
+ * @param speedY la vitesse en y de la balle
+ * @param type le type de la balle
+ * @return la balle initialisée
+ */
+bullet initBullet(float posX, float posY, int speedX, int speedY, int type);
+
+/**
+ * @brief initialise la liste de balles
+ * @return la liste de balles intialisée
+ */
+listBullet initListBullet();
+
 /* ----- FPS ----- */
 
 /**
