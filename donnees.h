@@ -683,6 +683,50 @@ int setBulletType(bullet* Balle, int type);
  */
 void setBulletTexture(bullet* Balle, SDL_Texture* texture);
 
+/* ------ listBullet -------*/
+
+/**
+ * @brief Renvoie la balle
+ * @param ListeBalles la liste de balles
+ * @return la balle
+ */
+bullet* getBullet(listbullet * ListeBalles);
+
+/**
+ * @brief Renvoie la liste de balles suivante
+ * 
+ * @param ListeBalles la liste de balles
+ * @return la prochaine liste de balles
+ */
+listBullet* getNextBullet(listbullet * ListeBalles);
+
+/**
+ * @brief Met à jour la balle de la liste
+ * @param ListeBalles la liste de balles 
+ * @param Balle la balle
+ */
+void setBullet(listBullet *ListeBalles, bullet Balle);
+
+/**
+ * @brief 
+ * @param ListeBalles 
+ * @param ListeBallesNext 
+ * @return int 
+ */
+int setNextBullet(listBullet * ListeBalles, listBullet * ListeBallesNext);
+
+/**
+ * @brief Retourne l'etat de la liste de balles
+ * @param ListeBalles la liste de balles
+ * @return 1 si vide 0 sinon
+ */
+int isEmptyListBullet(listBullet* ListeBalles);
+
+/**
+ * @brief Libère la mémoire reservée par la liste de balles
+ * @param ListeBalles la liste de balles
+ */
+void freeListBullet(listBullet* ListeBalles);
 
 /* ---------- Fonctions ---------- */
 

@@ -349,6 +349,34 @@ void setBulletTexture(bullet* Balle, SDL_Texture* texture){
     setSpriteTexture(getBulletSprite(Balle),texture);
 }
 
+/* ------ listBullet ------*/
+
+bullet* getBullet(listbullet * ListeBalles){return &(ListeBalles->Bullet);}
+listBullet* getNextBullet(listbullet * ListeBalles){return ListBalles->next;}
+
+void setBullet(listBullet *ListeBalles, bullet Balle) {
+    ListeBullet->Bullet = Balle;
+}
+
+int setNextBullet(listBullet * ListeBalles, listBullet * ListeBallesNext){
+    ListeBalles->next = ListeBallesNext;
+    if(ListeBalles->next == ListeBallesNext){
+        return 0;
+    }
+    return -1;
+}
+
+int isEmptyListBullet(listBullet* ListeBalles){
+    return (ListeBalles == NULL);
+}
+
+void freeListBullet(listBullet* ListeBalles){
+    if(!isEmptyListBullet(ListeBalles)){
+        freeListBullet(getNextBullet(ListeBalles));
+        free(ListeBalles);
+    }
+}
+
 /* -------- Fonctions -------- */
 
 /* ----- Initialisation ----- */
