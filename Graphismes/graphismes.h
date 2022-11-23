@@ -3,7 +3,7 @@
 
 #include <SDL2/SDL.h>
 #include <SDL2/SDL_ttf.h>
-#include "donnees.h"
+#include "../Donnees/donnees.h"
 
 /**
  * @brief Charge un sprite

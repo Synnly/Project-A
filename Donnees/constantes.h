@@ -1,0 +1,26 @@
+#ifndef PROJECT_A_CONSTANTES_H
+#define PROJECT_A_CONSTANTES_H
+
+#define EPSILON 1e-2
+#define FPS 60
+
+#define SCREEN_WIDTH 1280
+#define SCREEN_HEIGHT 720
+
+#define PLAYER_SIZE 40
+#define PLAYER_LIFE 100
+#define PLAYER_SPEED 200
+
+#define ENEMY_SIZE 40
+#define ENEMY_LIFE 100
+#define ENEMY_SPEED 200
+
+#define BLOC_TYPE 0
+#define BLOC_SIZE 40
+
+#define BULLET_SIZE 10
+#define PISTOL_TYPE 0
+
+#define NB_ENNEMIS 5
+
+#endif //PROJECT_A_CONSTANTES_H

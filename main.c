@@ -1,7 +1,8 @@
 #include <SDL2/SDL.h>
 #include <SDL2/SDL_ttf.h>
-#include "graphismes.h"
-#include "donnees.h"
+#include "Graphismes/graphismes.h"
+#include "Donnees/donnees.h"
+#include "Donnees/constantes.h"
 #include <stdio.h>
 #define SDL_MAIN_HANDLED
 

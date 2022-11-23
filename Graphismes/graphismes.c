@@ -1,7 +1,7 @@
 #include <SDL2/SDL.h>
 #include <SDL2/SDL_ttf.h>
 #include "graphismes.h"
-#include "donnees.h"
+#include "../Donnees/donnees.h"
 
 SDL_Texture* loadSprite(SDL_Renderer* renderer, const char* file){
     SDL_Surface* sprite = SDL_LoadBMP(file);
