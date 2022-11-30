@@ -13,44 +13,23 @@ sprite* getEnemySprite(enemy* Enemy){return &(Enemy->sprite);}
 
 /* ----- Setter ----- */
 
-int setEnemyPosX(enemy* Enemy, float posX){
+void setEnemyPosX(enemy* Enemy, float posX){
     setSpritePosX(getEnemySprite(Enemy), posX);
-    if(fabs(getEnemyPosX(Enemy) - posX) >= EPSILON){
-        return 0;
-    }
-    return -1;
 }
 
-int setEnemyPosY(enemy* Enemy, float posY){
+void setEnemyPosY(enemy* Enemy, float posY){
     setSpritePosY(getEnemySprite(Enemy), posY);
-    if(fabs(getEnemyPosY(Enemy) - posY) >= EPSILON){
-        return 0;
-    }
-    return -1;
-}
 
-int setEnemyLife(enemy* Enemy, int life){
+void setEnemyLife(enemy* Enemy, int life){
     Enemy->life = life;
-    if(getEnemyLife(Enemy) == life){
-        return 0;
-    }
-    return -1;
 }
 
-int setEnemySpeed(enemy* Enemy, int speed){
+void setEnemySpeed(enemy* Enemy, int speed){
     Enemy->speed = speed;
-    if(getEnemySpeed(Enemy) == speed){
-        return 0;
-    }
-    return -1;
 }
 
-int setEnemyType(enemy* Enemy, int type){
+void setEnemyType(enemy* Enemy, int type){
     Enemy->type = type;
-    if(getEnemyType(Enemy) == type){
-        return 0;
-    }
-    return -1;
 }
 
 void setEnemyTexture(enemy* Enemy, SDL_Texture* texture){

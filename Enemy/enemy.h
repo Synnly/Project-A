@@ -70,41 +70,36 @@ sprite* getEnemySprite(enemy* Enemy);
     @brief Modifie la coordonnée X de l'ennemi
     @param Enemy L'ennemi
     @param posX Sa coordonnée X
-    @return -1 en cas d'échec, 0 sinon
 */
-int setEnemyPosX(enemy * Enemy, float posX);
+void setEnemyPosX(enemy * Enemy, float posX);
 
 /*
     @brief Modifie la coordonnée Y de l'ennemi
     @param Enemy L'ennemi
     @param posY Sa coordonnée Y
-    @return -1 en cas d'échec, 0 sinon
 */
-int setEnemyPosY(enemy * Enemy, float posY);
+void setEnemyPosY(enemy * Enemy, float posY);
 
 /*
     @brief Modifie la vie restante de l'ennemi
     @param Enemy L'ennemi
     @param life Sa vie restante
-    @return -1 en cas d'échec, 0 sinon
 */
-int setEnemyLife(enemy * Enemy, int life);
+void setEnemyLife(enemy * Enemy, int life);
 
 /*
     @brief Modifie la vitesse de l'ennemi
     @param Enemy L'ennemi
     @param speed Sa vitesse
-    @return -1 en cas d'échec, 0 sinon
 */
-int setEnemySpeed(enemy * Enemy, int speed);
+void setEnemySpeed(enemy * Enemy, int speed);
 
 /*
     @brief Modifie le type de l'ennemi
     @param Enemy L'ennemi
     @param type Son type
-    @return -1 en cas d'échec, 0 sinon
 */
-int setEnemyType(enemy * Enemy, int type);
+void setEnemyType(enemy * Enemy, int type);
 
 /**
  * @brief Met à jour la texture du sprite de l'ennemi

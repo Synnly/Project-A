@@ -21,44 +21,24 @@ void setBulletSprite(sprite* Sprite, bullet* Balle){
     Balle->sprite = *Sprite;
 }
 
-int setBulletPosX(bullet* Balle, float posX){
+void setBulletPosX(bullet* Balle, float posX){
     setSpritePosX(getBulletSprite(Balle), posX);
-    if(fabs(getBulletPosX(Balle) - posX) >= EPSILON){
-        return 0;
-    }
-    return -1;
 }
 
-int setBulletPosY(bullet* Balle, float posY){
+void setBulletPosY(bullet* Balle, float posY){
     setSpritePosY(getBulletSprite(Balle), posY);
-    if(fabs(getBulletPosY(Balle) - posY) >= EPSILON){
-        return 0;
-    }
-    return -1;
 }
 
-int setBulletXSpeed(bullet* Balle, float xSpeed){
+void setBulletXSpeed(bullet* Balle, float xSpeed){
     Balle->xspeed = xSpeed;
-    if(Balle->xspeed == xSpeed){
-        return 1;
-    }
-    return 0;
 }
 
-int setBulletYSpeed(bullet* Balle, float ySpeed){
+void setBulletYSpeed(bullet* Balle, float ySpeed){
     Balle->yspeed = ySpeed;
-    if(Balle->yspeed == ySpeed){
-        return 1;
-    }
-    return 0;
 }
 
-int setBulletType(bullet* Balle, int type){
+void setBulletType(bullet* Balle, int type){
     Balle->type = type;
-    if(Balle->type == type){
-        return 1;
-    }
-    return 0;
 }
 
 void setBulletTexture(bullet* Balle, SDL_Texture* texture){

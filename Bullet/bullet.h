@@ -81,41 +81,36 @@ void setBulletSprite(sprite* Sprite, bullet* Balle);
  * @brief Met à jour la position x de la balle
  * @param Balle la balle
  * @param posX la position en x
- * @return 1 si réussite 0 sinon
  */
-int setBulletPosX(bullet* Balle, float posX);
+void setBulletPosX(bullet* Balle, float posX);
 
 /**
  * @brief Met à jour la coordonnée y de la balle
  * @param Balle la balle
  * @param posY la position en y
- * @return 1 si réussite 0 sinon
  */
-int setBulletPosY(bullet* Balle, float posY);
+void setBulletPosY(bullet* Balle, float posY);
 
 /**
  * @brief Met à jour la vitesse en x de la balle
  * @param Balle la balle
  * @param xSpeed la vitesse en x
- * @return 1 si réussite 0 sinon
  */
-int setBulletXSpeed(bullet* Balle, float xSpeed);
+void setBulletXSpeed(bullet* Balle, float xSpeed);
 
 /**
  * @brief Met à jour la vitesse y de la balle
  * @param Balle la balle
  * @param ySpeed la vitesse en y
- * @return 1 si réussite 0 sinon
  */
-int setBulletYSpeed(bullet* Balle, float ySpeed);
+void setBulletYSpeed(bullet* Balle, float ySpeed);
 
 /**
  * @brief Met à jour le type de la balle
  * @param Balle la balle
  * @param type le type
- * @return 1 si réussite 0 sinon
  */
-int setBulletType(bullet* Balle, int type);
+void setBulletType(bullet* Balle, int type);
 
 /**
  * @brief Met à jour la texture de la balle

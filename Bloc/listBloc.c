@@ -27,6 +27,7 @@ listBloc initListBloc(){
     CurrentListeBlocs = ListeBlocs;
     for(int i = 0; i <= SCREEN_WIDTH - BLOC_SIZE; i+= BLOC_SIZE){
         for(int j = 0; j <= SCREEN_HEIGHT - BLOC_SIZE; j+= BLOC_SIZE){
+            // On parcourt les blocs qui font le tour de l'écran pour les mettre en obstacle
             if((i == 0 || i == SCREEN_WIDTH - BLOC_SIZE) || (j == 0 || j == SCREEN_HEIGHT - BLOC_SIZE)){
 
                 //Attribution du bloc

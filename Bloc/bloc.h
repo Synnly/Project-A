@@ -60,39 +60,34 @@ sprite* getBlocSprite(bloc* Bloc);
     @brief Modifie la coordonnée X du bloc
     @param Bloc Le bloc
     @param posX Sa nouvelle coordonnée X
-    @return -1 en cas d'echec, 0 sinon
 */
-int setBlocPosX(bloc * Bloc, float posX);
+void setBlocPosX(bloc * Bloc, float posX);
 
 /*
     @brief Modifie la coordonnée Y du bloc
     @param Bloc Le bloc
     @param posY Sa nouvelle coordonnée Y
-    @return -1 en cas d'echec, 0 sinon
 */
-int setBlocPosY(bloc * Bloc, float posY);
+void setBlocPosY(bloc * Bloc, float posY);
 
 /*
     @brief Modifie le type du bloc
     @param Bloc Le bloc
     @param type Son nouveau type
-    @return -1 en cas d'echec, 0 sinon
 */
-int setBlocType(bloc * Bloc, int type);
+void setBlocType(bloc * Bloc, int type);
 
 /*
     @brief Rend le bloc obstacle
     @param Bloc Le bloc
-    @return -1 en cas d'echec, 0 sinon
 */
-int setBlocObstacle(bloc * Bloc);
+void setBlocObstacle(bloc * Bloc);
 
 /*
     @brief Rend le bloc non-obstacle
     @param Bloc Le bloc
-    @return -1 en cas d'echec, 0 sinon
 */
-int setBlocNotObstacle(bloc * Bloc);
+void setBlocNotObstacle(bloc * Bloc);
 
 /**
  *@brief Met la texture du bloc

@@ -14,52 +14,28 @@ sprite* getPlayerSprite(player* Player){return &(Player->sprite);}
 
 /* ----- Setter ----- */
 
-int setPlayerPosX(player* Player, float posX){
+void setPlayerPosX(player* Player, float posX){
     setSpritePosX(getPlayerSprite(Player),  posX);
-    if(fabs(getPlayerPosX(Player) - posX) >= EPSILON){
-        return 0;
-    }
-    return -1;
 }
 
-int setPlayerPosY(player* Player, float posY){
+void setPlayerPosY(player* Player, float posY){
     setSpritePosY(getPlayerSprite(Player),  posY);
-    if(fabs(getPlayerPosY(Player) - posY) >= EPSILON){
-        return 0;
-    }
-    return -1;
 }
 
-int setPlayerLife(player* Player, int life){
+void setPlayerLife(player* Player, int life){
     Player->life = life;
-    if(getPlayerLife(Player) == life){
-        return 0;
-    }
-    return -1;
 }
 
-int setPlayerSpeed(player* Player, int speed){
+void setPlayerSpeed(player* Player, int speed){
     Player->speed = speed;
-    if(getPlayerSpeed(Player) == speed){
-        return 0;
-    }
-    return -1;
 }
 
-int setPlayerWeaponType(player* Player, int weapontype){
+void setPlayerWeaponType(player* Player, int weapontype){
     Player->weaponType = weapontype;
-    if(getPlayerWeaponType(Player) == weapontype){
-        return 0;
-    }
-    return -1;
 }
 
-int setPlayerMoney(player* Player, int money){
+void setPlayerMoney(player* Player, int money){
     Player->money = money;
-    if(getPlayerMoney(Player) == money){
-        return 0;
-    }
-    return -1;
 }
 
 void setPlayerTexture(player* Player, SDL_Texture* texture){

@@ -12,44 +12,24 @@ sprite* getBlocSprite(bloc* Bloc){return &(Bloc->sprite);}
 
 /* ----- Setter ----- */
 
-int setBlocPosX(bloc* Bloc, float posX){
+void setBlocPosX(bloc* Bloc, float posX){
     setSpritePosX(getBlocSprite(Bloc),  posX);
-    if(fabs(getBlocPosX(Bloc) - posX) >= EPSILON){
-        return 0;
-    }
-    return -1;
 }
 
-int setBlocPosY(bloc* Bloc, float posY){
+void setBlocPosY(bloc* Bloc, float posY){
     setSpritePosY(getBlocSprite(Bloc),  posY);
-    if(fabs(getBlocPosY(Bloc) - posY) >= EPSILON){
-        return 0;
-    }
-    return -1;
 }
 
-int setBlocType(bloc * Bloc, int type){
+void setBlocType(bloc * Bloc, int type){
     Bloc->type = type;
-    if(getBlocType(Bloc) == type){
-        return 0;
-    }
-    return -1;
 }
 
-int setBlocObstacle(bloc * Bloc){
+void setBlocObstacle(bloc * Bloc){
     Bloc->isObstacle = 1;
-    if(getBlocIsObstacle(Bloc)){
-        return 0;
-    }
-    return -1;
 }
 
-int setBlocNotObstacle(bloc * Bloc){
+void setBlocNotObstacle(bloc * Bloc){
     Bloc->isObstacle = 0;
-    if(!getBlocIsObstacle(Bloc)){
-        return 0;
-    }
-    return -1;
 }
 
 void setBlocTexture(bloc* Bloc, SDL_Texture* texture){

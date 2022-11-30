@@ -69,11 +69,13 @@ listEnemy initListEnemy(int nb){
 /* ----- Autre ----- */
 
 int isEmptyLE(listEnemy* ListEnnemy){
+
     return (ListEnnemy == NULL);
 }
 
 void freeListEnemy(listEnemy* ListeEnnemis){
     if(!isEmptyLE(ListeEnnemis)){
+
         freeListEnemy(getNextE(ListeEnnemis));
         free(ListeEnnemis);
     }

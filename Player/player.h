@@ -78,49 +78,43 @@ sprite* getPlayerSprite(player* PLayer);
     @brief Modifie la coordonnée X du joueur
     @param Player Le joueur
     @param posX Sa coordonnée X
-    @return -1 en cas d'échec, 0 sinon
 */
-int setPlayerPosX(player * Player, float posX);
+void setPlayerPosX(player * Player, float posX);
 
 /*
     @brief Modifie la coordonnée Y du joueur
     @param Player Le joueur
     @param posY Sa coordonnée Y
-    @return -1 en cas d'échec, 0 sinon
 */
-int setPlayerPosY(player * Player, float posY);
+void setPlayerPosY(player * Player, float posY);
 
 /*
     @brief Modifie la vie restante du joueur
     @param Player Le joueur
     @param life Sa vie restante
-    @return -1 en cas d'échec, 0 sinon
 */
-int setPlayerLife(player * Player, int life);
+void setPlayerLife(player * Player, int life);
 
 /*
     @brief Modifie la vitesse du joueur
     @param Player Le joueur
     @param speed Sa vitesse
-    @return -1 en cas d'échec, 0 sinon
 */
-int setPlayerSpeed(player * Player, int speed);
+void setPlayerSpeed(player * Player, int speed);
 
 /*
     @brief Modifie le type de l'arme du joueur
     @param Player Le joueur
     @param weaponType Le type de son arme
-    @return -1 en cas d'échec, 0 sinon
 */
-int setPlayerWeaponType(player * Player, int weaponType);
+void setPlayerWeaponType(player * Player, int weaponType);
 
 /*
     @brief Modifie le montant de l'argent du joueur
     @param Player le joueur
     @param money le nouveau montant de l'argent du joueur
-    @return -1 en cas d'échec, 0 sinon
 */
-int setPlayerMoney(player* Player, int money);
+void setPlayerMoney(player* Player, int money);
 
 /**
  * @brief Met à jour la texture du sprite du joueur
