@@ -5,8 +5,8 @@
 
 struct bullet_t{
     sprite sprite;
-    int xspeed;
-    int yspeed;
+    float xspeed;
+    float yspeed;
     int type;
 };
 
@@ -48,13 +48,13 @@ int getBulletWidth(bullet* Balle);
  * @brief donne la vitesse en x de la balle
  * @param Balle la balle
  */
-int getBulletXSpeed(bullet* Balle);
+float getBulletXSpeed(bullet* Balle);
 
 /**
  * @brief donne la vitesse en y de la balle
  * @param Balle la balle
  */
-int getBulletYSpeed(bullet* Balle);
+float getBulletYSpeed(bullet* Balle);
 
 /**
  * @brief donne le type de la balle
@@ -99,7 +99,7 @@ int setBulletPosY(bullet* Balle, float posY);
  * @param xSpeed la vitesse en x
  * @return 1 si réussite 0 sinon
  */
-int setBulletXSpeed(bullet* Balle, int xSpeed);
+int setBulletXSpeed(bullet* Balle, float xSpeed);
 
 /**
  * @brief Met à jour la vitesse y de la balle
@@ -107,7 +107,7 @@ int setBulletXSpeed(bullet* Balle, int xSpeed);
  * @param ySpeed la vitesse en y
  * @return 1 si réussite 0 sinon
  */
-int setBulletYSpeed(bullet* Balle, int ySpeed);
+int setBulletYSpeed(bullet* Balle, float ySpeed);
 
 /**
  * @brief Met à jour le type de la balle

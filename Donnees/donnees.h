@@ -45,32 +45,12 @@ int fpsCap(Uint32 start, Uint32* end);
  * @param is_playing Variable qui traque si le jeu est en cours ou non
  * @param player Le joueur
  * @param ListeBlocs la liste des blocs
+ * @param listeBalles la liste des balles
  * @param dt intervalle de temps
+ * @param startFire Compteur de frames pour le tir en continu
  */
-void handleEvents(SDL_Event* event, int* is_playing, player* player, listBloc* ListeBlocs, double dt);
+void handleEvents(SDL_Event* event, int* is_playing, player* player, listBloc* ListeBlocs, listBullet* listeBalles, double dt, double* startFire);
 
-/**
- * @brief Renvoie la valeur max entre deux valeurs
- * @param val1 la première valeur
- * @param val2 la deuxième valeur
- * @return le max entre les deux valeurs
- */
-float max(float val1, float val2);
-
-/**
- * @brief Renvoie la valeur min entre deux valeurs
- * @param val1 la première valeur
- * @param val2 la deuxième valeur
- * @return le min entre les deux valeurs
- */
-float min(float val1, float val2);
-
-/**
- * @brief Retourne la longueur de l'adjacent d'un triangle rectangle isocèle d'hypoténuse c
- * @param c L'hypoténuse
- * @return La longueur de l'adjacent
- */
-float pythagore(float c);
 
 /**
  * @brief Déplace l'ennemi vers le joueur
@@ -97,19 +77,19 @@ void moveListEnemyToPlayer(listEnemy* ListeEnnemis, player* player, double dt);
 int inCollision(sprite* Sprite1, sprite* Sprite2);
 
 /**
- * @brief Indique si f1 et f2 sont égaux à epsilon pès
- * @param f1 Le premier réel
- * @param f2 Le deuxième réel
- * @return 1 si ils sont égaux, 0 sinon
- */
-int floatEquals(float f1, float f2);
-
-/**
  * @brief Indique si un sprite et un bloc obstacle sont en collision
  * @param Sprite Le sprite
  * @param ListeBlocs la liste des blocs
  * @return 1 si collision 0 sinon
  */
 int spriteCollidesWalls(sprite* Sprite, listBloc* ListeBlocs);
+
+/**
+ * @brief Initialise la vitesse de la balle dans chaque axe en fonction de sa destination
+ * @param Balle La balle
+ * @param x La coordonnée x de sa destination
+ * @param y La coordonnée x de sa destination
+ */
+void setBulletSpeeds(bullet* Balle, int x, int y);
 
 #endif

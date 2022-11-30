@@ -1,5 +1,7 @@
 #include "bullet.h"
 #include "../Donnees/constantes.h"
+#include "../Donnees/maths.h"
+#include <SDL2/SDL.h>
 
 /* ----- Getter ----- */
 
@@ -8,8 +10,8 @@ float getBulletPosX(bullet* Balle){return getSpritePosX(getBulletSprite(Balle));
 float getBulletPosY(bullet* Balle){return getSpritePosY(getBulletSprite(Balle));}
 int getBulletHeight(bullet* Balle){return getSpriteHeight(getBulletSprite(Balle));}
 int getBulletWidth(bullet* Balle){return getSpriteWidth(getBulletSprite(Balle));}
-int getBulletXSpeed(bullet* Balle){return Balle->xspeed;}
-int getBulletYSpeed(bullet* Balle){return Balle->yspeed;}
+float getBulletXSpeed(bullet* Balle){return Balle->xspeed;}
+float getBulletYSpeed(bullet* Balle){return Balle->yspeed;}
 int getBulletType(bullet* Balle){return Balle->type;}
 SDL_Texture* getBulletTexture(bullet* Balle){return getSpriteTexture(getBulletSprite(Balle));}
 
@@ -35,7 +37,7 @@ int setBulletPosY(bullet* Balle, float posY){
     return -1;
 }
 
-int setBulletXSpeed(bullet* Balle, int xSpeed){
+int setBulletXSpeed(bullet* Balle, float xSpeed){
     Balle->xspeed = xSpeed;
     if(Balle->xspeed == xSpeed){
         return 1;
@@ -43,7 +45,7 @@ int setBulletXSpeed(bullet* Balle, int xSpeed){
     return 0;
 }
 
-int setBulletYSpeed(bullet* Balle, int ySpeed){
+int setBulletYSpeed(bullet* Balle, float ySpeed){
     Balle->yspeed = ySpeed;
     if(Balle->yspeed == ySpeed){
         return 1;
@@ -73,13 +75,15 @@ bullet initBullet(float posX, float posY, int speedX, int speedY, int type){
     switch (type){
 
         //à compléter plus tard (avec un peu de chance)
-        case 0:
+        case 1:
             break;
         default:
             setBulletXSpeed(&Balle, speedX);
             setBulletYSpeed(&Balle, speedY);
+            break;
     }
     setBulletType(&Balle, type);
+    setBulletTexture(&Balle, NULL);
     return Balle;
 }
 
@@ -93,5 +97,21 @@ int isSameBullet(bullet* Balle1, bullet* Balle2){
         return 1;
     }
     return 0;
+}
+
+void setBulletSpeeds(bullet* Balle, int x, int y){
+
+    // Distance sur chaque axe à parcourir
+    float distX = getBulletPosX(Balle)-x;
+    float distY = getBulletPosY(Balle)-y;
+
+    // Distance à parcourir
+    float dist = sqrt(pow(distX, 2) + pow(distY, 2));
+
+    // Pourcentage de la distance à parcourir en 1s
+    float prct = BULLET_SPEED/dist;
+
+    setBulletXSpeed(Balle, distX * prct);
+    setBulletYSpeed(Balle, distY * prct);
 }
 

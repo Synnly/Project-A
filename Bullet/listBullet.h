@@ -38,9 +38,9 @@ listBullet* getNextBullet(listBullet * ListeBalles);
 void setBullet(listBullet *ListeBalles, bullet Balle);
 
 /**
- * @brief
- * @param ListeBalles
- * @param ListeBallesNext
+ * @brief Met à jour la balle suivante de la liste
+ * @param ListeBalles La liste des balles
+ * @param ListeBallesNext Le prochain maillon de la liste
  * @return int
  */
 int setNextBullet(listBullet * ListeBalles, listBullet * ListeBallesNext);
@@ -82,5 +82,12 @@ void addBullet(listBullet* ListeBalles, bullet* Balle);
  * @return 1 si la balle a été supprimée, 0 si la balle n'est pas dans la liste, -1 si la liste ou la balle est vide
  */
 int deleteBullet(listBullet* ListeBalles, bullet* Balle);
+
+
+/**
+ * @brief Deplace toutes les balles
+ * @param ListeBalles La liste des balles
+ */
+void moveBullets(listBullet* ListeBalles);
 
 #endif //PROJECT_A_LISTBULLET_H

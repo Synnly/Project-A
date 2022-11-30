@@ -1,6 +1,7 @@
 #include <SDL2/SDL.h>
 #include "donnees.h"
-#include <math.h>
+#include "constantes.h"
+#include "maths.h"
 #include <stdlib.h>
 
 /* ----- FPS ----- */
@@ -8,15 +9,15 @@
 void fpsCounter(int* fps, int* fpstimer){
     int fpsNow = SDL_GetTicks();
     if(fpsNow > *fpstimer + 1000){
-        printf("%d fps\n",*fps);
+        printf("%d fps\n", *fps);
         *fpstimer = fpsNow;
-        *fps = 0;
+        *fps = 1;
     }
 }
 
 int fpsCap(Uint32 start, Uint32* end){
     *end = SDL_GetTicks();
-    if (*end-start < 1000/FPS) {
+    if (*end-start < 1000./FPS) {
         return 1;
     }
     return 0;
@@ -24,7 +25,7 @@ int fpsCap(Uint32 start, Uint32* end){
 
 /* ----- Autres ----- */
 
-void handleEvents(SDL_Event* event, int* is_playing, player* player, listBloc* ListeBlocs, double dt){
+void handleEvents(SDL_Event* event, int* is_playing, player* player, listBloc* ListeBlocs, listBullet* listeBalles, double dt, double* startFire) {
 
     // On retire tous les evenements sauf l'indication de fermer le jeu
     SDL_FlushEvents(SDL_APP_TERMINATING, SDL_USEREVENT);
@@ -32,103 +33,104 @@ void handleEvents(SDL_Event* event, int* is_playing, player* player, listBloc* L
     const Uint8 *keystates = SDL_GetKeyboardState(NULL);
 
     // Fermeture du jeu
-    if(SDL_PollEvent(event) && ((event->type==SDL_QUIT) || keystates[SDL_SCANCODE_ESCAPE])){
+    if (SDL_PollEvent(event) && ((event->type == SDL_QUIT) || keystates[SDL_SCANCODE_ESCAPE])) {
 
         *is_playing = 0;
 
-    }else if(((keystates[SDL_SCANCODE_LEFT]  || keystates[SDL_SCANCODE_A]) && (keystates[SDL_SCANCODE_UP] || keystates[SDL_SCANCODE_W]))){ // Déplacement en haut à gauche
+    } else {
 
-        setPlayerPosX(player, max(0, getPlayerPosX(player)-pythagore(PLAYER_SPEED*dt)));
-        setPlayerPosY(player, max(0, getPlayerPosY(player)-pythagore(PLAYER_SPEED*dt)));
+        if (((keystates[SDL_SCANCODE_LEFT] || keystates[SDL_SCANCODE_A]) && (keystates[SDL_SCANCODE_UP] || keystates[SDL_SCANCODE_W]))) { // Déplacement en haut à gauche
 
-        if(spriteCollidesWalls(getPlayerSprite(player),ListeBlocs)){
-            setPlayerPosX(player, min(SCREEN_WIDTH - PLAYER_SIZE,getPlayerPosX(player) + pythagore(PLAYER_SPEED*dt)));
-            setPlayerPosY(player, min(SCREEN_HEIGHT - PLAYER_SIZE,getPlayerPosY(player) + pythagore(PLAYER_SPEED*dt)));
+            setPlayerPosX(player, max(0, getPlayerPosX(player) - pythagore(PLAYER_SPEED * dt)));
+            setPlayerPosY(player, max(0, getPlayerPosY(player) - pythagore(PLAYER_SPEED * dt)));
+
+            if (spriteCollidesWalls(getPlayerSprite(player), ListeBlocs)) {
+                setPlayerPosX(player,min(SCREEN_WIDTH - PLAYER_SIZE, getPlayerPosX(player) + pythagore(PLAYER_SPEED * dt)));
+                setPlayerPosY(player,min(SCREEN_HEIGHT - PLAYER_SIZE, getPlayerPosY(player) + pythagore(PLAYER_SPEED * dt)));
+            }
         }
 
-    }else if(((keystates[SDL_SCANCODE_LEFT]  || keystates[SDL_SCANCODE_A]) && (keystates[SDL_SCANCODE_DOWN] || keystates[SDL_SCANCODE_S]))){ // Déplaceent en bas à gauche
+        else if (((keystates[SDL_SCANCODE_LEFT] || keystates[SDL_SCANCODE_A]) && (keystates[SDL_SCANCODE_DOWN] || keystates[SDL_SCANCODE_S]))) { // Déplaceent en bas à gauche
 
-        setPlayerPosX(player, max(0, getPlayerPosX(player)-pythagore(PLAYER_SPEED*dt)));
-        setPlayerPosY(player, min(SCREEN_HEIGHT - PLAYER_SIZE,getPlayerPosY(player) + pythagore(PLAYER_SPEED*dt)));
+        setPlayerPosX(player, max(0, getPlayerPosX(player) - pythagore(PLAYER_SPEED * dt)));
+        setPlayerPosY(player, min(SCREEN_HEIGHT - PLAYER_SIZE, getPlayerPosY(player) + pythagore(PLAYER_SPEED * dt)));
 
-        if(spriteCollidesWalls(getPlayerSprite(player),ListeBlocs)){
-            setPlayerPosX(player, min(SCREEN_WIDTH - PLAYER_SIZE,getPlayerPosX(player) + pythagore(PLAYER_SPEED*dt)));
-            setPlayerPosY(player, max(0,getPlayerPosY(player)-pythagore(PLAYER_SPEED*dt)));
+        if (spriteCollidesWalls(getPlayerSprite(player), ListeBlocs)) {
+            setPlayerPosX(player,min(SCREEN_WIDTH - PLAYER_SIZE, getPlayerPosX(player) + pythagore(PLAYER_SPEED * dt)));
+            setPlayerPosY(player, max(0, getPlayerPosY(player) - pythagore(PLAYER_SPEED * dt)));
         }
 
-    }else if(((keystates[SDL_SCANCODE_RIGHT]  || keystates[SDL_SCANCODE_D]) && (keystates[SDL_SCANCODE_UP] || keystates[SDL_SCANCODE_W]))){ // Déplacement en haut à droite
+        } else if (((keystates[SDL_SCANCODE_RIGHT] || keystates[SDL_SCANCODE_D]) && (keystates[SDL_SCANCODE_UP] || keystates[SDL_SCANCODE_W]))) { // Déplacement en haut à droite
 
-        setPlayerPosX(player, min(SCREEN_WIDTH - PLAYER_SIZE,getPlayerPosX(player) + pythagore(PLAYER_SPEED*dt)));
-        setPlayerPosY(player, max(0,getPlayerPosY(player)-pythagore(PLAYER_SPEED*dt)));
+            setPlayerPosX(player, min(SCREEN_WIDTH - PLAYER_SIZE, getPlayerPosX(player) + pythagore(PLAYER_SPEED * dt)));
+            setPlayerPosY(player, max(0, getPlayerPosY(player) - pythagore(PLAYER_SPEED * dt)));
 
-        if(spriteCollidesWalls(getPlayerSprite(player),ListeBlocs)){
-            setPlayerPosX(player, max(0, getPlayerPosX(player)-pythagore(PLAYER_SPEED*dt)));
-            setPlayerPosY(player, min(SCREEN_HEIGHT - PLAYER_SIZE,getPlayerPosY(player) + pythagore(PLAYER_SPEED*dt)));
+            if (spriteCollidesWalls(getPlayerSprite(player), ListeBlocs)) {
+                setPlayerPosX(player, max(0, getPlayerPosX(player) - pythagore(PLAYER_SPEED * dt)));
+                setPlayerPosY(player,min(SCREEN_HEIGHT - PLAYER_SIZE, getPlayerPosY(player) + pythagore(PLAYER_SPEED * dt)));
+            }
+
+        } else if ((keystates[SDL_SCANCODE_RIGHT] || keystates[SDL_SCANCODE_D]) && (keystates[SDL_SCANCODE_DOWN] || keystates[SDL_SCANCODE_S])) { // Déplacement en bas à droite
+
+            setPlayerPosX(player, min(SCREEN_WIDTH - PLAYER_SIZE, getPlayerPosX(player) + pythagore(PLAYER_SPEED * dt)));
+            setPlayerPosY(player, min(SCREEN_HEIGHT - PLAYER_SIZE, getPlayerPosY(player) + pythagore(PLAYER_SPEED * dt)));
+
+            if (spriteCollidesWalls(getPlayerSprite(player), ListeBlocs)) {
+                setPlayerPosX(player, max(0, getPlayerPosX(player) - pythagore(PLAYER_SPEED * dt)));
+                setPlayerPosY(player, max(0, getPlayerPosY(player) - pythagore(PLAYER_SPEED * dt)));
+            }
+
+        } else if (keystates[SDL_SCANCODE_LEFT] || keystates[SDL_SCANCODE_A]) { // Déplacement à gauche
+
+            setPlayerPosX(player, max(0, getPlayerPosX(player) - PLAYER_SPEED * dt));
+
+            if (spriteCollidesWalls(getPlayerSprite(player), ListeBlocs)) {
+
+                setPlayerPosX(player, min(SCREEN_WIDTH - PLAYER_SIZE, getPlayerPosX(player) + PLAYER_SPEED * dt));
+            }
+
+        } else if (keystates[SDL_SCANCODE_UP] || keystates[SDL_SCANCODE_W]) { // Déplacement en haut
+
+            setPlayerPosY(player, max(0, getPlayerPosY(player) - PLAYER_SPEED * dt));
+
+            if (spriteCollidesWalls(getPlayerSprite(player), ListeBlocs)) {
+                setPlayerPosY(player, min(SCREEN_HEIGHT - PLAYER_SIZE, getPlayerPosY(player) + PLAYER_SPEED * dt));
+            }
+
+        } else if (keystates[SDL_SCANCODE_RIGHT] || keystates[SDL_SCANCODE_D]) { // Déplacement à droite
+
+            setPlayerPosX(player, min(SCREEN_WIDTH - PLAYER_SIZE, getPlayerPosX(player) + PLAYER_SPEED * dt));
+
+            if (spriteCollidesWalls(getPlayerSprite(player), ListeBlocs)) {
+                setPlayerPosX(player, max(0, getPlayerPosX(player) - PLAYER_SPEED * dt));
+            }
+
+        } else if (keystates[SDL_SCANCODE_DOWN] || keystates[SDL_SCANCODE_S]) { // Déplacement en bas
+
+            setPlayerPosY(player, min(SCREEN_HEIGHT - PLAYER_SIZE, getPlayerPosY(player) + PLAYER_SPEED * dt));
+
+            if (spriteCollidesWalls(getPlayerSprite(player), ListeBlocs)) {
+                setPlayerPosY(player, max(0, getPlayerPosY(player) - PLAYER_SPEED * dt));
+            }
+        }
+        if (keystates[SDL_SCANCODE_SPACE] && *startFire>0.25){
+            int x, y;
+ 
+            // Position de la souris
+            SDL_GetMouseState(&x, &y);
+
+            // Initialisation et ajout de la balle dans la liste
+            bullet Balle = initBullet(getPlayerPosX(player) + getSpriteWidth(getPlayerSprite(player)) / 2,getPlayerPosY(player) + getSpriteHeight(getPlayerSprite(player)) / 2, 0, 0, 0);
+            setBulletSpeeds(&Balle, x, y);
+            addBullet(listeBalles, &Balle);
+
+            //Reset du compteur de frames
+            *startFire = 0.;
         }
 
-    }else if((keystates[SDL_SCANCODE_RIGHT] || keystates[SDL_SCANCODE_D]) && (keystates[SDL_SCANCODE_DOWN] || keystates[SDL_SCANCODE_S])){ // Déplacement en bas à droite
-
-        setPlayerPosX(player, min(SCREEN_WIDTH - PLAYER_SIZE,getPlayerPosX(player) + pythagore(PLAYER_SPEED*dt)));
-        setPlayerPosY(player, min(SCREEN_HEIGHT - PLAYER_SIZE,getPlayerPosY(player) + pythagore(PLAYER_SPEED*dt)));
-
-        if(spriteCollidesWalls(getPlayerSprite(player),ListeBlocs)){
-            setPlayerPosX(player, max(0, getPlayerPosX(player)-pythagore(PLAYER_SPEED*dt)));
-            setPlayerPosY(player, max(0, getPlayerPosY(player)-pythagore(PLAYER_SPEED*dt)));
-        }
-
-    }else if(keystates[SDL_SCANCODE_LEFT] || keystates[SDL_SCANCODE_A]){ // Déplacement à gauche
-
-        setPlayerPosX(player, max(0, getPlayerPosX(player)-PLAYER_SPEED*dt));
-
-        if(spriteCollidesWalls(getPlayerSprite(player),ListeBlocs)){
-            
-           setPlayerPosX(player, min(SCREEN_WIDTH - PLAYER_SIZE,getPlayerPosX(player) + PLAYER_SPEED*dt));
-        }
-
-    }else if(keystates[SDL_SCANCODE_UP] || keystates[SDL_SCANCODE_W]){ // Déplacement en haut
-
-        setPlayerPosY(player, max(0,getPlayerPosY(player)-PLAYER_SPEED*dt));
-
-        if(spriteCollidesWalls(getPlayerSprite(player),ListeBlocs)){
-            setPlayerPosY(player, min(SCREEN_HEIGHT - PLAYER_SIZE,getPlayerPosY(player) + PLAYER_SPEED*dt));
-        }
-
-    }else if(keystates[SDL_SCANCODE_RIGHT] || keystates[SDL_SCANCODE_D]){ // Déplacement à droite
-
-        setPlayerPosX(player, min(SCREEN_WIDTH - PLAYER_SIZE,getPlayerPosX(player) + PLAYER_SPEED*dt));
-
-        if(spriteCollidesWalls(getPlayerSprite(player),ListeBlocs)){
-            setPlayerPosX(player, max(0, getPlayerPosX(player)-PLAYER_SPEED*dt));
-        }
-
-    }else if(keystates[SDL_SCANCODE_DOWN] || keystates[SDL_SCANCODE_S]){ // Déplacement en bas
-
-        setPlayerPosY(player, min(SCREEN_HEIGHT - PLAYER_SIZE,getPlayerPosY(player) + PLAYER_SPEED*dt));
-
-        if(spriteCollidesWalls(getPlayerSprite(player),ListeBlocs)){
-            setPlayerPosY(player, max(0,getPlayerPosY(player)-PLAYER_SPEED*dt));
-        }
-    }else if (keystates[SDL_SCANCODE_SPACE]){
-        //bullet Bullet = initBullet();
+        //Incrementation du compteur de frames du tir
+        *startFire += dt;
     }
-}
-
-float max(float val1, float val2){
-    if(val1>=val2){
-        return val1;
-    }
-    return val2;
-}
-
-float min(float val1, float val2){
-    if(val1<=val2){
-        return val1;
-    }
-    return val2;
-}
-
-float pythagore(float c) {
-    return sqrt((pow(c , 2)/2));
 }
 
 void moveToPlayer(enemy* enemy, player* player, double dt){
@@ -195,10 +197,6 @@ int inCollision(sprite* Sprite1, sprite* Sprite2) {
         return 1;
     }
     return 0;
-}
-
-int floatEquals(float f1, float f2){
-    return fabs(f1-f2)<EPSILON;
 }
 
 int spriteCollidesWalls(sprite* Sprite, listBloc* ListeBlocs){

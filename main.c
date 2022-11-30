@@ -7,11 +7,13 @@
 #define SDL_MAIN_HANDLED
 
 // Boucle de jeu
-void boucleDeJeu(SDL_Renderer* renderer, player* player, listEnemy* listeEnnemis, listBloc* listeBlocs){
+void boucleDeJeu(SDL_Renderer* renderer, player* player, listEnemy* listeEnnemis, listBloc* listeBlocs, listBullet* listeBalles){
     int is_playing = 1;
-    int fps = 0;
+    int fps = 1;
     int fpstimer = 0;
     Uint32 start = SDL_GetTicks();
+
+    double startFire = 0.;
 
     initTextures(renderer,player,listeEnnemis,listeBlocs);
 
@@ -21,9 +23,12 @@ void boucleDeJeu(SDL_Renderer* renderer, player* player, listEnemy* listeEnnemis
         //Cap à 60 fps
         if(fpsCap(start,&end)) {continue;}
 
+        moveListEnemyToPlayer(listeEnnemis, player, (end-start)/1000.);
+        moveBullets(listeBalles);
+
         // Gestion des evenements
         SDL_Event event;
-        handleEvents(&event, &is_playing, player, listeBlocs, (end-start)/1000.);
+        handleEvents(&event, &is_playing, player, listeBlocs, listeBalles,(end-start)/1000., &startFire);
 
         //Fermeture du jeu
         if(!is_playing){break;}
@@ -31,15 +36,14 @@ void boucleDeJeu(SDL_Renderer* renderer, player* player, listEnemy* listeEnnemis
         //Rafraichissement de l'ecran
         SDL_RenderClear(renderer);
 
-        moveListEnemyToPlayer(listeEnnemis, player, (end-start)/1000.);
 
-        //printf("%f, %f\n", getEnemyPosX(getEnemy(listeEnnemis)), getEnemyPosY(getEnemy(listeEnnemis)));
-        //printf("%f, %f\n----------------\n", getEnemyPosX(getNext(getEnemy(listeEnnemis))), getEnemyPosY(getNext(getEnemy(listeEnnemis))));
-
-        //Affichage du joueur
+        //Affichage des sprites
         drawListBlocSprites(renderer, listeBlocs);
         drawSprite(renderer, (int)getPlayerPosX(player), (int)getPlayerPosY(player), PLAYER_SIZE, PLAYER_SIZE, 0, getPlayerTexture(player));
         drawListEnemySprites(renderer, listeEnnemis);
+
+        initListBulletTextures(renderer, listeBalles);
+        drawListBulletSprites(renderer, listeBalles);
 
         SDL_RenderPresent(renderer);
         
@@ -63,6 +67,7 @@ int main(){
     listBloc listeBlocs = initListBloc();
     player joueur = initPLayer();
     listEnemy listeEnnemis = initListEnemy(NB_ENNEMIS);
+    listBullet listeBalles = initListBullet();
   
 
     // Creation de la fenetre
@@ -73,8 +78,8 @@ int main(){
     SDL_SetWindowTitle(fenetre, "Project A");
     SDL_SetRenderDrawColor(renderer, 32, 34, 37, SDL_ALPHA_OPAQUE);
 
-    boucleDeJeu(renderer, &joueur, &listeEnnemis, &listeBlocs);
-    endSDL(fenetre, renderer, &joueur, &listeEnnemis, &listeBlocs);
+    boucleDeJeu(renderer, &joueur, &listeEnnemis, &listeBlocs, &listeBalles);
+    endSDL(fenetre, renderer, &joueur, &listeEnnemis, &listeBlocs, &listeBalles);
     freeListEnemy(&listeEnnemis);
     freeListBloc(&listeBlocs);
     return 0; 

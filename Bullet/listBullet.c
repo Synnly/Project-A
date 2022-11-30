@@ -24,6 +24,7 @@ int setNextBullet(listBullet * ListeBalles, listBullet * ListeBallesNext){
 
 listBullet initListBullet(){
     listBullet* ListeBalles = malloc(sizeof(listBullet));
+    setNextBullet(ListeBalles, NULL);
     return *ListeBalles;
 }
 
@@ -41,41 +42,58 @@ void freeListBullet(listBullet* ListeBalles){
 }
 
 void addBullet(listBullet* ListeBalles, bullet* Balle){
-    listBullet* ListeBulletNext = malloc(sizeof(listBullet));
-    setBullet(ListeBulletNext,*Balle);
-    if(!isEmptyListBullet(ListeBalles)){
+
+    if(!isEmptyListBullet(getNextBullet(ListeBalles))){
         addBullet(getNextBullet(ListeBalles),Balle);
+
     }else{
-        setNextBullet(ListeBalles,ListeBulletNext);
+        listBullet* ListeBulletNext = malloc(sizeof(listBullet));
+        setBullet(ListeBulletNext,*Balle);
+
         setNextBullet(ListeBulletNext,NULL);
+        setNextBullet(ListeBalles,ListeBulletNext);
     }
 }
 
 int deleteBullet(listBullet* ListeBalles, bullet* Balle){
-    if(isEmptyListBullet(ListeBalles) || Balle == NULL){
-        return -1;
-    }
+    if(isEmptyListBullet(ListeBalles) || Balle == NULL){return -1;}
+
     listBullet* temp;
+
     //La balle est la première de la liste
     if(isSameBullet(Balle,getBullet(ListeBalles))){
         temp = ListeBalles;
         ListeBalles = getNextBullet(ListeBalles);
         freeListBullet(temp);
         return 1;
+
     }else{ // On parcourt le reste de la liste pour trouver la bonne balle
         listBullet* currentListBullet;
+
         while(getNextBullet(currentListBullet)!=NULL){
+
             //On a trouvé la balle
             if(isSameBullet(Balle,getBullet(getNextBullet(currentListBullet)))){
                 temp = getNextBullet(currentListBullet);
+
                 //On supprime la balle
                 setNextBullet(currentListBullet,getNextBullet(getNextBullet(currentListBullet)));
                 freeListBullet(temp);
                 return 1;
+
             }else{//La balle n'a pas été trouvée on passe à la suivante
                 currentListBullet = getNextBullet(currentListBullet);
             }
         }
     }
     return 0;
+}
+
+void moveBullets(listBullet* ListeBalles){
+    if(!isEmptyListBullet(ListeBalles)){
+        //printf("%f xspeed, %f yspeed\n", getBulletXSpeed(getBullet(ListeBalles)), getBulletYSpeed(getBullet(ListeBalles)));
+        setBulletPosX(getBullet(ListeBalles), getBulletPosX(getBullet(ListeBalles)) - getBulletXSpeed(getBullet(ListeBalles)));
+        setBulletPosY(getBullet(ListeBalles), getBulletPosY(getBullet(ListeBalles)) - getBulletYSpeed(getBullet(ListeBalles)));
+        moveBullets(getNextBullet(ListeBalles));
+    }
 }
