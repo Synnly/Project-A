@@ -46,8 +46,13 @@ void initTextures(SDL_Renderer* renderer, player* Player, listEnemy* ListeEnnemi
 }
 
 void drawSprite(SDL_Renderer* renderer, int x, int y, int w, int h, int spriteIndex, SDL_Texture* textureSprite){
+
+    // Rectangle source
     SDL_Rect src = {w*spriteIndex,0,w,h};
+
+    // Rectangle destination
     SDL_Rect dest = {x, y, w, h};
+
     SDL_RenderCopy(renderer,textureSprite,&src,&dest);
 }
 
@@ -94,11 +99,14 @@ void destroyListBulletTextures(listBullet * listeBalles){
 }
 
 void endSDL(SDL_Window* fenetre, SDL_Renderer* renderer, player* Player, listEnemy* ListeEnnemis, listBloc* ListeBlocs, listBullet * listeBalles){
-    destroyListBlocTextures(ListeBlocs);
     SDL_DestroyTexture(getPlayerTexture(Player));
+
+    destroyListBlocTextures(ListeBlocs);
     destroyListEnemyTextures(ListeEnnemis);
     destroyListBulletTextures(listeBalles);
+
     SDL_DestroyRenderer(renderer);
     SDL_DestroyWindow(fenetre);
+
     SDL_Quit();
 }

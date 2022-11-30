@@ -85,7 +85,7 @@ int deleteBullet(listBullet* ListeBalles, bullet* Balle);
 
 
 /**
- * @brief Deplace toutes les balles
+ * @brief Déplace toutes les balles
  * @param ListeBalles La liste des balles
  */
 void moveBullets(listBullet* ListeBalles);

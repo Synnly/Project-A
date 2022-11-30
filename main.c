@@ -6,13 +6,13 @@
 #include <stdio.h>
 #define SDL_MAIN_HANDLED
 
-// Boucle de jeu
 void boucleDeJeu(SDL_Renderer* renderer, player* player, listEnemy* listeEnnemis, listBloc* listeBlocs, listBullet* listeBalles){
+
+    //Initialisation
     int is_playing = 1;
     int fps = 1;
     int fpstimer = 0;
     Uint32 start = SDL_GetTicks();
-
     double startFire = 0.;
 
     initTextures(renderer,player,listeEnnemis,listeBlocs);
@@ -23,6 +23,7 @@ void boucleDeJeu(SDL_Renderer* renderer, player* player, listEnemy* listeEnnemis
         //Cap à 60 fps
         if(fpsCap(start,&end)) {continue;}
 
+        // Déplacement des entités autres que le joueur
         moveListEnemyToPlayer(listeEnnemis, player, (end-start)/1000.);
         moveBullets(listeBalles);
 
@@ -36,15 +37,17 @@ void boucleDeJeu(SDL_Renderer* renderer, player* player, listEnemy* listeEnnemis
         //Rafraichissement de l'ecran
         SDL_RenderClear(renderer);
 
-
         //Affichage des sprites
         drawListBlocSprites(renderer, listeBlocs);
         drawSprite(renderer, (int)getPlayerPosX(player), (int)getPlayerPosY(player), PLAYER_SIZE, PLAYER_SIZE, 0, getPlayerTexture(player));
         drawListEnemySprites(renderer, listeEnnemis);
 
+        // Initialisation des textures des balles qui n'ont pas de textures
         initListBulletTextures(renderer, listeBalles);
+
         drawListBulletSprites(renderer, listeBalles);
 
+        // Rendu
         SDL_RenderPresent(renderer);
         
         //Gestion des fps
@@ -56,19 +59,20 @@ void boucleDeJeu(SDL_Renderer* renderer, player* player, listEnemy* listeEnnemis
 
 
 int main(){
-    SDL_SetMainReady();
-    if(SDL_Init(SDL_INIT_VIDEO)){
-        printf("Erreur d'initilisation de SDL : %s", SDL_GetError());
-        return -1;
-    }
 
+    // Initialisation des structures
     SDL_Window* fenetre;
     SDL_Renderer* renderer;
     listBloc listeBlocs = initListBloc();
     player joueur = initPLayer();
     listEnemy listeEnnemis = initListEnemy(NB_ENNEMIS);
     listBullet listeBalles = initListBullet();
-  
+
+    SDL_SetMainReady();
+    if(SDL_Init(SDL_INIT_VIDEO)){
+        printf("Erreur d'initilisation de SDL : %s", SDL_GetError());
+        return -1;
+    }
 
     // Creation de la fenetre
     if(SDL_CreateWindowAndRenderer(1280, 720, SDL_WINDOW_SHOWN | SDL_WINDOW_INPUT_FOCUS, &fenetre, &renderer)){
@@ -78,9 +82,15 @@ int main(){
     SDL_SetWindowTitle(fenetre, "Project A");
     SDL_SetRenderDrawColor(renderer, 32, 34, 37, SDL_ALPHA_OPAQUE);
 
+    // Jeu
     boucleDeJeu(renderer, &joueur, &listeEnnemis, &listeBlocs, &listeBalles);
+
+    // Nettoyage final
     endSDL(fenetre, renderer, &joueur, &listeEnnemis, &listeBlocs, &listeBalles);
+
     freeListEnemy(&listeEnnemis);
     freeListBloc(&listeBlocs);
+    freeListBullet(&listeBalles);
+
     return 0; 
 }

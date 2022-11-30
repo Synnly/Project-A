@@ -69,6 +69,8 @@ void setBulletTexture(bullet* Balle, SDL_Texture* texture){
 
 bullet initBullet(float posX, float posY, int speedX, int speedY, int type){
     bullet Balle;
+
+    // Positionné au centre du joueur
     sprite Sprite = initSprite(posX,posY,BULLET_SIZE,BULLET_SIZE);
     setBulletSprite(&Sprite, &Balle);
 
@@ -83,6 +85,8 @@ bullet initBullet(float posX, float posY, int speedX, int speedY, int type){
             break;
     }
     setBulletType(&Balle, type);
+
+    //La texture est initilisée à NULL pour pouvoir la différencier des balles qui ont une texture pour initialiser sa texture dans graphismes.c/initListBulletTextures()
     setBulletTexture(&Balle, NULL);
     return Balle;
 }

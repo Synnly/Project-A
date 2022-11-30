@@ -23,6 +23,7 @@ int setNextBullet(listBullet * ListeBalles, listBullet * ListeBallesNext){
 /* ----- Initialisation ----- */
 
 listBullet initListBullet(){
+
     listBullet* ListeBalles = malloc(sizeof(listBullet));
     setNextBullet(ListeBalles, NULL);
     return *ListeBalles;
@@ -35,7 +36,9 @@ int isEmptyListBullet(listBullet* ListeBalles){
 }
 
 void freeListBullet(listBullet* ListeBalles){
+
     if(!isEmptyListBullet(ListeBalles)){
+
         freeListBullet(getNextBullet(ListeBalles));
         free(ListeBalles);
     }
@@ -56,44 +59,33 @@ void addBullet(listBullet* ListeBalles, bullet* Balle){
 }
 
 int deleteBullet(listBullet* ListeBalles, bullet* Balle){
-    if(isEmptyListBullet(ListeBalles) || Balle == NULL){return -1;}
+    //Si liste non vide ET balle non vide
+    if(!isEmptyListBullet(ListeBalles) && Balle != NULL) {
 
-    listBullet* temp;
 
-    //La balle est la première de la liste
-    if(isSameBullet(Balle,getBullet(ListeBalles))){
-        temp = ListeBalles;
-        ListeBalles = getNextBullet(ListeBalles);
-        freeListBullet(temp);
-        return 1;
+        //La balle est la première de la liste
+        if (isSameBullet(Balle, getBullet(ListeBalles))) {
 
-    }else{ // On parcourt le reste de la liste pour trouver la bonne balle
-        listBullet* currentListBullet;
+            //On récupère puis libère la balle
+            listBullet *temp = ListeBalles;
+            ListeBalles = getNextBullet(ListeBalles);
 
-        while(getNextBullet(currentListBullet)!=NULL){
+            freeListBullet(temp);
 
-            //On a trouvé la balle
-            if(isSameBullet(Balle,getBullet(getNextBullet(currentListBullet)))){
-                temp = getNextBullet(currentListBullet);
+        } else {
 
-                //On supprime la balle
-                setNextBullet(currentListBullet,getNextBullet(getNextBullet(currentListBullet)));
-                freeListBullet(temp);
-                return 1;
-
-            }else{//La balle n'a pas été trouvée on passe à la suivante
-                currentListBullet = getNextBullet(currentListBullet);
-            }
+            // On parcourt le reste de la liste pour trouver la bonne balle
+            deleteBullet(getNextBullet(ListeBalles), Balle);
         }
     }
-    return 0;
 }
 
 void moveBullets(listBullet* ListeBalles){
     if(!isEmptyListBullet(ListeBalles)){
-        //printf("%f xspeed, %f yspeed\n", getBulletXSpeed(getBullet(ListeBalles)), getBulletYSpeed(getBullet(ListeBalles)));
+
         setBulletPosX(getBullet(ListeBalles), getBulletPosX(getBullet(ListeBalles)) - getBulletXSpeed(getBullet(ListeBalles)));
         setBulletPosY(getBullet(ListeBalles), getBulletPosY(getBullet(ListeBalles)) - getBulletYSpeed(getBullet(ListeBalles)));
+
         moveBullets(getNextBullet(ListeBalles));
     }
 }
