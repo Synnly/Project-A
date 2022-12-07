@@ -17,8 +17,9 @@ void setEnemyPosX(enemy* Enemy, float posX){
     setSpritePosX(getEnemySprite(Enemy), posX);
 }
 
-void setEnemyPosY(enemy* Enemy, float posY){
+void setEnemyPosY(enemy* Enemy, float posY) {
     setSpritePosY(getEnemySprite(Enemy), posY);
+}
 
 void setEnemyLife(enemy* Enemy, int life){
     Enemy->life = life;

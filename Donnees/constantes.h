@@ -19,7 +19,7 @@
 #define BLOC_SIZE 40
 
 #define BULLET_SIZE 10
-#define BULLET_SPEED 10
+#define BULLET_SPEED 1500
 #define PISTOL_TYPE 0
 
 #define NB_ENNEMIS 5

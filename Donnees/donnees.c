@@ -25,7 +25,7 @@ int fpsCap(Uint32 start, Uint32* end){
 
 /* ----- Autres ----- */
 
-void handleEvents(SDL_Event* event, int* is_playing, player* player, listBloc* ListeBlocs, listBullet* listeBalles, double dt, double* startFire) {
+void handleEvents(SDL_Event* event, int* is_playing, player* player, listBloc* ListeBlocs, listBullet* listeBalles, double dt, double* startFire, int mouseX, int mouseY, Uint32 mouseBitMask) {
 
     // On retire tous les evenements sauf l'indication de fermer le jeu
     SDL_FlushEvents(SDL_APP_TERMINATING, SDL_USEREVENT);
@@ -113,15 +113,11 @@ void handleEvents(SDL_Event* event, int* is_playing, player* player, listBloc* L
                 setPlayerPosY(player, max(0, getPlayerPosY(player) - PLAYER_SPEED * dt));
             }
         }
-        if (keystates[SDL_SCANCODE_SPACE] && *startFire>0.25){
-            int x, y;
- 
-            // Position de la souris
-            SDL_GetMouseState(&x, &y);
+        if ((keystates[SDL_SCANCODE_SPACE] || mouseBitMask == SDL_BUTTON(SDL_BUTTON_LMASK)) && *startFire>0.25){
 
             // Initialisation et ajout de la balle dans la liste
             bullet Balle = initBullet(getPlayerPosX(player) + getSpriteWidth(getPlayerSprite(player)) / 2,getPlayerPosY(player) + getSpriteHeight(getPlayerSprite(player)) / 2, 0, 0, 0);
-            setBulletSpeeds(&Balle, x, y);
+            setBulletSpeeds(&Balle, mouseX, mouseY);
             addBullet(listeBalles, &Balle);
 
             //Reset du compteur de frames
@@ -208,4 +204,10 @@ int spriteCollidesWalls(sprite* Sprite, listBloc* ListeBlocs){
         }
     }
     return 0;
+}
+
+void drawLine(SDL_Renderer* renderer, float x1, float y1, float x2, float y2){
+    float distX = x2-x1;
+    float distY = y2-y1;
+    SDL_RenderDrawLine(renderer, (int)x1, (int)y1, (int)(x1 + distX*3), (int)(y1 + distY*3));
 }

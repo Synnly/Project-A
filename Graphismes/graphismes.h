@@ -88,7 +88,6 @@ void destroyListBlocTextures(listBloc* ListeBlocs);
  */
 void destroyListEnemyTextures(listEnemy* ListeEnnemis);
 
-
 /**
  * @brief Ferme la fenetre et quite sdl
  * @param fenetre La fenetre

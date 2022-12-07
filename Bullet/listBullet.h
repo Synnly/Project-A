@@ -79,15 +79,15 @@ void addBullet(listBullet* ListeBalles, bullet* Balle);
  * @brief Supprime une balle de la liste de balles
  * @param ListeBalles la liste de balles
  * @param Balle la balle à supprimer
- * @return 1 si la balle a été supprimée, 0 si la balle n'est pas dans la liste, -1 si la liste ou la balle est vide
  */
-int deleteBullet(listBullet* ListeBalles, bullet* Balle);
+void deleteBullet(listBullet* ListeBalles, bullet* Balle);
 
 
 /**
  * @brief Déplace toutes les balles
  * @param ListeBalles La liste des balles
+ * @param dt Le laps de temps écoulé depuis la dernière execution
  */
-void moveBullets(listBullet* ListeBalles);
+void moveBullets(listBullet* ListeBalles, double dt);
 
 #endif //PROJECT_A_LISTBULLET_H

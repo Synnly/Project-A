@@ -47,10 +47,12 @@ int fpsCap(Uint32 start, Uint32* end);
  * @param ListeBlocs la liste des blocs
  * @param listeBalles la liste des balles
  * @param dt intervalle de temps
- * @param startFire Compteur de frames pour le tir en continu
+ * @param startFire Nombre de secondes depuis le dernier tir
+ * @param mouseX La position dans l'axe X de la souris
+ * @param mouseY La position dans l'axe Y de la souris
+ * @param mouseBitMask L'état des boutons de la souris
  */
-void handleEvents(SDL_Event* event, int* is_playing, player* player, listBloc* ListeBlocs, listBullet* listeBalles, double dt, double* startFire);
-
+void handleEvents(SDL_Event* event, int* is_playing, player* player, listBloc* ListeBlocs, listBullet* listeBalles, double dt, double* startFire,  int mouseX, int mouseY, Uint32 mouseBitMask);
 
 /**
  * @brief Déplace l'ennemi vers le joueur
@@ -91,5 +93,15 @@ int spriteCollidesWalls(sprite* Sprite, listBloc* ListeBlocs);
  * @param y La coordonnée x de sa destination
  */
 void setBulletSpeeds(bullet* Balle, int x, int y);
+
+/**
+ * @Brief Dessine une ligne rouge de (x1, y1) et qui dépasse (x2, y2)
+ * @param renderer Le renderer
+ * @param x1 Coordonnée X du point de départ
+ * @param y1 Coordonnée Y du point de départ
+ * @param x2 Coordonnée X du point d'arrivée
+ * @param y2 Coordonnée Y du point d'arrivée
+ */
+void drawLine(SDL_Renderer* renderer, float x1, float y1, float x2, float y2);
 
 #endif

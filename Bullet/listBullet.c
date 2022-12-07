@@ -58,7 +58,7 @@ void addBullet(listBullet* ListeBalles, bullet* Balle){
     }
 }
 
-int deleteBullet(listBullet* ListeBalles, bullet* Balle){
+void deleteBullet(listBullet* ListeBalles, bullet* Balle){
     //Si liste non vide ET balle non vide
     if(!isEmptyListBullet(ListeBalles) && Balle != NULL) {
 
@@ -80,12 +80,12 @@ int deleteBullet(listBullet* ListeBalles, bullet* Balle){
     }
 }
 
-void moveBullets(listBullet* ListeBalles){
+void moveBullets(listBullet* ListeBalles, double dt){
     if(!isEmptyListBullet(ListeBalles)){
 
-        setBulletPosX(getBullet(ListeBalles), getBulletPosX(getBullet(ListeBalles)) - getBulletXSpeed(getBullet(ListeBalles)));
-        setBulletPosY(getBullet(ListeBalles), getBulletPosY(getBullet(ListeBalles)) - getBulletYSpeed(getBullet(ListeBalles)));
+        setBulletPosX(getBullet(ListeBalles), getBulletPosX(getBullet(ListeBalles)) - getBulletXSpeed(getBullet(ListeBalles)) * dt);
+        setBulletPosY(getBullet(ListeBalles), getBulletPosY(getBullet(ListeBalles)) - getBulletYSpeed(getBullet(ListeBalles)) * dt);
 
-        moveBullets(getNextBullet(ListeBalles));
+        moveBullets(getNextBullet(ListeBalles), dt);
     }
 }

@@ -142,4 +142,12 @@ bullet initBullet(float posX, float posY, int speedX, int speedY, int type);
  */
 int isSameBullet(bullet* Balle1, bullet* Balle2);
 
+/**
+ * @brief Initialise la viteese de la balle dans l'axe X et Y en fonction du point (x,y)
+ * @param Balle La balle
+ * @param x La coordonnée x du point à atteindre
+ * @param y La coordonnée x du point à atteindre
+ */
+void setBulletSpeeds(bullet* Balle, int x, int y);
+
 #endif //PROJECT_A_BULLET_H
