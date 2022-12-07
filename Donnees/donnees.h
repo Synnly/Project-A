@@ -52,7 +52,7 @@ int fpsCap(Uint32 start, Uint32* end);
  * @param mouseY La position dans l'axe Y de la souris
  * @param mouseBitMask L'état des boutons de la souris
  */
-void handleEvents(SDL_Event* event, int* is_playing, player* player, listBloc* ListeBlocs, listBullet* listeBalles, double dt, double* startFire,  int mouseX, int mouseY, Uint32 mouseBitMask);
+void handleEvents(SDL_Event* event, int* is_playing, player* player, bloc* ListeBlocs, listBullet* listeBalles, double dt, double* startFire,  int mouseX, int mouseY, Uint32 mouseBitMask);
 
 /**
  * @brief Déplace l'ennemi vers le joueur
@@ -84,7 +84,7 @@ int inCollision(sprite* Sprite1, sprite* Sprite2);
  * @param ListeBlocs la liste des blocs
  * @return 1 si collision 0 sinon
  */
-int spriteCollidesWalls(sprite* Sprite, listBloc* ListeBlocs);
+int spriteCollidesWalls(sprite* Sprite, bloc* ListeBlocs);
 
 /**
  * @brief Initialise la vitesse de la balle dans chaque axe en fonction de sa destination

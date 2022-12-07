@@ -6,7 +6,7 @@
 #include <stdio.h>
 #define SDL_MAIN_HANDLED
 
-void boucleDeJeu(SDL_Renderer* renderer, player* player, listEnemy* listeEnnemis, listBloc* listeBlocs, listBullet* listeBalles){
+void boucleDeJeu(SDL_Renderer* renderer, player* player, listEnemy* listeEnnemis, bloc* listeBlocs, listBullet* listeBalles){
 
     //Initialisation
     int is_playing = 1;
@@ -77,7 +77,7 @@ int main(){
     // Initialisation des structures
     SDL_Window* fenetre;
     SDL_Renderer* renderer;
-    listBloc listeBlocs = initListBloc();
+    bloc* listeBlocs = initListBloc();
     player joueur = initPLayer();
     listEnemy listeEnnemis = initListEnemy(NB_ENNEMIS);
     listBullet listeBalles = initListBullet();
@@ -97,13 +97,13 @@ int main(){
     SDL_SetRenderDrawColor(renderer, 32, 34, 37, SDL_ALPHA_OPAQUE);
 
     // Jeu
-    boucleDeJeu(renderer, &joueur, &listeEnnemis, &listeBlocs, &listeBalles);
+    boucleDeJeu(renderer, &joueur, &listeEnnemis, listeBlocs, &listeBalles);
 
     // Nettoyage final
-    endSDL(fenetre, renderer, &joueur, &listeEnnemis, &listeBlocs, &listeBalles);
+    endSDL(fenetre, renderer, &joueur, &listeEnnemis, listeBlocs, &listeBalles);
 
     freeListEnemy(&listeEnnemis);
-    freeListBloc(&listeBlocs);
+    freeListBloc(listeBlocs);
     freeListBullet(&listeBalles);
 
     return 0; 

@@ -18,7 +18,7 @@ SDL_Texture* loadSprite(SDL_Renderer* renderer, const char* file);
  * @param renderer Le renderer
  * @param ListeBlocs La liste des blocs
  */
-void initListBlocTextures(SDL_Renderer* renderer, listBloc* ListeBlocs);
+void initListBlocTextures(SDL_Renderer* renderer, bloc* ListeBlocs);
 
 /**
  * @brief Initialise la texture de tous les ennemis
@@ -41,7 +41,7 @@ void initListBulletTextures(SDL_Renderer* renderer, listBullet* listeBalles);
  * @param ListeEnnemis La liste des ennemis
  * @param ListeBlocs la liste des blocs
  */
-void initTextures(SDL_Renderer* renderer, player* Player, listEnemy* ListeEnnemis, listBloc* ListeBlocs);
+void initTextures(SDL_Renderer* renderer, player* Player, listEnemy* ListeEnnemis, bloc* ListeBlocs);
 
 /**
  * @brief Affiche le sprite à l'écran
@@ -60,7 +60,7 @@ void drawSprite(SDL_Renderer* renderer, int x, int y, int w, int h, int spriteIn
  * @param renderer Le renderer
  * @param ListeBlocs  La liste des blocs
  */
-void drawListBlocSprites(SDL_Renderer* renderer, listBloc* ListeBlocs);
+void drawListBlocSprites(SDL_Renderer* renderer, bloc* ListeBlocs);
 
 /**
  * @brief Affiche le sprite de tous les ennemis à l'écran
@@ -80,7 +80,7 @@ void drawListBulletSprites(SDL_Renderer* renderer, listBullet * ListeBalle);
  * @brief Detruit le sprite de tous les blocs
  * @param ListeBlocs la liste des blocs
  */
-void destroyListBlocTextures(listBloc* ListeBlocs);
+void destroyListBlocTextures(bloc* ListeBlocs);
 
 /**
  * @brief Détruit le sprite de tous les ennemis
@@ -97,6 +97,6 @@ void destroyListEnemyTextures(listEnemy* ListeEnnemis);
  * @param ListeBlocs la liste des blocs
  * @param listeBalles La liste des balles
  */
-void endSDL(SDL_Window* fenetre, SDL_Renderer* renderer, player* Player, listEnemy* ListeEnnemis, listBloc* ListeBlocs, listBullet * listeBalles);
+void endSDL(SDL_Window* fenetre, SDL_Renderer* renderer, player* Player, listEnemy* ListeEnnemis, bloc* ListeBlocs, listBullet * listeBalles);
 
 #endif

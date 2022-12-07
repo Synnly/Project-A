@@ -11,10 +11,11 @@ SDL_Texture* loadSprite(SDL_Renderer* renderer, const char* file){
     return textureSprite;
 }
 
-void initListBlocTextures(SDL_Renderer* renderer, listBloc* ListeBlocs){
+void initListBlocTextures(SDL_Renderer* renderer, bloc* ListeBlocs){
     if(!isEmptyLB(ListeBlocs)){
-        setBlocTexture(getBloc(ListeBlocs),loadSprite(renderer, "assets/img/wall.bmp"));
-        initListBlocTextures(renderer, getNextB(ListeBlocs));
+        for(int i = 0; i < sizeOfListBloc(ListeBlocs); i ++){
+            setBlocTexture(getBloc(ListeBlocs,i),loadSprite(renderer, "assets/img/wall.bmp"));
+        }
     }
 }
 
@@ -34,7 +35,7 @@ void initListBulletTextures(SDL_Renderer* renderer, listBullet* listeBalles){
     }
 }
 
-void initTextures(SDL_Renderer* renderer, player* Player, listEnemy* ListeEnnemis, listBloc* ListeBlocs){
+void initTextures(SDL_Renderer* renderer, player* Player, listEnemy* ListeEnnemis, bloc* ListeBlocs){
     //Blocs
     initListBlocTextures(renderer, ListeBlocs);
 
@@ -56,10 +57,12 @@ void drawSprite(SDL_Renderer* renderer, int x, int y, int w, int h, int spriteIn
     SDL_RenderCopy(renderer,textureSprite,&src,&dest);
 }
 
-void drawListBlocSprites(SDL_Renderer* renderer, listBloc* ListeBlocs){
+void drawListBlocSprites(SDL_Renderer* renderer, bloc* ListeBlocs){
     if(!isEmptyLB(ListeBlocs)){
-        drawSprite(renderer, getBlocPosX(getBloc(ListeBlocs)),getBlocPosY(getBloc(ListeBlocs)),PLAYER_SIZE, PLAYER_SIZE, getBlocIsObstacle(getBloc(ListeBlocs)),getBlocTexture(getBloc(ListeBlocs)));
-        drawListBlocSprites(renderer, getNextB(ListeBlocs));
+        for(int i = 0; i < sizeOfListBloc(ListeBlocs); i ++) {
+            drawSprite(renderer, getBlocPosX(getBloc(ListeBlocs,i)), getBlocPosY(getBloc(ListeBlocs,i)), PLAYER_SIZE,
+                       PLAYER_SIZE, getBlocIsObstacle(getBloc(ListeBlocs,i)), getBlocTexture(getBloc(ListeBlocs,i)));
+        }
     }
 }
 
@@ -77,10 +80,11 @@ void drawListBulletSprites(SDL_Renderer* renderer, listBullet * ListeBalle){
     }
 }
 
-void destroyListBlocTextures(listBloc* ListeBlocs){
+void destroyListBlocTextures(bloc* ListeBlocs){
     if(!isEmptyLB(ListeBlocs)){
-        SDL_DestroyTexture(getBlocTexture(getBloc(ListeBlocs)));
-        destroyListBlocTextures(getNextB(ListeBlocs));
+        for(int i = 0; i < sizeOfListBloc(ListeBlocs); i ++) {
+            SDL_DestroyTexture(getBlocTexture(getBloc(ListeBlocs,i)));
+        }
     }
 }
 
@@ -98,7 +102,7 @@ void destroyListBulletTextures(listBullet * listeBalles){
     }
 }
 
-void endSDL(SDL_Window* fenetre, SDL_Renderer* renderer, player* Player, listEnemy* ListeEnnemis, listBloc* ListeBlocs, listBullet * listeBalles){
+void endSDL(SDL_Window* fenetre, SDL_Renderer* renderer, player* Player, listEnemy* ListeEnnemis, bloc* ListeBlocs, listBullet * listeBalles){
     SDL_DestroyTexture(getPlayerTexture(Player));
 
     destroyListBlocTextures(ListeBlocs);

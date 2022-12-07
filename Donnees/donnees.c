@@ -25,7 +25,7 @@ int fpsCap(Uint32 start, Uint32* end){
 
 /* ----- Autres ----- */
 
-void handleEvents(SDL_Event* event, int* is_playing, player* player, listBloc* ListeBlocs, listBullet* listeBalles, double dt, double* startFire, int mouseX, int mouseY, Uint32 mouseBitMask) {
+void handleEvents(SDL_Event* event, int* is_playing, player* player, bloc* ListeBlocs, listBullet* listeBalles, double dt, double* startFire, int mouseX, int mouseY, Uint32 mouseBitMask) {
 
     // On retire tous les evenements sauf l'indication de fermer le jeu
     SDL_FlushEvents(SDL_APP_TERMINATING, SDL_USEREVENT);
@@ -195,12 +195,12 @@ int inCollision(sprite* Sprite1, sprite* Sprite2) {
     return 0;
 }
 
-int spriteCollidesWalls(sprite* Sprite, listBloc* ListeBlocs){
+int spriteCollidesWalls(sprite* Sprite, bloc* ListeBlocs){
     if(!isEmptyLB(ListeBlocs)){
-        if(getBlocIsObstacle(getBloc(ListeBlocs))){
-            return inCollision(Sprite, getBlocSprite(getBloc(ListeBlocs))) || spriteCollidesWalls(Sprite, getNextB(ListeBlocs));
-        }else{
-            return spriteCollidesWalls(Sprite, getNextB(ListeBlocs));
+        for(int i = 0; i < sizeOfListBloc(ListeBlocs);i++){
+            if(getBlocIsObstacle(getBloc(ListeBlocs,i)) && (inCollision(Sprite, getBlocSprite(getBloc(ListeBlocs,i))))){
+                return 1;
+            }
         }
     }
     return 0;
