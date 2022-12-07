@@ -113,6 +113,7 @@ void handleEvents(SDL_Event* event, int* is_playing, player* player, bloc* Liste
                 setPlayerPosY(player, max(0, getPlayerPosY(player) - PLAYER_SPEED * dt));
             }
         }
+
         if ((keystates[SDL_SCANCODE_SPACE] || mouseBitMask == SDL_BUTTON(SDL_BUTTON_LMASK)) && *startFire>0.25){
 
             // Initialisation et ajout de la balle dans la liste
@@ -210,4 +211,20 @@ void drawLine(SDL_Renderer* renderer, float x1, float y1, float x2, float y2){
     float distX = x2-x1;
     float distY = y2-y1;
     SDL_RenderDrawLine(renderer, (int)x1, (int)y1, (int)(x1 + distX*3), (int)(y1 + distY*3));
+}
+
+int bulletCollidesEnemies(bullet* Balle, listEnemy* listeEnnemis){
+    if(!isEmptyLE(listeEnnemis)){
+        return inCollision(getBulletSprite(Balle), getEnemySprite(getEnemy(listeEnnemis))) || bulletCollidesEnemies(Balle,getNextE(listeEnnemis));
+    }
+    return 0;
+}
+
+void bulletsCollidesEnemies(listBullet* ListeBalle, listEnemy* ListeEnnemi){
+    if(!isEmptyListBullet(ListeBalle)){
+        if(bulletCollidesEnemies(getBullet(ListeBalle), ListeEnnemi)){
+            setSpriteToBeDestroyed(getBulletSprite(getBullet(ListeBalle)), 1);
+        }
+        bulletsCollidesEnemies(getNextBullet(ListeBalle), ListeEnnemi);
+    }
 }

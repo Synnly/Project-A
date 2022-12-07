@@ -3,7 +3,12 @@
 
 /* ----- Getter ----- */
 
-bullet* getBullet(listBullet * ListeBalles){return &(ListeBalles->Bullet);}
+bullet* getBullet(listBullet * ListeBalles){
+    if(isEmptyListBullet(ListeBalles)){
+        return NULL;
+    }
+    return &(ListeBalles->Bullet);
+}
 listBullet* getNextBullet(listBullet * ListeBalles){return ListeBalles->next;}
 
 /* ----- Setter ----- */
@@ -24,9 +29,8 @@ int setNextBullet(listBullet * ListeBalles, listBullet * ListeBallesNext){
 
 listBullet initListBullet(){
 
-    listBullet* ListeBalles = malloc(sizeof(listBullet));
-    setNextBullet(ListeBalles, NULL);
-    return *ListeBalles;
+    listBullet ListeBalles = {};
+    return ListeBalles;
 }
 
 /* ----- Autres ----- */
@@ -40,7 +44,7 @@ void freeListBullet(listBullet* ListeBalles){
     if(!isEmptyListBullet(ListeBalles)){
 
         freeListBullet(getNextBullet(ListeBalles));
-        free(ListeBalles);
+        free(getNextBullet(ListeBalles));
     }
 }
 
@@ -59,24 +63,30 @@ void addBullet(listBullet* ListeBalles, bullet* Balle){
 }
 
 void deleteBullet(listBullet* ListeBalles, bullet* Balle){
-    //Si liste non vide ET balle non vide
-    if(!isEmptyListBullet(ListeBalles) && Balle != NULL) {
 
+    //Si liste non vide ET balle non vide
+    if(!isEmptyListBullet(getNextBullet(ListeBalles)) && Balle != NULL) {
 
         //La balle est la première de la liste
         if (isSameBullet(Balle, getBullet(ListeBalles))) {
 
-            //On récupère puis libère la balle
-            listBullet *temp = ListeBalles;
-            ListeBalles = getNextBullet(ListeBalles);
-
-            freeListBullet(temp);
+            setBullet(ListeBalles, *getBullet(getNextBullet(ListeBalles)));
+            setNextBullet(ListeBalles, getNextBullet(getNextBullet(ListeBalles)));
 
         } else {
 
             // On parcourt le reste de la liste pour trouver la bonne balle
             deleteBullet(getNextBullet(ListeBalles), Balle);
         }
+    }
+}
+
+void deleteBulletsToBeDesttroyed(listBullet* ListeBalles){
+    if(!isEmptyListBullet(ListeBalles)){
+        if(getSpriteToBeDestroyed(getBulletSprite(getBullet(ListeBalles)))){
+            deleteBullet(ListeBalles, getBullet(ListeBalles));
+        }
+        deleteBulletsToBeDesttroyed(getNextBullet(ListeBalles));
     }
 }
 

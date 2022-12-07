@@ -9,6 +9,7 @@ struct sprite_t{
     int height;
     int width;
     SDL_Texture* texture;
+    int toBeDestroyed;
 };
 
 typedef struct sprite_t sprite;
@@ -50,6 +51,13 @@ int getSpriteWidth(sprite* Sprite);
  */
 SDL_Texture* getSpriteTexture(sprite* Sprite);
 
+/**
+ * @brief Retourne la valeur qui indique si le sprite doit etre detruit ou non
+ * @param Sprite Le sprite
+ * @return 1 si le sprite doit etre detruit, 0 sinon
+ */
+int getSpriteToBeDestroyed(sprite* Sprite);
+
 /* ----- Setter ----- */
 
 /**
@@ -58,7 +66,7 @@ SDL_Texture* getSpriteTexture(sprite* Sprite);
  * @param posX Sa coordonnée X
  * @return -1 en cas d'échec, 0 sinon
 */
-int setSpritePosX(sprite* Sprite, float posX);
+void setSpritePosX(sprite* Sprite, float posX);
 
 /**
  * @brief Modifie la coordonnée Y du joueur
@@ -66,7 +74,7 @@ int setSpritePosX(sprite* Sprite, float posX);
  * @param posY Sa coordonnée Y
  * @return -1 en cas d'échec, 0 sinon
 */
-int setSpritePosY(sprite* Sprite, float posY);
+void setSpritePosY(sprite* Sprite, float posY);
 
 /**
  * @brief Modifie la hauteur du sprite
@@ -74,7 +82,7 @@ int setSpritePosY(sprite* Sprite, float posY);
  * @param height Sa hauteur
  * @return -1 en cas d'échec, 0 sinon
 */
-int setSpriteHeight(sprite* Sprite, int height);
+void setSpriteHeight(sprite* Sprite, int height);
 
 /**
  * @brief Modifie la largeur du sprite
@@ -82,7 +90,7 @@ int setSpriteHeight(sprite* Sprite, int height);
  * @param height Sa largeur
  * @return -1 en cas d'échec, 0 sinon
 */
-int setSpriteWidth(sprite* Sprite, int width);
+void setSpriteWidth(sprite* Sprite, int width);
 
 /**
  * @brief Met à jour la texture du sprite
@@ -90,6 +98,13 @@ int setSpriteWidth(sprite* Sprite, int width);
  * @param texture la texture
  */
 void setSpriteTexture(sprite* Sprite, SDL_Texture* texture);
+
+/**
+ * @brief Initialise la valeur qui indique si le sprite doit etre detruit ou non
+ * @param Sprite Le sprite
+ * @param valeur 1 si le sprite doit etre detruit, 0 sinon
+ */
+void setSpriteToBeDestroyed(sprite* Sprite, int valeur);
 
 /* ----- Initialisation ----- */
 
@@ -99,7 +114,7 @@ void setSpriteTexture(sprite* Sprite, SDL_Texture* texture);
  * @param posY Sa position Y
  * @param height Sa hauteur
  * @param width Sa largeur
- * @return
+ * @return Le sprite
  */
 sprite initSprite(float posX, float posY, int height, int width);
 

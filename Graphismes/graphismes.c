@@ -95,6 +95,15 @@ void destroyListEnemyTextures(listEnemy* ListeEnnemis){
     }
 }
 
+void destroyToBeDestroyedBulletTextures(listBullet* ListeBalles){
+    if(!isEmptyListBullet(ListeBalles)){
+        if(getSpriteToBeDestroyed(getBulletSprite(getBullet(ListeBalles)))){
+            SDL_DestroyTexture(getBulletTexture(getBullet(ListeBalles)));
+        }
+        destroyToBeDestroyedBulletTextures(getNextBullet(ListeBalles));
+    }
+}
+
 void destroyListBulletTextures(listBullet * listeBalles){
     if(!isEmptyListBullet(listeBalles)){
         SDL_DestroyTexture(getBulletTexture(getBullet(listeBalles)));

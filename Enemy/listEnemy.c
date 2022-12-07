@@ -34,8 +34,8 @@ listEnemy initListEnemy(int nb){
 
         float posX, posY;
         listEnemy* CurrentListEnnemis;
-        ListeEnnemis = malloc(sizeof(listEnemy));
-        CurrentListEnnemis = ListeEnnemis;
+        CurrentListEnnemis = malloc(sizeof(listEnemy));
+        ListeEnnemis = CurrentListEnnemis;
 
         //Premiers maillons
         for(int i = 0; i<nb-1; i++){
@@ -61,7 +61,6 @@ listEnemy initListEnemy(int nb){
         setEnemy(CurrentListEnnemis, initEnemy(posX, posY, 1));
 
         setNextE(CurrentListEnnemis, NULL);
-
     }
     return *ListeEnnemis;
 }
@@ -77,6 +76,6 @@ void freeListEnemy(listEnemy* ListeEnnemis){
     if(!isEmptyLE(ListeEnnemis)){
 
         freeListEnemy(getNextE(ListeEnnemis));
-        free(ListeEnnemis);
+        free(getNextE(ListeEnnemis));
     }
 }

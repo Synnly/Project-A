@@ -74,7 +74,13 @@ bullet initBullet(float posX, float posY, int speedX, int speedY, int type){
 /* ----- Autre ----- */
 
 int isSameBullet(bullet* Balle1, bullet* Balle2){
-    if((getBulletPosX(Balle1) == getBulletPosX(Balle2)) && (getBulletPosY(Balle1) == getBulletPosY(Balle2)) &&
+
+    if(Balle1 == NULL || Balle2 == NULL){
+        printf("Balle1 ou 2 null\n");
+        return 0;
+    }
+
+    else if((getBulletPosX(Balle1) == getBulletPosX(Balle2)) && (getBulletPosY(Balle1) == getBulletPosY(Balle2)) &&
        (getBulletHeight(Balle1) == getBulletHeight(Balle2)) && (getBulletWidth(Balle1) == getBulletWidth(Balle2)) &&
        (getBulletXSpeed(Balle1) == getBulletXSpeed(Balle2)) && (getBulletYSpeed(Balle1) == getBulletYSpeed(Balle2)) &&
        (getBulletType(Balle1) == getBulletType(Balle2))){

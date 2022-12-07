@@ -82,6 +82,11 @@ void addBullet(listBullet* ListeBalles, bullet* Balle);
  */
 void deleteBullet(listBullet* ListeBalles, bullet* Balle);
 
+/**
+ * @brief Supprime les balles qui sont marquees comme "a detruire"
+ * @param ListeBalles La liste des balles
+ */
+void deleteBulletsToBeDesttroyed(listBullet* ListeBalles);
 
 /**
  * @brief Déplace toutes les balles

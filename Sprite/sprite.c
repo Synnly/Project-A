@@ -9,44 +9,16 @@ float getSpritePosY(sprite* Sprite){return Sprite->posY;}
 int getSpriteHeight(sprite* Sprite){return Sprite->height;}
 int getSpriteWidth(sprite* Sprite){return Sprite->width;}
 SDL_Texture* getSpriteTexture(sprite* Sprite){return Sprite->texture;}
+int getSpriteToBeDestroyed(sprite* Sprite){return Sprite->toBeDestroyed;}
 
 /* ----- Getter ----- */
 
-int setSpritePosX(sprite* Sprite, float posX){
-    Sprite->posX = posX;
-    if(fabs(getSpritePosX(Sprite) - posX) >= EPSILON){
-        return 0;
-    }
-    return -1;
-}
-
-int setSpritePosY(sprite* Sprite, float posY) {
-    Sprite->posY = posY;
-    if (fabs(getSpritePosY(Sprite) - posY) >= EPSILON) {
-        return 0;
-    }
-    return -1;
-}
-
-int setSpriteHeight(sprite* Sprite, int height){
-    Sprite->height = height;
-    if((getSpritePosY(Sprite) - height) == 0) {
-        return 0;
-    }
-    return -1;
-}
-
-int setSpriteWidth(sprite* Sprite, int width){
-    Sprite->width = width;
-    if((getSpritePosY(Sprite) - width) == 0) {
-        return 0;
-    }
-    return -1;
-}
-
-void setSpriteTexture(sprite* Sprite, SDL_Texture* texture){
-    Sprite->texture = texture;
-}
+void setSpritePosX(sprite* Sprite, float posX){Sprite->posX = posX;}
+void setSpritePosY(sprite* Sprite, float posY) {Sprite->posY = posY;}
+void setSpriteHeight(sprite* Sprite, int height){Sprite->height = height;}
+void setSpriteWidth(sprite* Sprite, int width){Sprite->width = width;}
+void setSpriteTexture(sprite* Sprite, SDL_Texture* texture){Sprite->texture = texture;}
+void setSpriteToBeDestroyed(sprite* Sprite, int valeur){Sprite->toBeDestroyed = valeur;}
 
 /* ----- Initialisation ----- */
 
@@ -56,5 +28,6 @@ sprite initSprite(float posX, float posY, int height, int width){
     setSpritePosY(&Sprite, posY);
     setSpriteHeight(&Sprite, height);
     setSpriteWidth(&Sprite, width);
+    setSpriteToBeDestroyed(&Sprite, 0);
     return Sprite;
 }

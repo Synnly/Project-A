@@ -70,6 +70,12 @@ void drawListBlocSprites(SDL_Renderer* renderer, bloc* ListeBlocs);
 void drawListEnemySprites(SDL_Renderer* renderer, listEnemy* ListeEnnemis);
 
 /**
+ * @brief Detruis la texture de toutes les balles marquees comme "a detruire"
+ * @param ListeBalles La liste des balles
+ */
+void destroyToBeDestroyedBulletTextures(listBullet* ListeBalles);
+
+/**
  * @brief Affiche le sprite de chaque balle
  * @param renderer Le renderer
  * @param ListeBalle La liste des balles
