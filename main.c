@@ -28,7 +28,7 @@ void boucleDeJeu(SDL_Renderer* renderer, player* player, listEnemy* listeEnnemis
         if(fpsCap(start,&end)) {continue;}
 
         // Déplacement des entités autres que le joueur
-        moveListEnemyToPlayer(listeEnnemis, player, dt);
+        moveListEnemyToPlayer(listeEnnemis, listeEnnemis, player, dt);
         moveBullets(listeBalles, dt);
 
         bulletsCollidesEnemies(listeBalles, listeEnnemis);

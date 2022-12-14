@@ -130,7 +130,7 @@ void handleEvents(SDL_Event* event, int* is_playing, player* player, bloc* Liste
     }
 }
 
-void moveToPlayer(enemy* enemy, player* player, double dt){
+void moveToPlayer(enemy* enemy, listEnemy* ListeEnnemis, player* player, double dt){
     //Distance de l'ennemi au joueur
     float distToPlayer = sqrt(pow(getPlayerPosX(player) - getEnemyPosX(enemy), 2) + pow(getPlayerPosY(player) - getEnemyPosY(enemy), 2));
 
@@ -142,17 +142,27 @@ void moveToPlayer(enemy* enemy, player* player, double dt){
     float distY = (getPlayerPosY(player)- getEnemyPosY(enemy))*prctDist;
 
     setEnemyPosX(enemy, getEnemyPosX(enemy)+distX);
+
+    // Si en se deplacant l;ennemi en touche un autre
+    if(enemyIsCollidingListEnemy(enemy, ListeEnnemis)){
+        setEnemyPosX(enemy, getEnemyPosX(enemy)-distX);
+    }
+
     setEnemyPosY(enemy, getEnemyPosY(enemy)+distY);
 
+    // Si en se deplacant l;ennemi en touche un autre
+    if(enemyIsCollidingListEnemy(enemy, ListeEnnemis)){
+        setEnemyPosY(enemy, getEnemyPosY(enemy)-distY);
+    }
 }
 
-void moveListEnemyToPlayer(listEnemy* ListeEnnemis, player* player, double dt){
-    if(!isEmptyLE(ListeEnnemis)){
+void moveListEnemyToPlayer(listEnemy* ListeEnnemisActuelle, listEnemy* ListeEnnemis, player* player, double dt){
+    if(!isEmptyLE(ListeEnnemisActuelle)){
         //Si pas en collision avec le joueur
-        if(!inCollision(getPlayerSprite(player), getEnemySprite(getEnemy(ListeEnnemis)))) {
-            moveToPlayer(getEnemy(ListeEnnemis), player, dt);
+        if(!inCollision(getPlayerSprite(player), getEnemySprite(getEnemy(ListeEnnemisActuelle)))) {
+            moveToPlayer(getEnemy(ListeEnnemisActuelle), ListeEnnemis, player, dt);
         }
-        moveListEnemyToPlayer(getNextE(ListeEnnemis), player, dt);
+        moveListEnemyToPlayer(getNextE(ListeEnnemisActuelle), ListeEnnemis, player, dt);
     }
 }
 
@@ -214,4 +224,16 @@ void bulletsCollidesEnemies(listBullet* ListeBalle, listEnemy* ListeEnnemi){
         }
         bulletsCollidesEnemies(getNextBullet(ListeBalle), ListeEnnemi);
     }
+}
+
+int enemyIsCollidingListEnemy(enemy* Ennemi, listEnemy* ListeEnnemis){
+    if(!isEmptyLE(ListeEnnemis)){
+        if(Ennemi == getEnemy(ListeEnnemis)){
+            return enemyIsCollidingListEnemy(Ennemi, getNextE(ListeEnnemis));
+        }
+        else {
+            return inCollision(getEnemySprite(Ennemi), getEnemySprite(getEnemy(ListeEnnemis))) || enemyIsCollidingListEnemy(Ennemi, getNextE(ListeEnnemis));
+        }
+    }
+    return 0;
 }

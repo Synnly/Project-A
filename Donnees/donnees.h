@@ -57,18 +57,20 @@ void handleEvents(SDL_Event* event, int* is_playing, player* player, bloc* Liste
 /**
  * @brief Déplace l'ennemi vers le joueur
  * @param enemy L'ennemi
- * @param player Le joueur
- * @param dt L'intervalle de temps
- */
-void moveToPlayer(enemy* enemy, player* player, double dt);
-
-/**
- * @brief Deplace tous les ennemis vers le joueur
  * @param ListeEnnemis La liste des ennemis
  * @param player Le joueur
  * @param dt L'intervalle de temps
  */
-void moveListEnemyToPlayer(listEnemy* ListeEnnemis, player* player, double dt);
+void moveToPlayer(enemy* enemy, listEnemy* ListeEnnemis, player* player, double dt);
+
+/**
+ * @brief Deplace tous les ennemis vers le joueur
+ * @param ListeEnnemisActuelle La liste actuele des ennemis
+ * @param ListeEnnemis La liste complete des ennemis
+ * @param player Le joueur
+ * @param dt L'intervalle de temps
+ */
+void moveListEnemyToPlayer(listEnemy* ListeEnnemisActuelle, listEnemy* ListeEnnemis, player* player, double dt);
 
 /**
  * @brief Indique si deux sprites sont en collision
@@ -118,5 +120,13 @@ int bulletCollidesEnemies(bullet* Balle, listEnemy* listeEnnemis);
  * @param ListeEnnemi La liste des ennemis
  */
 void bulletsCollidesEnemies(listBullet* ListeBalle, listEnemy* ListeEnnemi);
+
+/**
+ * @brief Verifie si l'ennemi est en collision qvec un autre ennemi de la liste
+ * @param Ennemi L'ennemi
+ * @param ListeEnnemis La liste des ennemis
+ * @return 1 si l'ennemi entre en collision avec un autre, 0 sinon;
+ */
+int enemyIsCollidingListEnemy(enemy* Ennemi, listEnemy* ListeEnnemis);
 
 #endif
