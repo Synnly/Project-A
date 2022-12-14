@@ -143,10 +143,12 @@ void moveToPlayer(enemy* enemy, player* player, double dt){
 
     setEnemyPosX(enemy, getEnemyPosX(enemy)+distX);
     setEnemyPosY(enemy, getEnemyPosY(enemy)+distY);
+
 }
 
 void moveListEnemyToPlayer(listEnemy* ListeEnnemis, player* player, double dt){
     if(!isEmptyLE(ListeEnnemis)){
+        //Si pas en collision avec le joueur
         if(!inCollision(getPlayerSprite(player), getEnemySprite(getEnemy(ListeEnnemis)))) {
             moveToPlayer(getEnemy(ListeEnnemis), player, dt);
         }
@@ -155,45 +157,30 @@ void moveListEnemyToPlayer(listEnemy* ListeEnnemis, player* player, double dt){
 }
 
 int inCollision(sprite* Sprite1, sprite* Sprite2) {
-    float x1 = getSpritePosX(Sprite1);
-    float x2 = getSpritePosX(Sprite2);
-    float y1 = getSpritePosY(Sprite1);
-    float y2 = getSpritePosY(Sprite2);
-    float w1 = (float) getSpriteWidth(Sprite1);
-    float w2 = (float) getSpriteWidth(Sprite2);
-    float h1 = (float) getSpriteHeight(Sprite1);
-    float h2 = (float) getSpriteHeight(Sprite2);
 
-    // Coin bas-droite (sprite1) contre/dans l'autre (sprite2)
-    if (((x1 + w1 > x2 || floatEquals(x1 + w1, x2)) && (y1 + w1 > y2 || floatEquals(y1 + h1, y2)) &&
+    //Coordonnees des coins haut gauche et bas droite du sprite 2
+    float x1 = getSpritePosX(Sprite2);
+    float y1 = getSpritePosY(Sprite2);
+    float w1 = (float) getSpriteWidth(Sprite2);
+    float h1 = (float) getSpriteHeight(Sprite2);
 
-         // Distance entre les deux points < h1 et < w1
-         (fabs(x1 + w1 - x2) < w1 || floatEquals(x1 + w1 - x2, w1)) &&
-         (fabs(y1 + w1 - y2) < h1 || floatEquals(y1 + w1 - h2, h1))) ||
+    // Coordonnees des coins du sprite 1
+    float pos[4][2] = {{getSpritePosX(Sprite1),getSpritePosY(Sprite1)},
+                       {getSpritePosX(Sprite1) + getSpriteWidth(Sprite1), getSpritePosY(Sprite1)},
+                       {getSpritePosX(Sprite1),getSpritePosY(Sprite1) + getSpriteHeight(Sprite1)},
+                       {getSpritePosX(Sprite1) + getSpriteWidth(Sprite1), getSpritePosY(Sprite1) + getSpriteHeight(Sprite1)}};
 
-        // Coin bas-gauche contre/dans l'autre
-        ((x1 < x2 + w2 || floatEquals(x1, x2 + w2)) && (y1 + h1 > y2 || floatEquals(y1 + h1, y2)) &&
+    // Verification pour les 4 coins
+    for (int point = 0; point < 4; point++) {
+        float x = pos[point][0];
+        float y = pos[point][1];
 
-         // Distance entre les deux points < h1 et < w1
-         (fabs(x2 + w2 - x1) < w1 || floatEquals(x2 + w2 - x1, w1)) &&
-         (fabs(y1 + h1 - y2) < h1 || floatEquals(y1 + h1 - y2, h1))) ||
-
-        // Coin haut-droite contre/dans l'autre
-        ((x1 + w1 > x2 || floatEquals(x1 + w1, x2)) && (y1 < y2 + h2 || floatEquals(y1, y2 + h2)) &&
-
-         // Distance entre les deux points < h1 et < w1
-         (fabs(x1 + w1 - x2) < w1 || floatEquals(x1 + w1 - x2, w1)) &&
-         (fabs(y2 + h2 - y1) < h1 || floatEquals(y2 + h2 - y1, h1))) ||
-
-        // Coin haut-gauche contre/dans l'autre
-        ((x1 < x2 + w2 || floatEquals(x1, x2 + w2)) && (y1 < y2 + h2 || floatEquals(y1, y2 + h2)) &&
-
-         // Distance entre les deux points < h1 et < w1
-         (fabs(x2 + w2 - x1) < w1 || floatEquals(x2 + w2 - x1, w1)) &&
-         (fabs(y2 + h2 - y1) < h1 || floatEquals(y2 + h2 - y1, h1)))) {
-        return 1;
+        if ((x > x1 || floatEquals(x, x1)) && (x < x1 + w1 || floatEquals(x, x1 + w1)) &&
+            (y > y1 || floatEquals(y, y1)) && (y < y1 + h1 || floatEquals(y, y1 + h1))) {
+            return SDL_TRUE;
+        }
     }
-    return 0;
+    return SDL_FALSE;
 }
 
 int spriteCollidesWalls(sprite* Sprite, bloc* ListeBlocs){
