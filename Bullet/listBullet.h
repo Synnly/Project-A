@@ -88,11 +88,4 @@ void deleteBullet(listBullet* ListeBalles, bullet* Balle);
  */
 void deleteBulletsToBeDesttroyed(listBullet* ListeBalles);
 
-/**
- * @brief Déplace toutes les balles
- * @param ListeBalles La liste des balles
- * @param dt Le laps de temps écoulé depuis la dernière execution
- */
-void moveBullets(listBullet* ListeBalles, double dt);
-
 #endif //PROJECT_A_LISTBULLET_H

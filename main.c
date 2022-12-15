@@ -29,7 +29,7 @@ void boucleDeJeu(SDL_Renderer* renderer, player* player, listEnemy* listeEnnemis
 
         // Déplacement des entités autres que le joueur
         moveListEnemyToPlayer(listeEnnemis, listeEnnemis, player, dt);
-        moveBullets(listeBalles, dt);
+        moveBullets(listeBalles, listeBlocs, dt);
 
         bulletsCollidesEnemies(listeBalles, listeEnnemis);
         destroyToBeDestroyedBulletTextures(listeBalles);
@@ -93,7 +93,7 @@ int main(){
     }
 
     // Creation de la fenetre
-    if(SDL_CreateWindowAndRenderer(1280, 720, SDL_WINDOW_SHOWN | SDL_WINDOW_INPUT_FOCUS, &fenetre, &renderer)){
+    if(SDL_CreateWindowAndRenderer(SCREEN_WIDTH, SCREEN_HEIGHT, SDL_WINDOW_SHOWN | SDL_WINDOW_INPUT_FOCUS, &fenetre, &renderer)){
         printf("Echec de creation de fenetre/renderer : %s", SDL_GetError());
         return -1;
     }

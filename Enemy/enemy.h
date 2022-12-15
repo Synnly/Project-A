@@ -44,9 +44,9 @@ int getEnemyLife(enemy * Enemy);
 int getEnemySpeed(enemy * Enemy);
 
 /*
-    @brief Retourne le type de l'ennemi
+    @brief Retourne le spread de l'ennemi
     @param Enemy L'ennemi
-    @return Son type
+    @return Son spread
 */
 int getEnemyType(enemy * Enemy);
 
@@ -95,9 +95,9 @@ void setEnemyLife(enemy * Enemy, int life);
 void setEnemySpeed(enemy * Enemy, int speed);
 
 /*
-    @brief Modifie le type de l'ennemi
+    @brief Modifie le spread de l'ennemi
     @param Enemy L'ennemi
-    @param type Son type
+    @param spread Son spread
 */
 void setEnemyType(enemy * Enemy, int type);
 
@@ -122,7 +122,7 @@ void setEnemySprite(enemy* Enemy, sprite* Sprite);
     @brief Initialise un ennemi
     @param posX Sa coordonnée X
     @param posY Sa coordonnée Y
-    @param type Son type
+    @param spread Son spread
 */
 enemy initEnemy(float posX, float posY, int type);
 

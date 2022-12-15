@@ -129,4 +129,12 @@ void bulletsCollidesEnemies(listBullet* ListeBalle, listEnemy* ListeEnnemi);
  */
 int enemyIsCollidingListEnemy(enemy* Ennemi, listEnemy* ListeEnnemis);
 
+/**
+ * @brief Déplace toutes les balles
+ * @param ListeBalles La liste des balles
+ * @param ListeBlocs La liste des blocs
+ * @param dt Le laps de temps écoulé depuis la dernière execution
+ */
+void moveBullets(listBullet* ListeBalles, bloc* ListeBlocs, double dt);
+
 #endif

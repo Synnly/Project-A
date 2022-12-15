@@ -3,9 +3,9 @@
 
 #include "../Sprite/sprite.h"
 
-struct bloc_t{    // Structure d'un bloc obstacle
+struct bloc_t{          // Structure d'un bloc obstacle
     sprite sprite;
-    int type;   //0 bloc classique, 1 bloc
+    int spread;         //Pourcentage de chance que le bloc se transforme en obstacle
     int isObstacle;     // 1 si le bloc est un obstacle, 0 sinon
 };
 
@@ -28,11 +28,11 @@ float getBlocPosX(bloc * Bloc);
 float getBlocPosY(bloc * Bloc);
 
 /*
-    @brief Retourne le type du bloc
+    @brief Retourne le pourcentage de contagion du bloc
     @param Bloc Le bloc
-    @return 0 = Mur, 1 = Entrée d'ennemis, 2 = Zone de soin
+    @return La pourcentage de contagion
 */
-int getBlocType(bloc * Bloc);
+int getBlocSpread(bloc * Bloc);
 
 /*
     @brief Retourne si le bloc est obstacle ou non
@@ -71,11 +71,11 @@ void setBlocPosX(bloc * Bloc, float posX);
 void setBlocPosY(bloc * Bloc, float posY);
 
 /*
-    @brief Modifie le type du bloc
+    @brief Modifie le pourcentage de contagion du bloc
     @param Bloc Le bloc
-    @param type Son nouveau type
+    @param spread Son nouveau spread
 */
-void setBlocType(bloc * Bloc, int type);
+void setBlocSpread(bloc * Bloc, int spread);
 
 /*
     @brief Rend le bloc obstacle
@@ -109,7 +109,7 @@ void setBlocSprite(bloc* Bloc, sprite* Sprite);
     @brief Initialise un bloc non-obstacle
     @param posX Sa coordonnée X
     @param posY Sa coordonnée Y
-    @param type Son type
+    @param spread Son spread
     @return Le bloc
 */
 bloc initBloc(int posX, int posY, int type);

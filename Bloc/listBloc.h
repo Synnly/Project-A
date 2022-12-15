@@ -21,6 +21,18 @@ typedef struct listBloc_t listBloc;
  */
 bloc* getBloc(bloc* ListeBlocs, int index);
 
+/**
+ * @Brief Retourne le nombre de blocs en largeur sur l'ecran
+ * @return Le nombre de blocs en largeur sur l'ecran
+ */
+int getListeWidth();
+
+/**
+ * @Brief Retourne le nombre de blocs en hauteur sur l'ecran
+ * @return Le nombre de blocs en hauteur sur l'ecran
+ */
+int getListeHeight();
+
 /* ----- Initialisation ----- */
 
 /**
@@ -48,5 +60,19 @@ void freeListBloc(bloc* ListeBlocs);
  * @return la taille de la liste
  */
 int sizeOfListBloc(bloc* ListeBlocs);
+
+/**
+ * @brief Transforme le bloc en obstacle avec assez de chance et transmets la contagion a ses plus proches voisins
+ * @param ListeBlocs La liste des blocs
+ * @param current L'indice du bloc actuel
+ */
+void spreadObstacles(bloc* ListeBlocs, int current);
+
+/**
+ * @brief Demarre la contagion de blocs a partir des clusters
+ * @param ListeBlocs La liste des blocs
+ * @param current L'indice bloc actuel
+ */
+void spreadListeBlocs(bloc* ListeBlocs, int current);
 
 #endif //PROJECT_A_LISTBLOC_H

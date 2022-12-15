@@ -89,13 +89,3 @@ void deleteBulletsToBeDesttroyed(listBullet* ListeBalles){
         deleteBulletsToBeDesttroyed(getNextBullet(ListeBalles));
     }
 }
-
-void moveBullets(listBullet* ListeBalles, double dt){
-    if(!isEmptyListBullet(ListeBalles)){
-
-        setBulletPosX(getBullet(ListeBalles), getBulletPosX(getBullet(ListeBalles)) - getBulletXSpeed(getBullet(ListeBalles)) * dt);
-        setBulletPosY(getBullet(ListeBalles), getBulletPosY(getBullet(ListeBalles)) - getBulletYSpeed(getBullet(ListeBalles)) * dt);
-
-        moveBullets(getNextBullet(ListeBalles), dt);
-    }
-}
