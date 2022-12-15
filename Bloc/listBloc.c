@@ -21,7 +21,7 @@ bloc* initListBloc(){
         }
 
         srand(time(NULL));
-        int nbClusters =  rand() % 6;
+        int nbClusters = (rand() % 6)+2;
 
         // Nb aleatoire de clusters de blocs
         for(int i = 0; i < nbClusters; i++){

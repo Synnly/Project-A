@@ -58,19 +58,21 @@ void handleEvents(SDL_Event* event, int* is_playing, player* player, bloc* Liste
  * @brief Déplace l'ennemi vers le joueur
  * @param enemy L'ennemi
  * @param ListeEnnemis La liste des ennemis
+ * @param ListeBlocs La liste des blocs
  * @param player Le joueur
  * @param dt L'intervalle de temps
  */
-void moveToPlayer(enemy* enemy, listEnemy* ListeEnnemis, player* player, double dt);
+void moveToPlayer(enemy* enemy, listEnemy* ListeEnnemis, bloc* ListeBlocs, player* player, double dt);
 
 /**
  * @brief Deplace tous les ennemis vers le joueur
  * @param ListeEnnemisActuelle La liste actuele des ennemis
  * @param ListeEnnemis La liste complete des ennemis
+ * @param ListeBlocs La liste des blocs
  * @param player Le joueur
  * @param dt L'intervalle de temps
  */
-void moveListEnemyToPlayer(listEnemy* ListeEnnemisActuelle, listEnemy* ListeEnnemis, player* player, double dt);
+void moveListEnemyToPlayer(listEnemy* ListeEnnemisActuelle, listEnemy* ListeEnnemis, bloc* ListeBlocs, player* player, double dt);
 
 /**
  * @brief Indique si deux sprites sont en collision

@@ -138,7 +138,7 @@ void handleEvents(SDL_Event* event, int* is_playing, player* player, bloc* Liste
     }
 }
 
-void moveToPlayer(enemy* enemy, listEnemy* ListeEnnemis, player* player, double dt){
+void moveToPlayer(enemy* enemy, listEnemy* ListeEnnemis, bloc* ListeBlocs, player* player, double dt){
     //Distance de l'ennemi au joueur
     float distToPlayer = sqrt(pow(getPlayerPosX(player) - getEnemyPosX(enemy), 2) + pow(getPlayerPosY(player) - getEnemyPosY(enemy), 2));
 
@@ -152,25 +152,25 @@ void moveToPlayer(enemy* enemy, listEnemy* ListeEnnemis, player* player, double 
     setEnemyPosX(enemy, getEnemyPosX(enemy)+distX);
 
     // Si en se deplacant l;ennemi en touche un autre
-    if(enemyIsCollidingListEnemy(enemy, ListeEnnemis)){
+    if(enemyIsCollidingListEnemy(enemy, ListeEnnemis) || spriteCollidesWalls(getEnemySprite(enemy), ListeBlocs)){
         setEnemyPosX(enemy, getEnemyPosX(enemy)-distX);
     }
 
     setEnemyPosY(enemy, getEnemyPosY(enemy)+distY);
 
     // Si en se deplacant l;ennemi en touche un autre
-    if(enemyIsCollidingListEnemy(enemy, ListeEnnemis)){
+    if(enemyIsCollidingListEnemy(enemy, ListeEnnemis) || spriteCollidesWalls(getEnemySprite(enemy), ListeBlocs)){
         setEnemyPosY(enemy, getEnemyPosY(enemy)-distY);
     }
 }
 
-void moveListEnemyToPlayer(listEnemy* ListeEnnemisActuelle, listEnemy* ListeEnnemis, player* player, double dt){
+void moveListEnemyToPlayer(listEnemy* ListeEnnemisActuelle, listEnemy* ListeEnnemis, bloc* ListeBlocs, player* player, double dt){
     if(!isEmptyLE(ListeEnnemisActuelle)){
         //Si pas en collision avec le joueur
         if(!inCollision(getPlayerSprite(player), getEnemySprite(getEnemy(ListeEnnemisActuelle)))) {
-            moveToPlayer(getEnemy(ListeEnnemisActuelle), ListeEnnemis, player, dt);
+            moveToPlayer(getEnemy(ListeEnnemisActuelle), ListeEnnemis, ListeBlocs, player, dt);
         }
-        moveListEnemyToPlayer(getNextE(ListeEnnemisActuelle), ListeEnnemis, player, dt);
+        moveListEnemyToPlayer(getNextE(ListeEnnemisActuelle), ListeEnnemis, ListeBlocs, player, dt);
     }
 }
 
