@@ -29,6 +29,18 @@ float getEnemyPosX(enemy * Enemy);
 */
 float getEnemyPosY(enemy * Enemy);
 
+/**
+ * @brief Donne la hauteur du sprite de l'ennemi
+ * @param Enemy l'ennemi
+ */
+int getEnemyHeight(enemy * Enemy);
+
+/**
+ * @brief Donne la largeur du sprite de l'ennemi
+ * @param Enemy l'ennemi
+ */
+int getEnemyWidth(enemy * Enemy);
+
 /*
     @brief Retourne la vie restante de l'ennemi
     @param Enemy L'ennemi
@@ -125,5 +137,15 @@ void setEnemySprite(enemy* Enemy, sprite* Sprite);
     @param spread Son spread
 */
 enemy initEnemy(float posX, float posY, int type);
+
+/* ----- Autre ----- */
+
+/**
+ * @brief Compare deux ennemis
+ * @param Enemy1 le premier ennmi
+ * @param Enemy2 le deuxieme ennemi
+ * @return 1 si les deux ennemis sont les mêmes 0 sinon
+ */
+int isSameEnemy(enemy * Enemy1, enemy * Enemy2);
 
 #endif //PROJECT_A_ENEMY_H

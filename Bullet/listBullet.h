@@ -86,6 +86,6 @@ void deleteBullet(listBullet* ListeBalles, bullet* Balle);
  * @brief Supprime les balles qui sont marquees comme "a detruire"
  * @param ListeBalles La liste des balles
  */
-void deleteBulletsToBeDesttroyed(listBullet* ListeBalles);
+void deleteBulletsToBeDestroyed(listBullet* ListeBalles);
 
 #endif //PROJECT_A_LISTBULLET_H

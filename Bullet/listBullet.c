@@ -81,11 +81,11 @@ void deleteBullet(listBullet* ListeBalles, bullet* Balle){
     }
 }
 
-void deleteBulletsToBeDesttroyed(listBullet* ListeBalles){
+void deleteBulletsToBeDestroyed(listBullet* ListeBalles){
     if(!isEmptyListBullet(ListeBalles)){
         if(getSpriteToBeDestroyed(getBulletSprite(getBullet(ListeBalles)))){
             deleteBullet(ListeBalles, getBullet(ListeBalles));
         }
-        deleteBulletsToBeDesttroyed(getNextBullet(ListeBalles));
+        deleteBulletsToBeDestroyed(getNextBullet(ListeBalles));
     }
 }

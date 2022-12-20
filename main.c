@@ -32,8 +32,11 @@ void boucleDeJeu(SDL_Renderer* renderer, player* player, listEnemy* listeEnnemis
         moveBullets(listeBalles, listeBlocs, dt);
 
         bulletsCollidesEnemies(listeBalles, listeEnnemis);
-        destroyToBeDestroyedBulletTextures(listeBalles);
-        deleteBulletsToBeDesttroyed(listeBalles);
+        //destroyToBeDestroyedBulletTextures(listeBalles);
+        deleteBulletsToBeDestroyed(listeBalles);
+
+        destroyToBeDestroyedEnemyTextures(listeEnnemis);
+        deleteEnemiesToBeDestroyed(listeEnnemis);
 
         // Recuperation de l'état de la souris
         mouseBitMask = SDL_GetMouseState(&mouseX, &mouseY);

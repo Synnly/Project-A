@@ -76,6 +76,12 @@ void drawListEnemySprites(SDL_Renderer* renderer, listEnemy* ListeEnnemis);
 void destroyToBeDestroyedBulletTextures(listBullet* ListeBalles);
 
 /**
+ * @brief Detruis la texture de tous les ennemis marquees comme "a detruire"
+ * @param ListeEnnemis La liste des ennemis
+ */
+void destroyToBeDestroyedEnemyTextures(listEnemy * ListeEnnemis);
+
+/**
  * @brief Affiche le sprite de chaque balle
  * @param renderer Le renderer
  * @param ListeBalle La liste des balles

@@ -68,4 +68,17 @@ int isEmptyLE(listEnemy* ListEnnemy);
  */
 void freeListEnemy(listEnemy* ListeEnnemis);
 
+/**
+ * @brief Supprime un ennemi de la liste d'ennemis
+ * @param ListeEnnemis la liste des ennemis
+ * @param Ennemi l'ennemi à supprimer
+ */
+void deleteEnemy(listEnemy* ListeEnnemis, enemy * Ennemi);
+
+/**
+ * @brief Supprime les ennemis qui sont marquees comme "a detruire"
+ * @param ListeEnnemis La liste des ennemis
+ */
+void deleteEnemiesToBeDestroyed(listEnemy* ListeEnnemis);
+
 #endif //PROJECT_A_LISTENEMY_H

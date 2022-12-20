@@ -183,10 +183,10 @@ int inCollision(sprite* Sprite1, sprite* Sprite2) {
     float h1 = (float) getSpriteHeight(Sprite2);
 
     // Coordonnees des coins du sprite 1
-    float pos[4][2] = {{getSpritePosX(Sprite1),getSpritePosY(Sprite1)},
-                       {getSpritePosX(Sprite1) + getSpriteWidth(Sprite1), getSpritePosY(Sprite1)},
-                       {getSpritePosX(Sprite1),getSpritePosY(Sprite1) + getSpriteHeight(Sprite1)},
-                       {getSpritePosX(Sprite1) + getSpriteWidth(Sprite1), getSpritePosY(Sprite1) + getSpriteHeight(Sprite1)}};
+    float pos[4][2] = {{getSpritePosX(Sprite1) + 1,getSpritePosY(Sprite1)+ 1},
+                       {getSpritePosX(Sprite1) + getSpriteWidth(Sprite1) - 1, getSpritePosY(Sprite1)+ 1},
+                       {getSpritePosX(Sprite1) + 1,getSpritePosY(Sprite1) + getSpriteHeight(Sprite1) - 1 },
+                       {getSpritePosX(Sprite1) + getSpriteWidth(Sprite1) - 1, getSpritePosY(Sprite1) + getSpriteHeight(Sprite1)- 1} };
 
     // Verification pour les 4 coins
     for (int point = 0; point < 4; point++) {
@@ -220,7 +220,13 @@ void drawLine(SDL_Renderer* renderer, float x1, float y1, float x2, float y2){
 
 int bulletCollidesEnemies(bullet* Balle, listEnemy* listeEnnemis){
     if(!isEmptyLE(listeEnnemis)){
-        return inCollision(getBulletSprite(Balle), getEnemySprite(getEnemy(listeEnnemis))) || bulletCollidesEnemies(Balle,getNextE(listeEnnemis));
+        if(inCollision(getBulletSprite(Balle), getEnemySprite(getEnemy(listeEnnemis)))){
+            setSpriteToBeDestroyed(getEnemySprite(getEnemy(listeEnnemis)), 1);
+            return 1;
+        }
+        else {
+            return bulletCollidesEnemies(Balle, getNextE(listeEnnemis));
+        }
     }
     return 0;
 }

@@ -79,3 +79,31 @@ void freeListEnemy(listEnemy* ListeEnnemis){
         free(getNextE(ListeEnnemis));
     }
 }
+
+void deleteEnemy(listEnemy* ListeEnnemis, enemy* Ennemi){
+
+    //Si liste non vide ET ennemi non vide
+    if(!isEmptyLE(getNextE(ListeEnnemis)) && Ennemi != NULL) {
+
+        //L'ennemi est le premier de la liste
+        if (isSameEnemy(Ennemi, getEnemy(ListeEnnemis))) {
+
+            setEnemy(ListeEnnemis, *getEnemy(getNextE(ListeEnnemis)));
+            setNextE(ListeEnnemis, getNextE(getNextE(ListeEnnemis)));
+
+        } else {
+
+            // On parcourt le reste de la liste pour trouver le bon ennemi
+            deleteEnemy(getNextE(ListeEnnemis), Ennemi);
+        }
+    }
+}
+
+void deleteEnemiesToBeDestroyed(listEnemy * ListeEnnemis){
+    if(!isEmptyLE(ListeEnnemis)){
+        if(getSpriteToBeDestroyed(getEnemySprite(getEnemy(ListeEnnemis)))){
+            deleteEnemy(ListeEnnemis, getEnemy(ListeEnnemis));
+        }
+        deleteEnemiesToBeDestroyed(getNextE(ListeEnnemis));
+    }
+}
