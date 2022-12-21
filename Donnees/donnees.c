@@ -127,7 +127,8 @@ void handleEvents(SDL_Event* event, int* is_playing, player* player, bloc* Liste
             // Initialisation et ajout de la balle dans la liste
             bullet Balle = initBullet(getPlayerPosX(player) + getSpriteWidth(getPlayerSprite(player)) / 2,getPlayerPosY(player) + getSpriteHeight(getPlayerSprite(player)) / 2, 0, 0, 0);
             setBulletSpeeds(&Balle, mouseX, mouseY);
-            addBullet(listeBalles, &Balle);
+
+            addBullet(listeBalles, Balle);
 
             //Reset du compteur de frames
             *startFire = 0.;

@@ -51,7 +51,7 @@ int setNextBullet(listBullet * ListeBalles, listBullet * ListeBallesNext);
  * @brief initialise la liste de balles
  * @return la liste de balles intialisée
  */
-listBullet initListBullet();
+listBullet* initListBullet();
 
 /* ----- Autre ----- */
 
@@ -73,7 +73,7 @@ void freeListBullet(listBullet* ListeBalles);
  * @param ListeBalles La liste de balles
  * @param Balle la balle à ajouter
  */
-void addBullet(listBullet* ListeBalles, bullet* Balle);
+void addBullet(listBullet* ListeBalles, bullet Balle);
 
 /**
  * @brief Supprime une balle de la liste de balles

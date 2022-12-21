@@ -31,19 +31,20 @@ void boucleDeJeu(SDL_Renderer* renderer, player* player, listEnemy* listeEnnemis
         moveListEnemyToPlayer(listeEnnemis, listeEnnemis, listeBlocs, player, dt);
         moveBullets(listeBalles, listeBlocs, dt);
 
-        bulletsCollidesEnemies(listeBalles, listeEnnemis);
-        //destroyToBeDestroyedBulletTextures(listeBalles);
-        deleteBulletsToBeDestroyed(listeBalles);
-
-        destroyToBeDestroyedEnemyTextures(listeEnnemis);
-        deleteEnemiesToBeDestroyed(listeEnnemis);
-
         // Recuperation de l'état de la souris
         mouseBitMask = SDL_GetMouseState(&mouseX, &mouseY);
 
         // Gestion des evenements
         SDL_Event event;
         handleEvents(&event, &is_playing, player, listeBlocs, listeBalles, dt, &startFire, mouseX, mouseY, mouseBitMask);
+
+        bulletsCollidesEnemies(listeBalles, listeEnnemis);
+        destroyToBeDestroyedBulletTextures(listeBalles);
+        deleteBulletsToBeDestroyed(listeBalles);
+
+        destroyToBeDestroyedEnemyTextures(listeEnnemis);
+        deleteEnemiesToBeDestroyed(listeEnnemis);
+
 
         //Fermeture du jeu
         if(!is_playing){break;}
@@ -87,7 +88,7 @@ int main(){
     bloc* listeBlocs = initListBloc();
     player joueur = initPLayer();
     listEnemy listeEnnemis = initListEnemy(NB_ENNEMIS);
-    listBullet listeBalles = initListBullet();
+    listBullet* listeBalles = initListBullet();
 
     SDL_SetMainReady();
     if(SDL_Init(SDL_INIT_VIDEO)){
@@ -104,14 +105,14 @@ int main(){
     SDL_SetRenderDrawColor(renderer, 32, 34, 37, SDL_ALPHA_OPAQUE);
 
     // Jeu
-    boucleDeJeu(renderer, &joueur, &listeEnnemis, listeBlocs, &listeBalles);
+    boucleDeJeu(renderer, &joueur, &listeEnnemis, listeBlocs, listeBalles);
 
     // Nettoyage final
-    endSDL(fenetre, renderer, &joueur, &listeEnnemis, listeBlocs, &listeBalles);
+    endSDL(fenetre, renderer, &joueur, &listeEnnemis, listeBlocs, listeBalles);
 
     freeListEnemy(&listeEnnemis);
     freeListBloc(listeBlocs);
-    freeListBullet(&listeBalles);
+    freeListBullet(listeBalles);
 
     return 0; 
 }

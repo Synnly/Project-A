@@ -4,9 +4,6 @@
 /* ----- Getter ----- */
 
 bullet* getBullet(listBullet * ListeBalles){
-    if(isEmptyListBullet(ListeBalles)){
-        return NULL;
-    }
     return &(ListeBalles->Bullet);
 }
 listBullet* getNextBullet(listBullet * ListeBalles){return ListeBalles->next;}
@@ -27,16 +24,18 @@ int setNextBullet(listBullet * ListeBalles, listBullet * ListeBallesNext){
 
 /* ----- Initialisation ----- */
 
-listBullet initListBullet(){
-
-    listBullet ListeBalles = {};
+listBullet* initListBullet(){
+    listBullet* ListeBalles = malloc(sizeof (listBullet));
+    setBullet(ListeBalles, initBullet(0,0,0,0,0));
+    setSpriteIsNull(getBulletSprite(getBullet(ListeBalles)), 1);
+    setNextBullet(ListeBalles, NULL);
     return ListeBalles;
 }
 
 /* ----- Autres ----- */
 
 int isEmptyListBullet(listBullet* ListeBalles){
-    return (ListeBalles == NULL);
+    return (getSpriteIsNull(getBulletSprite(getBullet(ListeBalles))) && getNextBullet(ListeBalles)==NULL);
 }
 
 void freeListBullet(listBullet* ListeBalles){
@@ -48,24 +47,20 @@ void freeListBullet(listBullet* ListeBalles){
     }
 }
 
-void addBullet(listBullet* ListeBalles, bullet* Balle){
-
-    if(!isEmptyListBullet(getNextBullet(ListeBalles))){
-        addBullet(getNextBullet(ListeBalles),Balle);
-
-    }else{
-        listBullet* ListeBulletNext = malloc(sizeof(listBullet));
-        setBullet(ListeBulletNext,*Balle);
-
-        setNextBullet(ListeBulletNext,NULL);
-        setNextBullet(ListeBalles,ListeBulletNext);
+void addBullet(listBullet* ListeBalles, bullet Balle){
+    if(isEmptyListBullet(ListeBalles)){
+        setBullet(ListeBalles, Balle);
+        setNextBullet(ListeBalles, initListBullet());
+    }
+    else{
+        addBullet(getNextBullet(ListeBalles), Balle);
     }
 }
 
 void deleteBullet(listBullet* ListeBalles, bullet* Balle){
-
+    printf("%d\n", isEmptyListBullet(getNextBullet(ListeBalles)));
     //Si liste non vide ET balle non vide
-    if(!isEmptyListBullet(getNextBullet(ListeBalles)) && Balle != NULL) {
+    if(!isEmptyListBullet(ListeBalles) && Balle != NULL) {
 
         //La balle est la première de la liste
         if (isSameBullet(Balle, getBullet(ListeBalles))) {
@@ -82,10 +77,13 @@ void deleteBullet(listBullet* ListeBalles, bullet* Balle){
 }
 
 void deleteBulletsToBeDestroyed(listBullet* ListeBalles){
-    if(!isEmptyListBullet(ListeBalles)){
-        if(getSpriteToBeDestroyed(getBulletSprite(getBullet(ListeBalles)))){
+    if(!isEmptyListBullet(ListeBalles)) {
+        if (getSpriteToBeDestroyed(getBulletSprite(getBullet(ListeBalles)))) {
             deleteBullet(ListeBalles, getBullet(ListeBalles));
         }
-        deleteBulletsToBeDestroyed(getNextBullet(ListeBalles));
+
+        if((getNextBullet(ListeBalles)) != NULL) {
+            deleteBulletsToBeDestroyed(getNextBullet(ListeBalles));
+        }
     }
 }

@@ -10,6 +10,7 @@ struct sprite_t{
     int width;
     SDL_Texture* texture;
     int toBeDestroyed;
+    int isNull;
 };
 
 typedef struct sprite_t sprite;
@@ -58,6 +59,13 @@ SDL_Texture* getSpriteTexture(sprite* Sprite);
  */
 int getSpriteToBeDestroyed(sprite* Sprite);
 
+/**
+ * @brief Retourne la valeur de validite du sprite
+ * @param Sprite Le sprite
+ * @return 1 si le sprite est nul, 0 sinon
+ */
+int getSpriteIsNull(sprite* Sprite);
+
 /* ----- Setter ----- */
 
 /**
@@ -100,11 +108,18 @@ void setSpriteWidth(sprite* Sprite, int width);
 void setSpriteTexture(sprite* Sprite, SDL_Texture* texture);
 
 /**
- * @brief Initialise la valeur qui indique si le sprite doit etre detruit ou non
+ * @brief Modifie la valeur qui indique si le sprite doit etre detruit ou non
  * @param Sprite Le sprite
  * @param valeur 1 si le sprite doit etre detruit, 0 sinon
  */
 void setSpriteToBeDestroyed(sprite* Sprite, int valeur);
+
+/**
+ * @brief Modifie la valeur qui indique si le sprite est nul
+ * @param Sprite Le sprite
+ * @param valeur 1 si le sprite doit etre detruitest nul, 0 sinon
+ */
+void setSpriteIsNull(sprite* Sprite, int valeur);
 
 /* ----- Initialisation ----- */
 
