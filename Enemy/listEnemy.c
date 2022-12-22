@@ -60,7 +60,7 @@ void deleteEnemiesToBeDestroyed(listEnemy * ListeEnnemis){
 void addEnemy(listEnemy* ListeEnnemis, enemy Ennemi){
     if(isEmptyLE(ListeEnnemis)){
         setEnemy(ListeEnnemis, Ennemi);
-        listEnemy* temp = initListEnemy(0);
+        listEnemy* temp = initListEnemy();
         setNextE(ListeEnnemis, temp);
     }
     else{
@@ -77,11 +77,13 @@ void fillListEnemy(listEnemy* ListeEnnemis, int nb){
 
         float posX, posY;
 
-        //Premiers maillons
         for (int i = 0; i < nb; i++) {
-            //Position aléatoire
-            posX = rand() % (SCREEN_WIDTH - ENEMY_SIZE + 1);
-            posY = rand() % (SCREEN_HEIGHT - ENEMY_SIZE + 1);
+            //Position aléatoire mais en dehors des murs
+            posX = (rand() % (SCREEN_WIDTH - ENEMY_SIZE + 1)) - SCREEN_WIDTH/2;
+            posX += ((posX>0 ? SCREEN_WIDTH/1.5 : -SCREEN_WIDTH/1.5)*2 + SCREEN_WIDTH/2);
+
+            posY = (rand() % (SCREEN_HEIGHT - ENEMY_SIZE + 1)) - SCREEN_HEIGHT/2;
+            posY += ((posY>0 ? SCREEN_HEIGHT/1.5 : -SCREEN_HEIGHT/1.5)*2 + SCREEN_HEIGHT/2);
 
             enemy Ennemi = initEnemy(posX, posY, -1);
             addEnemy(ListeEnnemis, Ennemi);

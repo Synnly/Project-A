@@ -12,16 +12,21 @@ int getListeHeight(){return (SCREEN_HEIGHT / BLOC_SIZE) ;}
 
 bloc* initListBloc(){
     bloc* ListeBlocs = malloc((getListeHeight() * getListeWidth()) * sizeof(bloc));
+
     for(int i = 0; i < getListeWidth() * getListeHeight(); i++){
+
         int x = (i % getListeWidth())*BLOC_SIZE;
         int y = (i/getListeWidth())*BLOC_SIZE;
         ListeBlocs[i] = initBloc(x,y,BLOC_TYPE);
+
+
+        //Murs en bord d'ecran
         if((x == 0 || x == SCREEN_WIDTH - BLOC_SIZE) || (y == 0 || y == SCREEN_HEIGHT - BLOC_SIZE)){
             setBlocObstacle(&(ListeBlocs[i]));
         }
 
         srand(time(NULL));
-        int nbClusters = (rand() % 6)+2;
+        int nbClusters = (rand() % 10)+4;
 
         // Nb aleatoire de clusters de blocs
         for(int i = 0; i < nbClusters; i++){
@@ -31,6 +36,16 @@ bloc* initListBloc(){
     }
 
     spreadListeBlocs(ListeBlocs, 0);
+
+    //Portes et couloirs pour les ennemis
+    for(int i = 0; i<getListeWidth()*getListeHeight(); i++){
+        int x = i%getListeWidth();
+        int y = i/getListeWidth();
+
+        if((x>=8 && x<=9) || (x>=21 && x<=22) || (y>=8 && y<=9)){
+            setBlocNotObstacle(&(ListeBlocs[i]));
+        }
+    }
 
     return ListeBlocs;
 }
