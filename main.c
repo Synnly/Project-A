@@ -188,21 +188,21 @@ int main(){
     SDL_SetRenderDrawColor(renderer, 32, 34, 37, SDL_ALPHA_OPAQUE);
 
     // Initialisation des textures du jeu
-    initTextures(renderer,&joueur,&listeEnnemis,listeBlocs);
+    initTextures(renderer,&joueur,listeEnnemis,listeBlocs);
 
     int i = afficherMenu(renderer);
 
     if(i == 0){
         // Jeu
-        boucleDeJeu(renderer, &joueur, &listeEnnemis, listeBlocs, listeBalles);
+        boucleDeJeu(renderer, &joueur, listeEnnemis, listeBlocs, listeBalles);
     }else if(i == 1){
         //chargement de map
         return 0;
     }
     // Nettoyage final
-    endSDL(fenetre, renderer, &joueur, &listeEnnemis, listeBlocs, listeBalles);
+    endSDL(fenetre, renderer, &joueur, listeEnnemis, listeBlocs, listeBalles);
 
-    freeListEnemy(&listeEnnemis);
+    freeListEnemy(listeEnnemis);
     freeListBloc(listeBlocs);
     freeListBullet(listeBalles);
 
