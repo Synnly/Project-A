@@ -6,7 +6,7 @@ typedef struct enemy_t enemy;
 
 struct listEnemy_t{
     enemy Enemy;
-    struct listEnemy_t * next;
+    struct listEnemy_t* next;
 };
 
 typedef struct listEnemy_t listEnemy;
@@ -40,18 +40,16 @@ void setEnemy(listEnemy * ListEnemy, enemy Enemy);
  * @brief Modifie la liste chainee suivante
  * @param ListEnemy La liste
  * @param ListEnemyNext La liste suivante
- * @return -1 en cas d'échec, 0 sinon
  */
-int setNextE(listEnemy * ListEnemy, listEnemy * ListEnemyNext);
+void setNextE(listEnemy * ListEnemy, listEnemy * ListEnemyNext);
 
 /* ----- Initialisation ----- */
 
 /*
-    @brief Initialise une liste chainée de nb ennemis
-    @param nb Le nombre d'ennemis
+    @brief Initialise une liste chainée d'ennemis
     @return La liste chainées des ennemis
 */
-listEnemy initListEnemy(int nb);
+listEnemy* initListEnemy();
 
 /* ----- Autre ----- */
 
@@ -69,16 +67,23 @@ int isEmptyLE(listEnemy* ListEnnemy);
 void freeListEnemy(listEnemy* ListeEnnemis);
 
 /**
- * @brief Supprime un ennemi de la liste d'ennemis
- * @param ListeEnnemis la liste des ennemis
- * @param Ennemi l'ennemi à supprimer
- */
-void deleteEnemy(listEnemy* ListeEnnemis, enemy * Ennemi);
-
-/**
  * @brief Supprime les ennemis qui sont marquees comme "a detruire"
  * @param ListeEnnemis La liste des ennemis
  */
 void deleteEnemiesToBeDestroyed(listEnemy* ListeEnnemis);
+
+/**
+ * @brief Ajoute un ennemi a la liste
+ * @param ListeEnnemis La liste des ennemis
+ * @param Ennemi L'ennemi a ajouter
+ */
+void addEnemy(listEnemy* ListeEnnemis, enemy Ennemi);
+
+/**
+ * @brief Remplis la liste de nb ennemis
+ * @param ListeEnnemis La liste d'ennemis
+ * @param nb Le nombre d'ennemis a ajouter
+ */
+void fillListEnemy(listEnemy* ListeEnnemis, int nb);
 
 #endif //PROJECT_A_LISTENEMY_H

@@ -76,7 +76,6 @@ bullet initBullet(float posX, float posY, int speedX, int speedY, int type){
 int isSameBullet(bullet* Balle1, bullet* Balle2){
 
     if(Balle1 == NULL || Balle2 == NULL){
-        printf("Balle1 ou 2 null\n");
         return 0;
     }
 

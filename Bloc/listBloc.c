@@ -57,25 +57,42 @@ void spreadObstacles(bloc* ListeBlocs, int current){
 
         // pourcentage de change de contamination
         for(int pos = current-1; pos <= current+1; pos++){
-            setBlocSpread(&ListeBlocs[pos-getListeWidth()], getBlocSpread(&ListeBlocs[current])/1.5);
-            if(pos!=current) {
-                setBlocSpread(&ListeBlocs[pos], getBlocSpread(&ListeBlocs[current])/1.5);
+            if (pos >= getListeWidth()) {
+                setBlocSpread(&ListeBlocs[pos - getListeWidth()], getBlocSpread(&ListeBlocs[current]) / 1.5);
             }
-            setBlocSpread(&ListeBlocs[pos+getListeWidth()], getBlocSpread(&ListeBlocs[current])/1.5);
+
+            if(pos!=current && pos<sizeOfListBloc(ListeBlocs)) {
+                setBlocSpread(&ListeBlocs[pos], getBlocSpread(&ListeBlocs[current]) / 1.5);
+            }
+
+            if (pos < sizeOfListBloc(ListeBlocs)-getListeWidth()) {
+                setBlocSpread(&ListeBlocs[pos + getListeWidth()], getBlocSpread(&ListeBlocs[current]) / 1.5);
+            }
         }
 
         //Contagion aux 8 blocs autour
-        for(int pos = current-1; pos <= current+1; pos++){
-            spreadObstacles(ListeBlocs, pos-getListeWidth());
+        for(int pos = current-1; pos <= current+1; pos++) {
+
+            if (pos >= getListeWidth()) {
+                spreadObstacles(ListeBlocs, pos - getListeWidth());
+            }
+
             if(pos!=current) {
                 spreadObstacles(ListeBlocs, pos);
             }
-            spreadObstacles(ListeBlocs, pos+getListeWidth());
+
+            if (pos < sizeOfListBloc(ListeBlocs)-getListeWidth()) {
+                spreadObstacles(ListeBlocs, pos + getListeWidth());
+            }
         }
     }
 }
 
 void spreadListeBlocs(bloc* ListeBlocs, int current){
+    while(current < sizeOfListBloc(ListeBlocs) && getBlocSpread(&ListeBlocs[current])==0){
+        current++;
+    }
+
     if(current < sizeOfListBloc(ListeBlocs)){
         spreadListeBlocs(ListeBlocs, current+1);
 
