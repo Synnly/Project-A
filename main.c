@@ -168,7 +168,8 @@ int main(){
     SDL_Renderer* renderer;
     bloc* listeBlocs = initListBloc();
     player joueur = initPLayer();
-    listEnemy listeEnnemis = initListEnemy(NB_ENNEMIS);
+    listEnemy* listeEnnemis = initListEnemy();
+    fillListEnemy(listeEnnemis, NB_ENNEMIS);
     listBullet* listeBalles = initListBullet();
 
 

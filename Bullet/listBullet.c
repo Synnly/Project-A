@@ -25,7 +25,7 @@ int setNextBullet(listBullet * ListeBalles, listBullet * ListeBallesNext){
 /* ----- Initialisation ----- */
 
 listBullet* initListBullet(){
-    listBullet* ListeBalles = malloc(sizeof (listBullet));
+    listBullet* ListeBalles = calloc(1, sizeof (listBullet));
     setBullet(ListeBalles, initBullet(0,0,0,0,0));
     setSpriteIsNull(getBulletSprite(getBullet(ListeBalles)), 1);
     setNextBullet(ListeBalles, NULL);
@@ -39,11 +39,9 @@ int isEmptyListBullet(listBullet* ListeBalles){
 }
 
 void freeListBullet(listBullet* ListeBalles){
-
-    if(!isEmptyListBullet(ListeBalles)){
-
+    if(ListeBalles!=NULL){
         freeListBullet(getNextBullet(ListeBalles));
-        free(getNextBullet(ListeBalles));
+        free(ListeBalles);
     }
 }
 
@@ -58,15 +56,17 @@ void addBullet(listBullet* ListeBalles, bullet Balle){
 }
 
 void deleteBullet(listBullet* ListeBalles, bullet* Balle){
-    printf("%d\n", isEmptyListBullet(getNextBullet(ListeBalles)));
     //Si liste non vide ET balle non vide
     if(!isEmptyListBullet(ListeBalles) && Balle != NULL) {
 
         //La balle est la première de la liste
         if (isSameBullet(Balle, getBullet(ListeBalles))) {
+            listBullet* temp = getNextBullet(ListeBalles);
 
             setBullet(ListeBalles, *getBullet(getNextBullet(ListeBalles)));
             setNextBullet(ListeBalles, getNextBullet(getNextBullet(ListeBalles)));
+
+            free(temp);
 
         } else {
 
@@ -76,13 +76,13 @@ void deleteBullet(listBullet* ListeBalles, bullet* Balle){
     }
 }
 
-void deleteBulletsToBeDestroyed(listBullet* ListeBalles){
-    if(!isEmptyListBullet(ListeBalles)) {
+void deleteBulletsToBeDestroyed(listBullet* ListeBalles) {
+    if (!isEmptyListBullet(ListeBalles)) {
         if (getSpriteToBeDestroyed(getBulletSprite(getBullet(ListeBalles)))) {
             deleteBullet(ListeBalles, getBullet(ListeBalles));
         }
 
-        if((getNextBullet(ListeBalles)) != NULL) {
+        if ((getNextBullet(ListeBalles)) != NULL) {
             deleteBulletsToBeDestroyed(getNextBullet(ListeBalles));
         }
     }

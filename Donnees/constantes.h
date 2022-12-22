@@ -23,6 +23,6 @@
 #define BULLET_SPEED 1000
 #define PISTOL_TYPE 0
 
-#define NB_ENNEMIS 5
+#define NB_ENNEMIS 100
 
 #endif //PROJECT_A_CONSTANTES_H
