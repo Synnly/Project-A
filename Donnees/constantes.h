@@ -1,6 +1,7 @@
 #ifndef PROJECT_A_CONSTANTES_H
 #define PROJECT_A_CONSTANTES_H
 
+#define NBBOUTONS 3
 #define EPSILON 1e-2
 #define FPS 60
 

@@ -120,12 +120,12 @@ void destroyListBulletTextures(listBullet * listeBalles){
     }
 }
 
-void endSDL(SDL_Window* fenetre, SDL_Renderer* renderer, player* Player, listEnemy* ListeEnnemis, bloc* ListeBlocs, listBullet * listeBalles){
+void endSDL(SDL_Window* fenetre, SDL_Renderer* renderer, player* Player, listEnemy* ListeEnnemis, bloc* ListeBlocs, listBullet * ListeBalles){
     SDL_DestroyTexture(getPlayerTexture(Player));
 
     destroyListBlocTextures(ListeBlocs);
     destroyListEnemyTextures(ListeEnnemis);
-    destroyListBulletTextures(listeBalles);
+    destroyListBulletTextures(ListeBalles);
 
     SDL_DestroyRenderer(renderer);
     SDL_DestroyWindow(fenetre);
