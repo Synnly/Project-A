@@ -112,6 +112,6 @@ void setBlocSprite(bloc* Bloc, sprite* Sprite);
     @param spread Son spread
     @return Le bloc
 */
-bloc initBloc(int posX, int posY, int type);
+bloc initBloc(int posX, int posY, int spread);
 
 #endif //PROJECT_A_BLOC_H

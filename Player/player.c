@@ -8,9 +8,9 @@ float getPlayerPosY(player* Player){return getSpritePosY(getPlayerSprite(Player)
 int getPlayerLife(player* Player){return Player->life;}
 int getPlayerSpeed(player* Player){return Player->speed;}
 int getPlayerWeaponType(player* Player){return Player->weaponType;}
-int getPlayerMoney(player* Player){return Player->money;}
 SDL_Texture* getPlayerTexture(player* Player){return getSpriteTexture(getPlayerSprite(Player));}
 sprite* getPlayerSprite(player* Player){return &(Player->sprite);}
+int getPlayerLives(player* Player){return Player->lives;}
 
 /* ----- Setter ----- */
 
@@ -34,16 +34,16 @@ void setPlayerWeaponType(player* Player, int weapontype){
     Player->weaponType = weapontype;
 }
 
-void setPlayerMoney(player* Player, int money){
-    Player->money = money;
-}
-
 void setPlayerTexture(player* Player, SDL_Texture* texture){
     setSpriteTexture(getPlayerSprite(Player),  texture);
 }
 
 void setPlayerSprite(player* Player, sprite* Sprite){
     Player->sprite = *Sprite;
+}
+
+void setPlayerLives(player* Player, int lives){
+    Player->lives = lives;
 }
 
 /* ----- Initialisation ----- */

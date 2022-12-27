@@ -2,6 +2,7 @@
 #include "donnees.h"
 #include "constantes.h"
 #include "maths.h"
+#include "../Files/files.h"
 #include <stdlib.h>
 
 /* ----- FPS ----- */
@@ -54,15 +55,15 @@ void handleEvents(SDL_Event* event, int* is_playing, player* player, bloc* Liste
 
         else if (((keystates[SDL_SCANCODE_LEFT] || keystates[SDL_SCANCODE_A]) && (keystates[SDL_SCANCODE_DOWN] || keystates[SDL_SCANCODE_S]))) { // Déplaceent en bas à gauche
 
-        setPlayerPosX(player, max(0, getPlayerPosX(player) - pythagore(PLAYER_SPEED * dt)));
-        if (spriteCollidesWalls(getPlayerSprite(player), ListeBlocs)) {
-            setPlayerPosX(player,min(SCREEN_WIDTH - PLAYER_SIZE, getPlayerPosX(player) + pythagore(PLAYER_SPEED * dt)));
-        }
+            setPlayerPosX(player, max(0, getPlayerPosX(player) - pythagore(PLAYER_SPEED * dt)));
+            if (spriteCollidesWalls(getPlayerSprite(player), ListeBlocs)) {
+                setPlayerPosX(player,min(SCREEN_WIDTH - PLAYER_SIZE, getPlayerPosX(player) + pythagore(PLAYER_SPEED * dt)));
+            }
 
-        setPlayerPosY(player, min(SCREEN_HEIGHT - PLAYER_SIZE, getPlayerPosY(player) + pythagore(PLAYER_SPEED * dt)));
-        if (spriteCollidesWalls(getPlayerSprite(player), ListeBlocs)) {
-            setPlayerPosY(player, max(0, getPlayerPosY(player) - pythagore(PLAYER_SPEED * dt)));
-        }
+            setPlayerPosY(player, min(SCREEN_HEIGHT - PLAYER_SIZE, getPlayerPosY(player) + pythagore(PLAYER_SPEED * dt)));
+            if (spriteCollidesWalls(getPlayerSprite(player), ListeBlocs)) {
+                setPlayerPosY(player, max(0, getPlayerPosY(player) - pythagore(PLAYER_SPEED * dt)));
+            }
 
         } else if (((keystates[SDL_SCANCODE_RIGHT] || keystates[SDL_SCANCODE_D]) && (keystates[SDL_SCANCODE_UP] || keystates[SDL_SCANCODE_W]))) { // Déplacement en haut à droite
 
@@ -265,5 +266,102 @@ void moveBullets(listBullet* ListeBalles, bloc* ListeBlocs, double dt){
         }
 
         moveBullets(getNextBullet(ListeBalles), ListeBlocs, dt);
+    }
+}
+
+bloc* initListBlocFile(const char* nomFichier){
+    char* tabFichier = readFile(nomFichier);
+
+    if(tabFichier == NULL) {
+        return NULL;
+    }
+
+    else {
+        bloc* ListeBloc = malloc((getListeHeight() * getListeWidth()) * sizeof(bloc));
+
+        for (int i = 0; i < (sizeOfListBloc(ListeBloc)); i++) {
+            int posx = (i%getListeWidth()) * BLOC_SIZE;
+            int posy = (i/getListeWidth()) * BLOC_SIZE;
+            bloc newBloc = initBloc(posx, posy, 0);
+
+            switch (tabFichier[i]) {
+                // Mur
+                case 'm': {
+                    setBlocSpread(&newBloc, 0);
+                    setBlocObstacle(&newBloc);
+                    break;
+                }
+
+                    // Blocs non-obstacle
+                case '0': {
+                    setBlocSpread(&newBloc, 0);
+                    break;
+                }
+
+                    // Blocs obstacle
+                case '1': {
+                    setBlocSpread(&newBloc, 10);
+                    setBlocObstacle(&newBloc);
+                    break;
+                }
+
+                case '2': {
+                    setBlocSpread(&newBloc, 20);
+                    setBlocObstacle(&newBloc);
+                    break;
+                }
+
+                case '3': {
+                    setBlocSpread(&newBloc, 30);
+                    setBlocObstacle(&newBloc);
+                    break;
+                }
+
+                case '4': {
+                    setBlocSpread(&newBloc, 40);
+                    setBlocObstacle(&newBloc);
+                    break;
+                }
+
+                case '5': {
+                    setBlocSpread(&newBloc, 50);
+                    setBlocObstacle(&newBloc);
+                    break;
+                }
+
+                case '6': {
+                    setBlocSpread(&newBloc, 60);
+                    setBlocObstacle(&newBloc);
+                    break;
+                }
+
+                case '7': {
+                    setBlocSpread(&newBloc, 70);
+                    setBlocObstacle(&newBloc);
+                    break;
+                }
+
+                case '8': {
+                    setBlocSpread(&newBloc, 80);
+                    setBlocObstacle(&newBloc);
+                    break;
+                }
+
+                case '9': {
+                    setBlocSpread(&newBloc, 90);
+                    setBlocObstacle(&newBloc);
+                    break;
+                }
+
+                    // Cluster
+                case 'c': {
+                    setBlocSpread(&newBloc, 100);
+                    setBlocObstacle(&newBloc);
+                    break;
+                }
+            }
+            ListeBloc[i] = newBloc;
+        }
+        return ListeBloc;
     }
 }

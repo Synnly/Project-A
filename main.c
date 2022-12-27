@@ -136,16 +136,16 @@ void boucleDeJeu(SDL_Renderer* renderer, player* player, listEnemy* listeEnnemis
         //Affichage des sprites
         drawListBlocSprites(renderer, listeBlocs);
 
-            // Initialisation des textures des balles qui n'ont pas de textures
+        // Initialisation des textures des balles qui n'ont pas de textures
         initListBulletTextures(renderer, listeBalles);
 
         drawListBulletSprites(renderer, listeBalles);
         drawListEnemySprites(renderer, listeEnnemis);
 
-            // Dessin du laser
+        // Dessin du laser
         SDL_SetRenderDrawColor(renderer, 255, 0, 0, SDL_ALPHA_OPAQUE);
         drawLine(renderer, (getPlayerPosX(player) + getSpriteWidth(getPlayerSprite(player))/2),
-                           (getPlayerPosY(player) + getSpriteHeight(getPlayerSprite(player))/2),
+                 (getPlayerPosY(player) + getSpriteHeight(getPlayerSprite(player))/2),
                  (float)mouseX, (float)mouseY);
         SDL_SetRenderDrawColor(renderer, 32, 34, 37, SDL_ALPHA_OPAQUE);
 
@@ -153,7 +153,7 @@ void boucleDeJeu(SDL_Renderer* renderer, player* player, listEnemy* listeEnnemis
 
         // Rendu
         SDL_RenderPresent(renderer);
-        
+
         // Gestion des fps
         fps++;
         start = end;
@@ -166,7 +166,7 @@ int main(){
     // Initialisation des structures
     SDL_Window* fenetre;
     SDL_Renderer* renderer;
-    bloc* listeBlocs = initListBloc();
+    bloc* listeBlocs;
     player joueur = initPLayer();
     listEnemy* listeEnnemis = initListEnemy();
     fillListEnemy(listeEnnemis, NB_ENNEMIS);
@@ -187,18 +187,35 @@ int main(){
     SDL_SetWindowTitle(fenetre, "Segfault");
     SDL_SetRenderDrawColor(renderer, 32, 34, 37, SDL_ALPHA_OPAQUE);
 
-    // Initialisation des textures du jeu
-    initTextures(renderer,&joueur,listeEnnemis,listeBlocs);
 
     int i = afficherMenu(renderer);
 
     if(i == 0){
+        // Liste des blocs initialisee normalement
+        listeBlocs = initListBloc();
+
+        // Initialisation des textures du jeu
+        initTextures(renderer,&joueur,listeEnnemis,listeBlocs);
+
         // Jeu
         boucleDeJeu(renderer, &joueur, listeEnnemis, listeBlocs, listeBalles);
+
+        writeFile("assets/maps/MapLoad", listeBlocs);
+
     }else if(i == 1){
         //chargement de map
-        return 0;
+        const char* nomFichier = "assets/maps/MapLoad";
+
+        // Liste des blocs initialisee avec un fichier
+        listeBlocs = initListBlocFile(nomFichier);
+
+        // Initialisation des textures du jeu
+        initTextures(renderer,&joueur,listeEnnemis,listeBlocs);
+
+        // Jeu
+        boucleDeJeu(renderer, &joueur, listeEnnemis, listeBlocs, listeBalles);
     }
+
     // Nettoyage final
     endSDL(fenetre, renderer, &joueur, listeEnnemis, listeBlocs, listeBalles);
 

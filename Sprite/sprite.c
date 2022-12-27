@@ -12,7 +12,8 @@ SDL_Texture* getSpriteTexture(sprite* Sprite){return Sprite->texture;}
 int getSpriteToBeDestroyed(sprite* Sprite){return Sprite->toBeDestroyed;}
 int getSpriteIsNull(sprite* Sprite){return Sprite->isNull;}
 
-/* ----- Getter ----- */
+
+/* ----- Setter ----- */
 
 void setSpritePosX(sprite* Sprite, float posX){Sprite->posX = posX;}
 void setSpritePosY(sprite* Sprite, float posY) {Sprite->posY = posY;}

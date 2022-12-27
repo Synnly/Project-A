@@ -61,42 +61,50 @@ void freeListBloc(bloc* ListeBlocs){
 }
 
 int sizeOfListBloc(bloc* ListeBlocs){
-   return (SCREEN_HEIGHT/BLOC_SIZE) * (SCREEN_WIDTH/BLOC_SIZE);
+    return (SCREEN_HEIGHT/BLOC_SIZE) * (SCREEN_WIDTH/BLOC_SIZE);
 }
 
 void spreadObstacles(bloc* ListeBlocs, int current){
 
-    int random = rand() % 101;
+    int random = (rand() % 100) + 1;
     if(getBlocSpread(&ListeBlocs[current]) >= random){
         setBlocObstacle(&ListeBlocs[current]);
 
         // pourcentage de change de contamination
         for(int pos = current-1; pos <= current+1; pos++){
+            int bSpread;
+
             if (pos >= getListeWidth()) {
-                setBlocSpread(&ListeBlocs[pos - getListeWidth()], getBlocSpread(&ListeBlocs[current]) / 1.5);
+                if (getBlocSpread(&ListeBlocs[pos - getListeWidth()]) == 0) {
+                    setBlocSpread(&ListeBlocs[pos - getListeWidth()], getBlocSpread(&ListeBlocs[current]) / 2);
+                }
             }
 
             if(pos!=current && pos<sizeOfListBloc(ListeBlocs)) {
-                setBlocSpread(&ListeBlocs[pos], getBlocSpread(&ListeBlocs[current]) / 1.5);
+                if (getBlocSpread(&ListeBlocs[pos]) == 0) {
+                    setBlocSpread(&ListeBlocs[pos], getBlocSpread(&ListeBlocs[current]) / 2);
+                }
             }
 
             if (pos < sizeOfListBloc(ListeBlocs)-getListeWidth()) {
-                setBlocSpread(&ListeBlocs[pos + getListeWidth()], getBlocSpread(&ListeBlocs[current]) / 1.5);
+                if (getBlocSpread(&ListeBlocs[pos + getListeWidth()]) == 0) {
+                    setBlocSpread(&ListeBlocs[pos + getListeWidth()], getBlocSpread(&ListeBlocs[current]) / 2);
+                }
             }
         }
 
         //Contagion aux 8 blocs autour
         for(int pos = current-1; pos <= current+1; pos++) {
 
-            if (pos >= getListeWidth()) {
+            if (pos >= getListeWidth() && !getBlocIsObstacle(&ListeBlocs[pos - getListeWidth()])) {
                 spreadObstacles(ListeBlocs, pos - getListeWidth());
             }
 
-            if(pos!=current) {
+            if(pos!=current && !getBlocIsObstacle(&ListeBlocs[pos])) {
                 spreadObstacles(ListeBlocs, pos);
             }
 
-            if (pos < sizeOfListBloc(ListeBlocs)-getListeWidth()) {
+            if (pos < sizeOfListBloc(ListeBlocs)-getListeWidth()  && !getBlocIsObstacle(&ListeBlocs[pos + getListeWidth()])) {
                 spreadObstacles(ListeBlocs, pos + getListeWidth());
             }
         }

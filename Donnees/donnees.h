@@ -10,6 +10,7 @@
 #include "../Bloc/listBloc.h"
 #include "../Bullet/bullet.h"
 #include "../Bullet/listBullet.h"
+#include "../Files/files.h"
 
 typedef struct player_t player;
 typedef struct sprite_t sprite;
@@ -138,5 +139,12 @@ int enemyIsCollidingListEnemy(enemy* Ennemi, listEnemy* ListeEnnemis);
  * @param dt Le laps de temps écoulé depuis la dernière execution
  */
 void moveBullets(listBullet* ListeBalles, bloc* ListeBlocs, double dt);
+
+/**
+ * @brief Initialise une loste de blocs a partir d'un fichier
+ * @param nomFichier Le nom du fichier
+ * @return La liste initialisee
+ */
+bloc* initListBlocFile(const char* nomFichier);
 
 #endif
