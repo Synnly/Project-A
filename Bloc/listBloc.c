@@ -67,12 +67,13 @@ int sizeOfListBloc(bloc* ListeBlocs){
 void spreadObstacles(bloc* ListeBlocs, int current){
 
     int random = (rand() % 100) + 1;
+
     if(getBlocSpread(&ListeBlocs[current]) >= random){
+        printf("%d ",random);
         setBlocObstacle(&ListeBlocs[current]);
 
         // pourcentage de change de contamination
         for(int pos = current-1; pos <= current+1; pos++){
-            int bSpread;
 
             if (pos >= getListeWidth()) {
                 if (getBlocSpread(&ListeBlocs[pos - getListeWidth()]) == 0) {
@@ -118,10 +119,6 @@ void spreadListeBlocs(bloc* ListeBlocs, int current){
 
     if(current < sizeOfListBloc(ListeBlocs)){
         spreadListeBlocs(ListeBlocs, current+1);
-
-        // on contagie seulement les blocs qui ont un pourcent non nul
-        if(getBlocSpread(&ListeBlocs[current]) > 0) {
-            spreadObstacles(ListeBlocs, current);
-        }
+        spreadObstacles(ListeBlocs, current);
     }
 }

@@ -148,4 +148,11 @@ enemy initEnemy(float posX, float posY, int type);
  */
 int isSameEnemy(enemy * Enemy1, enemy * Enemy2);
 
+/**
+ * @brief retire dmg points de vie a un enemy
+ * @param Enemy L'enemy
+ * @param dmg Le nombre de pv a retirer
+ */
+void enemyTakeDamage(enemy* Enemy,int dmg);
+
 #endif //PROJECT_A_ENEMY_H

@@ -10,7 +10,6 @@ int getPlayerSpeed(player* Player){return Player->speed;}
 int getPlayerWeaponType(player* Player){return Player->weaponType;}
 SDL_Texture* getPlayerTexture(player* Player){return getSpriteTexture(getPlayerSprite(Player));}
 sprite* getPlayerSprite(player* Player){return &(Player->sprite);}
-int getPlayerLives(player* Player){return Player->lives;}
 
 /* ----- Setter ----- */
 
@@ -42,10 +41,6 @@ void setPlayerSprite(player* Player, sprite* Sprite){
     Player->sprite = *Sprite;
 }
 
-void setPlayerLives(player* Player, int lives){
-    Player->lives = lives;
-}
-
 /* ----- Initialisation ----- */
 
 player initPLayer(){
@@ -56,6 +51,13 @@ player initPLayer(){
     setPlayerLife(&Player,PLAYER_LIFE);
     setPlayerSpeed(&Player,PLAYER_SPEED);
     setPlayerWeaponType(&Player,PISTOL_TYPE);
-    setPlayerMoney(&Player,0);
     return Player;
+}
+
+void playerTakeDamage(player* Player, int dmg){
+    if(dmg > getPlayerLife(Player)){
+        setPlayerLife(Player,0);
+    }else{
+        setPlayerLife(Player, getPlayerLife(Player)-dmg);
+    }
 }

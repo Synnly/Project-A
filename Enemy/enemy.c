@@ -82,3 +82,11 @@ int isSameEnemy(enemy* Enemy1, enemy* Enemy2){
     }
     return 0;
 }
+
+void enemyTakeDamage(enemy* Enemy, int dmg){
+    if(dmg > getEnemyLife(Enemy)){
+        setEnemyLife(Enemy,0);
+    }else{
+        setEnemyLife(Enemy, getEnemyLife(Enemy)-dmg);
+    }
+}

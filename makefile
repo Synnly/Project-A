@@ -4,7 +4,7 @@ LIBS = -L./SDL2_ttf/.libs
 LDFLAGS = `sdl2-config --cflags --libs` -lSDL2_ttf -lm
 INCLUDES = -I./SDL2_ttf
 EXEC = main
-SRC = main.c Bloc/bloc.c Bloc/listBloc.c Bullet/bullet.c Bullet/listBullet.c Donnees/donnees.c Donnees/maths.c Enemy/enemy.c Enemy/listEnemy.c Graphismes/graphismes.c Player/player.c Sprite/sprite.c
+SRC = main.c Bloc/bloc.c Bloc/listBloc.c Bullet/bullet.c Bullet/listBullet.c Donnees/donnees.c Donnees/maths.c Enemy/enemy.c Enemy/listEnemy.c Graphismes/graphismes.c Player/player.c Sprite/sprite.c Files/files.c
 OBJ = $(SRC:.c=.o)
 
 all: $(EXEC)

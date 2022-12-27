@@ -26,7 +26,7 @@ int fpsCap(Uint32 start, Uint32* end){
 
 /* ----- Autres ----- */
 
-void handleEvents(SDL_Event* event, int* is_playing, player* player, bloc* ListeBlocs, listBullet* listeBalles, double dt, double* startFire, int mouseX, int mouseY, Uint32 mouseBitMask) {
+void handleEvents(SDL_Event* event, int* is_playing, player* player, bloc* ListeBlocs, listBullet* listeBalles, double dt, double* startFire, int mouseX, int mouseY, Uint32 mouseBitMask, int* gameState) {
 
     // On retire tous les evenements sauf l'indication de fermer le jeu
     SDL_FlushEvents(SDL_APP_TERMINATING, SDL_USEREVENT);
@@ -36,6 +36,7 @@ void handleEvents(SDL_Event* event, int* is_playing, player* player, bloc* Liste
     // Fermeture du jeu
     if (SDL_PollEvent(event) && ((event->type == SDL_QUIT) || keystates[SDL_SCANCODE_ESCAPE])) {
 
+        *gameState = 2;
         *is_playing = 0;
 
     } else {
@@ -171,6 +172,9 @@ void moveListEnemyToPlayer(listEnemy* ListeEnnemisActuelle, listEnemy* ListeEnne
         //Si pas en collision avec le joueur
         if(!inCollision(getPlayerSprite(player), getEnemySprite(getEnemy(ListeEnnemisActuelle)))) {
             moveToPlayer(getEnemy(ListeEnnemisActuelle), ListeEnnemis, ListeBlocs, player, dt);
+        }else{
+            setSpriteToBeDestroyed(getEnemySprite(getEnemy(ListeEnnemisActuelle)),1);
+            playerTakeDamage(player,ENEMY_DMG);
         }
         moveListEnemyToPlayer(getNextE(ListeEnnemisActuelle), ListeEnnemis, ListeBlocs, player, dt);
     }
@@ -223,7 +227,10 @@ void drawLine(SDL_Renderer* renderer, float x1, float y1, float x2, float y2){
 int bulletCollidesEnemies(bullet* Balle, listEnemy* listeEnnemis){
     if(!isEmptyLE(listeEnnemis)){
         if(inCollision(getBulletSprite(Balle), getEnemySprite(getEnemy(listeEnnemis)))){
-            setSpriteToBeDestroyed(getEnemySprite(getEnemy(listeEnnemis)), 1);
+            enemyTakeDamage(getEnemy(listeEnnemis),PISTOL_DMG);
+            if(getEnemyLife(getEnemy(listeEnnemis)) == 0){
+                setSpriteToBeDestroyed(getEnemySprite(getEnemy(listeEnnemis)), 1);
+            }
             return 1;
         }
         else {
@@ -364,4 +371,18 @@ bloc* initListBlocFile(const char* nomFichier){
         }
         return ListeBloc;
     }
+}
+
+void initGame(player* Joueur, listEnemy* ListeEnnemis,listBullet* ListeBalles){
+    *Joueur = initPLayer();
+
+    freeListEnemy(ListeEnnemis);
+    listEnemy* listETemp = initListEnemy();
+    *ListeEnnemis = *listETemp;
+    fillListEnemy(ListeEnnemis,NB_ENNEMIS);
+
+    freeListBullet(ListeBalles);
+    listBullet* listBTemp = initListBullet();
+    *ListeBalles = *listBTemp;
+
 }

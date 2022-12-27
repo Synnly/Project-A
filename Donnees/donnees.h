@@ -52,8 +52,9 @@ int fpsCap(Uint32 start, Uint32* end);
  * @param mouseX La position dans l'axe X de la souris
  * @param mouseY La position dans l'axe Y de la souris
  * @param mouseBitMask L'état des boutons de la souris
+ * @param gameState L'état du jeu
  */
-void handleEvents(SDL_Event* event, int* is_playing, player* player, bloc* ListeBlocs, listBullet* listeBalles, double dt, double* startFire,  int mouseX, int mouseY, Uint32 mouseBitMask);
+void handleEvents(SDL_Event* event, int* is_playing, player* player, bloc* ListeBlocs, listBullet* listeBalles, double dt, double* startFire,  int mouseX, int mouseY, Uint32 mouseBitMask, int* gameState);
 
 /**
  * @brief Déplace l'ennemi vers le joueur
@@ -146,5 +147,13 @@ void moveBullets(listBullet* ListeBalles, bloc* ListeBlocs, double dt);
  * @return La liste initialisee
  */
 bloc* initListBlocFile(const char* nomFichier);
+
+/**
+ * @brief Initialise les données du jeu
+ * @param Joueur Le joueur
+ * @param ListeEnnemis La liste des ennemies
+ * @param ListeBalles La liste des balles
+ */
+void initGame(player* Joueur, listEnemy* ListeEnnemis,listBullet* ListeBalles);
 
 #endif

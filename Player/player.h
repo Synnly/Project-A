@@ -9,7 +9,6 @@ struct player_t{      //Structure du joueur
     int life;
     int speed;
     int weaponType;
-    int lives;
 };
 
 typedef struct player_t player;
@@ -50,13 +49,6 @@ int getPlayerSpeed(player * Player);
     @return Le type de son arme
 */
 int getPlayerWeaponType(player * Player);
-
-/**
- * @brief Retourne le nombre de vies du joueur
- * @param Player Le joueur
- * @return les points de vie du joueur
- */
-int getPlayerLives(player* Player);
 
 /**
  * @brief Retourne la texture du sprite du joueur
@@ -123,12 +115,6 @@ void setPlayerTexture(player* Player, SDL_Texture* texture);
  */
 void setPlayerSprite(player* Player, sprite* Sprite);
 
-/**
- * @brief Met à jour les points de vie du joueur
- * @param Player Le joueur
- * @param lives Les points de vie
- */
-void setPlayerLives(player* Player, int lives);
 
 /* ----- Initialisation ----- */
 
@@ -138,4 +124,12 @@ void setPlayerLives(player* Player, int lives);
 */
 player initPLayer();
 
+/* ------- Autre -------*/
+
+/**
+ * @brief Retire dmg points de vie au joueur
+ * @param Player Le joueur
+ * @param dmg Le nombre de points de vie a retirer
+ */
+void playerTakeDamage(player* Player, int dmg);
 #endif

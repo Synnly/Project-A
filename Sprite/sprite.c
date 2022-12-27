@@ -33,5 +33,6 @@ sprite initSprite(float posX, float posY, int height, int width){
     setSpriteWidth(&Sprite, width);
     setSpriteToBeDestroyed(&Sprite, 0);
     setSpriteIsNull(&Sprite, 0);
+    setSpriteTexture(&Sprite,NULL);
     return Sprite;
 }

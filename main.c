@@ -4,28 +4,48 @@
 #include "Donnees/donnees.h"
 #include "Donnees/constantes.h"
 #include <stdio.h>
+
 #define SDL_MAIN_HANDLED
 
 
-int afficherMenu(SDL_Renderer* renderer){
+int afficherMenu(SDL_Renderer* renderer, int type){
     // Buffer pour getMouseState
     int x,y;
+    sprite Bouton1;
+    sprite Bouton2;
+    sprite Bouton3;
+    if(type == 0){ // Menu principal
+        // Sprites des boutons
+        Bouton1 = initSprite(SCREEN_WIDTH/2 - 80 ,SCREEN_HEIGHT/2 - 40,40,160);
+        Bouton2 = initSprite(SCREEN_WIDTH/2 - 80,SCREEN_HEIGHT/2 + 40,40,160);
+        Bouton3 = initSprite(SCREEN_WIDTH/2 - 80,SCREEN_HEIGHT/2 + 120,40,160);
 
-    // Sprites des boutons
-    sprite BoutonJouer = initSprite(SCREEN_WIDTH/2 - 80 ,SCREEN_HEIGHT/2 - 40,40,160);
-    sprite BoutonCharger = initSprite(SCREEN_WIDTH/2 - 80,SCREEN_HEIGHT/2 + 40,40,160);
-    sprite BoutonQuitter = initSprite(SCREEN_WIDTH/2 - 80,SCREEN_HEIGHT/2 + 120,40,160);
+        // Set des textures des boutons
+        setSpriteTexture(&Bouton1,loadSprite(renderer,"assets/img/Jouer.bmp"));
+        setSpriteTexture(&Bouton2,loadSprite(renderer,"assets/img/Charger.bmp"));
+        setSpriteTexture(&Bouton3,loadSprite(renderer,"assets/img/Quitter.bmp"));
 
-    // Set des textures des boutons
-    setSpriteTexture(&BoutonJouer,loadSprite(renderer,"assets/img/Jouer.bmp"));
-    setSpriteTexture(&BoutonCharger,loadSprite(renderer,"assets/img/Charger.bmp"));
-    setSpriteTexture(&BoutonQuitter,loadSprite(renderer,"assets/img/Quitter.bmp"));
+    }else{ // Menu GameOver
+        //Sprites des boutons
+        Bouton1 = initSprite(SCREEN_WIDTH/2 - 80 ,SCREEN_HEIGHT/2 - 40,40,160);
+        Bouton2 = initSprite(SCREEN_WIDTH/2 - 80,SCREEN_HEIGHT/2 + 40,40,160);
+        Bouton3 = initSprite(SCREEN_WIDTH/2 - 80,SCREEN_HEIGHT/2 + 120,40,160);
 
+        // Set des textures des boutons
+        setSpriteTexture(&Bouton1,loadSprite(renderer,"assets/img/Rejouer.bmp"));
+        setSpriteTexture(&Bouton2,loadSprite(renderer,"assets/img/Charger.bmp"));
+        setSpriteTexture(&Bouton3,loadSprite(renderer,"assets/img/Quitter.bmp"));
+
+
+    }
     // Creation et remplissage du tableau des boutons
     sprite boutons[NBBOUTONS];
-    boutons[0] = BoutonJouer;
-    boutons[1] = BoutonCharger;
-    boutons[2] = BoutonQuitter;
+    boutons[0] = Bouton1;
+    boutons[1] = Bouton2;
+    boutons[2] = Bouton3;
+
+
+
 
 
     SDL_Event event;
@@ -87,7 +107,8 @@ int afficherMenu(SDL_Renderer* renderer){
 
 }
 
-void boucleDeJeu(SDL_Renderer* renderer, player* player, listEnemy* listeEnnemis, bloc* listeBlocs, listBullet* listeBalles){
+
+void boucleDeJeu(SDL_Renderer* renderer, player* player, listEnemy* listeEnnemis, bloc* listeBlocs, listBullet* listeBalles, int* gameState){
 
     //Initialisation
     int is_playing = 1;
@@ -117,7 +138,7 @@ void boucleDeJeu(SDL_Renderer* renderer, player* player, listEnemy* listeEnnemis
 
         // Gestion des evenements
         SDL_Event event;
-        handleEvents(&event, &is_playing, player, listeBlocs, listeBalles, dt, &startFire, mouseX, mouseY, mouseBitMask);
+        handleEvents(&event, &is_playing, player, listeBlocs, listeBalles, dt, &startFire, mouseX, mouseY, mouseBitMask, gameState);
 
         bulletsCollidesEnemies(listeBalles, listeEnnemis);
         destroyToBeDestroyedBulletTextures(listeBalles);
@@ -158,6 +179,10 @@ void boucleDeJeu(SDL_Renderer* renderer, player* player, listEnemy* listeEnnemis
         fps++;
         start = end;
         fpsCounter(&fps,&fpstimer);
+
+        if(getPlayerLife(player) <= 0){
+            is_playing = 0;
+        }
     }
 }
 
@@ -167,10 +192,10 @@ int main(){
     SDL_Window* fenetre;
     SDL_Renderer* renderer;
     bloc* listeBlocs;
-    player joueur = initPLayer();
+    player joueur;
     listEnemy* listeEnnemis = initListEnemy();
-    fillListEnemy(listeEnnemis, NB_ENNEMIS);
     listBullet* listeBalles = initListBullet();
+    int type = 0;
 
 
     SDL_SetMainReady();
@@ -188,33 +213,44 @@ int main(){
     SDL_SetRenderDrawColor(renderer, 32, 34, 37, SDL_ALPHA_OPAQUE);
 
 
-    int i = afficherMenu(renderer);
+    int gameState = afficherMenu(renderer,type);
+    while(gameState != 2){
+        if(gameState == 0){
+            // Liste des blocs initialisee normalement
+            listeBlocs = initListBloc();
+            initGame(&joueur,listeEnnemis,listeBalles);
+            // Initialisation des textures du jeu
+            initTextures(renderer,&joueur,listeEnnemis,listeBlocs);
 
-    if(i == 0){
-        // Liste des blocs initialisee normalement
-        listeBlocs = initListBloc();
+            // Jeu
+            boucleDeJeu(renderer, &joueur, listeEnnemis, listeBlocs, listeBalles, &gameState);
 
-        // Initialisation des textures du jeu
-        initTextures(renderer,&joueur,listeEnnemis,listeBlocs);
+            //Sauvegarde de la map dans un fichier
+            writeFile("assets/maps/MapLoad", listeBlocs);
+            type = 1;
+        }else if(gameState == 1){
+            if(type == 0) {
+                //chargement de map
+                const char *nomFichier = "assets/maps/MapLoad";
 
-        // Jeu
-        boucleDeJeu(renderer, &joueur, listeEnnemis, listeBlocs, listeBalles);
+                // Liste des blocs initialisee avec un fichier
+                listeBlocs = initListBlocFile(nomFichier);
+                initGame(&joueur,listeEnnemis,listeBalles);
+                // Initialisation des textures du jeu
+                initTextures(renderer, &joueur, listeEnnemis, listeBlocs);
 
-        writeFile("assets/maps/MapLoad", listeBlocs);
-
-    }else if(i == 1){
-        //chargement de map
-        const char* nomFichier = "assets/maps/MapLoad";
-
-        // Liste des blocs initialisee avec un fichier
-        listeBlocs = initListBlocFile(nomFichier);
-
-        // Initialisation des textures du jeu
-        initTextures(renderer,&joueur,listeEnnemis,listeBlocs);
-
-        // Jeu
-        boucleDeJeu(renderer, &joueur, listeEnnemis, listeBlocs, listeBalles);
+                // Jeu
+                boucleDeJeu(renderer, &joueur, listeEnnemis, listeBlocs, listeBalles, &gameState);
+                type = 1;
+            }else {
+                type = 0;
+            }
+        }
+        if(gameState != 2){
+            gameState = afficherMenu(renderer,type);
+        }
     }
+
 
     // Nettoyage final
     endSDL(fenetre, renderer, &joueur, listeEnnemis, listeBlocs, listeBalles);
