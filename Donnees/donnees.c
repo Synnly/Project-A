@@ -372,17 +372,3 @@ bloc* initListBlocFile(const char* nomFichier){
         return ListeBloc;
     }
 }
-
-void initGame(player* Joueur, listEnemy* ListeEnnemis,listBullet* ListeBalles){
-    *Joueur = initPLayer();
-
-    freeListEnemy(ListeEnnemis);
-    listEnemy* listETemp = initListEnemy();
-    *ListeEnnemis = *listETemp;
-    fillListEnemy(ListeEnnemis,NB_ENNEMIS);
-
-    freeListBullet(ListeBalles);
-    listBullet* listBTemp = initListBullet();
-    *ListeBalles = *listBTemp;
-
-}

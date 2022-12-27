@@ -101,14 +101,19 @@ void destroyListBlocTextures(bloc* ListeBlocs);
 void destroyListEnemyTextures(listEnemy* ListeEnnemis);
 
 /**
+ * @brief Détruit toutes les textures du jeu
+ * @param Player Le joueur
+ * @param ListeEnnemis La liste d'ennemis
+ * @param ListeBlocs La liste de blocs
+ * @param ListeBalles La liste de balles
+ */
+void destroyAllTextures(player* Player, listEnemy* ListeEnnemis, bloc* ListeBlocs, listBullet * ListeBalles);
+
+/**
  * @brief Ferme la fenetre et quite sdl
  * @param fenetre La fenetre
  * @param renderer Le renderer
- * @param Player Le joueur
- * @param ListeEnnemis La liste des ennemis
- * @param ListeBlocs la liste des blocs
- * @param listeBalles La liste des balles
  */
-void endSDL(SDL_Window* fenetre, SDL_Renderer* renderer, player* Player, listEnemy* ListeEnnemis, bloc* ListeBlocs, listBullet * listeBalles);
+void endSDL(SDL_Window* fenetre, SDL_Renderer* renderer);
 
 #endif

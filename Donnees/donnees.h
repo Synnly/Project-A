@@ -148,12 +148,4 @@ void moveBullets(listBullet* ListeBalles, bloc* ListeBlocs, double dt);
  */
 bloc* initListBlocFile(const char* nomFichier);
 
-/**
- * @brief Initialise les données du jeu
- * @param Joueur Le joueur
- * @param ListeEnnemis La liste des ennemies
- * @param ListeBalles La liste des balles
- */
-void initGame(player* Joueur, listEnemy* ListeEnnemis,listBullet* ListeBalles);
-
 #endif

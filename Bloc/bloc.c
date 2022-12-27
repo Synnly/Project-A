@@ -6,7 +6,7 @@
 float getBlocPosX(bloc * Bloc){return getSpritePosX(getBlocSprite(Bloc));}
 float getBlocPosY(bloc * Bloc){return getSpritePosY(getBlocSprite(Bloc));}
 int getBlocSpread(bloc * Bloc){return Bloc->spread;}
-int getBlocIsObstacle(bloc * Bloc){return Bloc->isObstacle == 1;}
+int getBlocIsObstacle(bloc * Bloc){return Bloc->isObstacle;}
 SDL_Texture* getBlocTexture(bloc* Bloc){return getSpriteTexture(getBlocSprite(Bloc));}
 sprite* getBlocSprite(bloc* Bloc){return &(Bloc->sprite);}
 

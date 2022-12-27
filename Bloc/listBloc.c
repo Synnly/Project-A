@@ -26,7 +26,7 @@ bloc* initListBloc(){
         }
 
         srand(time(NULL));
-        int nbClusters = (rand() % 10)+4;
+        int nbClusters = (rand() % 5)+4;
 
         // Nb aleatoire de clusters de blocs
         for(int i = 0; i < nbClusters; i++){
@@ -69,7 +69,6 @@ void spreadObstacles(bloc* ListeBlocs, int current){
     int random = (rand() % 100) + 1;
 
     if(getBlocSpread(&ListeBlocs[current]) >= random){
-        printf("%d ",random);
         setBlocObstacle(&ListeBlocs[current]);
 
         // pourcentage de change de contamination

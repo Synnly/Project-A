@@ -3,7 +3,7 @@
 
 #define NBBOUTONS 3
 #define EPSILON 1e-2
-#define FPS 144
+#define FPS 60
 
 #define SCREEN_WIDTH 1280
 #define SCREEN_HEIGHT 720

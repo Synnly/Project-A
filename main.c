@@ -94,7 +94,7 @@ int afficherMenu(SDL_Renderer* renderer, int type){
                         if(x>=xS && x<=wS + xS && y>=yS && y<=yS + hS){
 
                             for(int j = 0; j < NBBOUTONS; j++){
-                                SDL_DestroyTexture(getSpriteTexture(&boutons[i]));
+                                SDL_DestroyTexture(getSpriteTexture(&boutons[j]));
                             }
                             return i;
                         }
@@ -191,7 +191,7 @@ int main(){
     // Initialisation des structures
     SDL_Window* fenetre;
     SDL_Renderer* renderer;
-    bloc* listeBlocs;
+    bloc* listeBlocs = NULL;
     player joueur;
     listEnemy* listeEnnemis = initListEnemy();
     listBullet* listeBalles = initListBullet();
@@ -214,51 +214,64 @@ int main(){
 
 
     int gameState = afficherMenu(renderer,type);
+
     while(gameState != 2){
         if(gameState == 0){
             // Liste des blocs initialisee normalement
             listeBlocs = initListBloc();
-            initGame(&joueur,listeEnnemis,listeBalles);
-            // Initialisation des textures du jeu
-            initTextures(renderer,&joueur,listeEnnemis,listeBlocs);
+        }else if(gameState == 1 && type == 0) {
+            //chargement de map
+            const char *nomFichier = "assets/maps/MapLoad";
 
-            // Jeu
-            boucleDeJeu(renderer, &joueur, listeEnnemis, listeBlocs, listeBalles, &gameState);
-
-            //Sauvegarde de la map dans un fichier
-            writeFile("assets/maps/MapLoad", listeBlocs);
-            type = 1;
-        }else if(gameState == 1){
-            if(type == 0) {
-                //chargement de map
-                const char *nomFichier = "assets/maps/MapLoad";
-
-                // Liste des blocs initialisee avec un fichier
-                listeBlocs = initListBlocFile(nomFichier);
-                initGame(&joueur,listeEnnemis,listeBalles);
-                // Initialisation des textures du jeu
-                initTextures(renderer, &joueur, listeEnnemis, listeBlocs);
-
-                // Jeu
-                boucleDeJeu(renderer, &joueur, listeEnnemis, listeBlocs, listeBalles, &gameState);
-                type = 1;
-            }else {
-                type = 0;
-            }
+            // Liste des blocs initialisee avec un fichier
+            listeBlocs = initListBlocFile(nomFichier);
         }
+
+        //Initialisation des données du jeu
+        //Player
+        joueur = initPLayer();
+
+        //List Enemy
+        listEnemy* tempE = initListEnemy();
+        fillListEnemy(tempE,NB_ENNEMIS);
+        freeListEnemy(listeEnnemis);
+        listeEnnemis = tempE;
+
+        //List Bullet
+        freeListBullet(listeBalles);
+        listeBalles = initListBullet();
+
+        // Initialisation des textures du jeu
+        initTextures(renderer,&joueur,listeEnnemis,listeBlocs);
+
+        // Jeu
+        boucleDeJeu(renderer, &joueur, listeEnnemis, listeBlocs, listeBalles, &gameState);
+
+        //Sauvegarde de la map dans un fichier
+        writeFile("assets/maps/MapLoad", listeBlocs);
+
+        //Passage au menu de game over
+        type = 1;
+
+        //Nettoyage
+        destroyAllTextures(&joueur,listeEnnemis,listeBlocs,listeBalles);
+        freeListBloc(listeBlocs);
+
+        // Si le joueur n'a pas quitté le jeu
         if(gameState != 2){
             gameState = afficherMenu(renderer,type);
         }
+
+        // Le joueur appuie sur le bouton de retour au menu principal
+        if(gameState == 1 ){
+            type = 0;
+            gameState = afficherMenu(renderer, type);
+        }
     }
 
-
     // Nettoyage final
-    endSDL(fenetre, renderer, &joueur, listeEnnemis, listeBlocs, listeBalles);
-
+    endSDL(fenetre, renderer);
     freeListEnemy(listeEnnemis);
-    freeListBloc(listeBlocs);
     freeListBullet(listeBalles);
-
     return 0;
-
 }
