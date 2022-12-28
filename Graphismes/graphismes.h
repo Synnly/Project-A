@@ -116,4 +116,21 @@ void destroyAllTextures(player* Player, listEnemy* ListeEnnemis, bloc* ListeBloc
  */
 void endSDL(SDL_Window* fenetre, SDL_Renderer* renderer);
 
+/**
+ * @brief Affiche les vies du joueur
+ * @param renderer Le renderer
+ * @param Player Le joueur
+ * @param font La police
+ */
+void printLives(SDL_Renderer* renderer, player* Player, TTF_Font* font);
+
+/**
+ * @brief Affiche le score du joueur
+ * @param renderer Le renderer
+ * @param Player Le joueur
+ * @param font La police
+ */
+void printScore(SDL_Renderer *renderer, player* Player, TTF_Font* font);
+
+
 #endif

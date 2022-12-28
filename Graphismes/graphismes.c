@@ -2,6 +2,7 @@
 #include <SDL2/SDL_ttf.h>
 #include "graphismes.h"
 #include "../Donnees/constantes.h"
+#include "fonts.h"
 
 SDL_Texture* loadSprite(SDL_Renderer* renderer, const char* file){
     SDL_Surface* sprite = SDL_LoadBMP(file);
@@ -132,4 +133,32 @@ void endSDL(SDL_Window* fenetre, SDL_Renderer* renderer){
     SDL_DestroyWindow(fenetre);
 
     SDL_Quit();
+}
+
+void printLives(SDL_Renderer* renderer, player* Player, TTF_Font* font){
+    char *lives_str = malloc(sizeof(char)*3);     //Vies
+
+    SDL_itoa(getPlayerLife(Player), lives_str, 10);      //Conversion des vies en texte
+
+    int taille_txt = strlen("Lives : ");
+
+    //Affichage
+    apply_text(renderer, 20, 80, taille_txt*(FONT_SIZE), FONT_SIZE*2, "Lives : ", font);
+    apply_text(renderer, 20 + taille_txt*(FONT_SIZE), 80, (FONT_SIZE)*strlen(lives_str), FONT_SIZE*2, lives_str, font);
+
+    free(lives_str);
+
+}
+
+void printScore(SDL_Renderer *renderer, player* Player, TTF_Font* font){
+    char *score_str = malloc(sizeof(char)*3);     //Score (max 999)
+    SDL_itoa(*getPlayerScore(Player), score_str, 10);      //Conversion du score en texte
+
+    int taille_txt = strlen("Score : ");
+
+    //Affichage
+    apply_text(renderer, 20, 40, taille_txt*(FONT_SIZE), FONT_SIZE*2, "Score : ", font);
+    apply_text(renderer, 20 + taille_txt*(FONT_SIZE), 40, (FONT_SIZE)*strlen(score_str), FONT_SIZE*2, score_str, font);
+
+    free(score_str);
 }

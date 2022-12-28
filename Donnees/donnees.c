@@ -224,28 +224,30 @@ void drawLine(SDL_Renderer* renderer, float x1, float y1, float x2, float y2){
     SDL_RenderDrawLine(renderer, (int)x1, (int)y1, (int)(x1 + distX*3), (int)(y1 + distY*3));
 }
 
-int bulletCollidesEnemies(bullet* Balle, listEnemy* listeEnnemis){
+int bulletCollidesEnemies(bullet* Balle, listEnemy* listeEnnemis, int* score){
     if(!isEmptyLE(listeEnnemis)){
         if(inCollision(getBulletSprite(Balle), getEnemySprite(getEnemy(listeEnnemis)))){
             enemyTakeDamage(getEnemy(listeEnnemis),PISTOL_DMG);
             if(getEnemyLife(getEnemy(listeEnnemis)) == 0){
                 setSpriteToBeDestroyed(getEnemySprite(getEnemy(listeEnnemis)), 1);
+                *score+=NENEMY_SCORE_REWARD;
+                fillListEnemy(listeEnnemis,1);
             }
             return 1;
         }
         else {
-            return bulletCollidesEnemies(Balle, getNextE(listeEnnemis));
+            return bulletCollidesEnemies(Balle, getNextE(listeEnnemis),score);
         }
     }
     return 0;
 }
 
-void bulletsCollidesEnemies(listBullet* ListeBalle, listEnemy* ListeEnnemi){
+void bulletsCollidesEnemies(listBullet* ListeBalle, listEnemy* ListeEnnemi,int* score){
     if(!isEmptyListBullet(ListeBalle)){
-        if(bulletCollidesEnemies(getBullet(ListeBalle), ListeEnnemi)){
+        if(bulletCollidesEnemies(getBullet(ListeBalle), ListeEnnemi,score)){
             setSpriteToBeDestroyed(getBulletSprite(getBullet(ListeBalle)), 1);
         }
-        bulletsCollidesEnemies(getNextBullet(ListeBalle), ListeEnnemi);
+        bulletsCollidesEnemies(getNextBullet(ListeBalle), ListeEnnemi,score);
     }
 }
 

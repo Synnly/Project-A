@@ -9,6 +9,7 @@ struct player_t{      //Structure du joueur
     int life;
     int speed;
     int weaponType;
+    int score;
 };
 
 typedef struct player_t player;
@@ -49,6 +50,13 @@ int getPlayerSpeed(player * Player);
     @return Le type de son arme
 */
 int getPlayerWeaponType(player * Player);
+
+/**
+ * @brief Retourne le score du joueur
+ * @param Player Le joueur
+ * @return Le score du joueur
+ */
+int* getPlayerScore(player* Player);
 
 /**
  * @brief Retourne la texture du sprite du joueur
@@ -100,6 +108,13 @@ void setPlayerSpeed(player * Player, int speed);
     @param weaponType Le type de son arme
 */
 void setPlayerWeaponType(player * Player, int weaponType);
+
+/**
+ * @brief Mets a jour le score du joueur
+ * @param Player Le joueur
+ * @param score Le nouveau score du joueur
+ */
+void setPlayerScore(player* Player, int score);
 
 /**
  * @brief Met à jour la texture du sprite du joueur

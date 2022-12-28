@@ -4,6 +4,7 @@
 #include "Donnees/donnees.h"
 #include "Donnees/constantes.h"
 #include <stdio.h>
+#include "Graphismes/fonts.h"
 
 #define SDL_MAIN_HANDLED
 
@@ -33,7 +34,7 @@ int afficherMenu(SDL_Renderer* renderer, int type){
 
         // Set des textures des boutons
         setSpriteTexture(&Bouton1,loadSprite(renderer,"assets/img/Rejouer.bmp"));
-        setSpriteTexture(&Bouton2,loadSprite(renderer,"assets/img/Charger.bmp"));
+        setSpriteTexture(&Bouton2,loadSprite(renderer,"assets/img/Menu.bmp"));
         setSpriteTexture(&Bouton3,loadSprite(renderer,"assets/img/Quitter.bmp"));
 
 
@@ -123,6 +124,7 @@ void boucleDeJeu(SDL_Renderer* renderer, player* player, listEnemy* listeEnnemis
 
 
     while(is_playing){
+        TTF_Font* font = load_font("assets/fonts/Minecraft.ttf",FONT_SIZE);
         Uint32 end = SDL_GetTicks();
         dt = (end-start)/1000.;
 
@@ -140,7 +142,7 @@ void boucleDeJeu(SDL_Renderer* renderer, player* player, listEnemy* listeEnnemis
         SDL_Event event;
         handleEvents(&event, &is_playing, player, listeBlocs, listeBalles, dt, &startFire, mouseX, mouseY, mouseBitMask, gameState);
 
-        bulletsCollidesEnemies(listeBalles, listeEnnemis);
+        bulletsCollidesEnemies(listeBalles, listeEnnemis, getPlayerScore(player));
         destroyToBeDestroyedBulletTextures(listeBalles);
         deleteBulletsToBeDestroyed(listeBalles);
 
@@ -172,6 +174,11 @@ void boucleDeJeu(SDL_Renderer* renderer, player* player, listEnemy* listeEnnemis
 
         drawSprite(renderer, (int)getPlayerPosX(player), (int)getPlayerPosY(player), PLAYER_SIZE, PLAYER_SIZE, 0, getPlayerTexture(player));
 
+        if(getPlayerLife(player)>0){
+            printLives(renderer,player,font);
+            printScore(renderer,player,font);
+        }
+
         // Rendu
         SDL_RenderPresent(renderer);
 
@@ -183,6 +190,7 @@ void boucleDeJeu(SDL_Renderer* renderer, player* player, listEnemy* listeEnnemis
         if(getPlayerLife(player) <= 0){
             is_playing = 0;
         }
+        clean_font(font);
     }
 }
 
@@ -195,6 +203,7 @@ int main(){
     player joueur;
     listEnemy* listeEnnemis = initListEnemy();
     listBullet* listeBalles = initListBullet();
+    init_ttf();
     int type = 0;
 
 

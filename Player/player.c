@@ -8,6 +8,7 @@ float getPlayerPosY(player* Player){return getSpritePosY(getPlayerSprite(Player)
 int getPlayerLife(player* Player){return Player->life;}
 int getPlayerSpeed(player* Player){return Player->speed;}
 int getPlayerWeaponType(player* Player){return Player->weaponType;}
+int* getPlayerScore(player* Player){return &Player->score;}
 SDL_Texture* getPlayerTexture(player* Player){return getSpriteTexture(getPlayerSprite(Player));}
 sprite* getPlayerSprite(player* Player){return &(Player->sprite);}
 
@@ -33,6 +34,10 @@ void setPlayerWeaponType(player* Player, int weapontype){
     Player->weaponType = weapontype;
 }
 
+void setPlayerScore(player* Player, int score){
+    Player->score = score;
+}
+
 void setPlayerTexture(player* Player, SDL_Texture* texture){
     setSpriteTexture(getPlayerSprite(Player),  texture);
 }
@@ -51,6 +56,7 @@ player initPLayer(){
     setPlayerLife(&Player,PLAYER_LIFE);
     setPlayerSpeed(&Player,PLAYER_SPEED);
     setPlayerWeaponType(&Player,PISTOL_TYPE);
+    setPlayerScore(&Player,0);
     return Player;
 }
 

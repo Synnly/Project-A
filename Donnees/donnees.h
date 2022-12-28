@@ -114,16 +114,18 @@ void drawLine(SDL_Renderer* renderer, float x1, float y1, float x2, float y2);
  * @brief Indique si la balle est en collision avec un ennemiw
  * @param Balle La balle
  * @param listeEnnemis La liste des ennemis
+ * @param score Le score du joueur
  * @return 1 si la balle touche un ennemi, 0 sinon
  */
-int bulletCollidesEnemies(bullet* Balle, listEnemy* listeEnnemis);
+int bulletCollidesEnemies(bullet* Balle, listEnemy* listeEnnemis, int* score);
 
 /**
  * @brief Marque une balle a etre detruite si elle touche un ennemi
  * @param ListeBalle La liste des balles
  * @param ListeEnnemi La liste des ennemis
+ * @param score Le score du joueur
  */
-void bulletsCollidesEnemies(listBullet* ListeBalle, listEnemy* ListeEnnemi);
+void bulletsCollidesEnemies(listBullet* ListeBalle, listEnemy* ListeEnnemi, int* score);
 
 /**
  * @brief Verifie si l'ennemi est en collision qvec un autre ennemi de la liste
