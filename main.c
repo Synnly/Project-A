@@ -10,11 +10,16 @@
 
 
 int afficherMenu(SDL_Renderer* renderer, int type){
+    int fps = 1;
+    int fpstimer = 0;
+    Uint32 start = SDL_GetTicks();
+
     // Buffer pour getMouseState
     int x,y;
     sprite Bouton1;
     sprite Bouton2;
     sprite Bouton3;
+
     if(type == 0){ // Menu principal
         // Sprites des boutons
         Bouton1 = initSprite(SCREEN_WIDTH/2 - 80 ,SCREEN_HEIGHT/2 - 40,40,160);
@@ -36,52 +41,40 @@ int afficherMenu(SDL_Renderer* renderer, int type){
         setSpriteTexture(&Bouton1,loadSprite(renderer,"assets/img/Rejouer.bmp"));
         setSpriteTexture(&Bouton2,loadSprite(renderer,"assets/img/Menu.bmp"));
         setSpriteTexture(&Bouton3,loadSprite(renderer,"assets/img/Quitter.bmp"));
-
-
     }
+
     // Creation et remplissage du tableau des boutons
     sprite boutons[NBBOUTONS];
     boutons[0] = Bouton1;
     boutons[1] = Bouton2;
     boutons[2] = Bouton3;
 
-
-
-
-
     SDL_Event event;
-    while(1){
-        while(SDL_PollEvent(&event)){
 
+    while(1){
+        Uint32 end = SDL_GetTicks();
+
+        //Cap à 60 fps
+        if(fpsCap(start,&end)) {continue;}
+
+        SDL_RenderClear(renderer);
+
+        // Affichage des boutons
+        for(int i = 0; i<NBBOUTONS; i++){
+            drawSprite(renderer, getSpritePosX(&boutons[i]), getSpritePosY(&boutons[i]), getSpriteWidth(&boutons[i]),
+                       getSpriteHeight(&boutons[i]), 0, getSpriteTexture(&boutons[i]));
+        }
+
+        while(SDL_PollEvent(&event)){
             SDL_GetMouseState(&x,&y);
-            SDL_RenderClear(renderer);
 
             switch(event.type){
-
                 case SDL_QUIT:
 
                     for(int i = 0; i<NBBOUTONS; i++) {
                         SDL_DestroyTexture(getSpriteTexture(&boutons[i]));
                     }
                     return 2;
-
-                case SDL_MOUSEMOTION:
-
-                    for(int i = 0; i <NBBOUTONS;i++){
-
-                        float xS = getSpritePosX(&boutons[i]);
-                        float yS = getSpritePosY(&boutons[i]);
-                        int wS = getSpriteWidth(&boutons[i]);
-                        int hS = getSpriteHeight(&boutons[i]);
-
-                        // Vérification des coordonnées de la souris pour voir si elles sont en collision avec un bouton
-                        if(x>=xS && x<=wS + xS && y>=yS && y<=yS + hS){ // Si collision changement de la texture pour la texture de survol
-                            drawSprite(renderer, xS,yS,wS,hS,1, getSpriteTexture(&boutons[i]));
-                        }else{ //Sinon on redessine la texture normale
-                            drawSprite(renderer, xS,yS,wS,hS,0, getSpriteTexture(&boutons[i]));
-                        }
-                    }
-                    break;
 
                 case SDL_MOUSEBUTTONDOWN:
 
@@ -103,11 +96,32 @@ int afficherMenu(SDL_Renderer* renderer, int type){
                     break;
             }
         }
+
+        // La souris passe sur un bouton
+        for(int i = 0; i <NBBOUTONS;i++){
+
+            float xS = getSpritePosX(&boutons[i]);
+            float yS = getSpritePosY(&boutons[i]);
+            int wS = getSpriteWidth(&boutons[i]);
+            int hS = getSpriteHeight(&boutons[i]);
+
+            // Vérification des coordonnées de la souris pour voir si elles sont en collision avec un bouton
+            if(x>=xS && x<=wS + xS && y>=yS && y<=yS + hS){ // Si collision changement de la texture pour la texture de survol
+                drawSprite(renderer, xS,yS,wS,hS,1, getSpriteTexture(&boutons[i]));
+
+            }else{ //Sinon on redessine la texture normale
+                drawSprite(renderer, xS,yS,wS,hS,0, getSpriteTexture(&boutons[i]));
+            }
+        }
+
         SDL_RenderPresent(renderer);
+
+        // Gestion des fps
+        fps++;
+        start = end;
+        fpsCounter(&fps,&fpstimer);
     }
-
 }
-
 
 void boucleDeJeu(SDL_Renderer* renderer, player* player, listEnemy* listeEnnemis, bloc* listeBlocs, listBullet* listeBalles, int* gameState){
 
@@ -120,8 +134,6 @@ void boucleDeJeu(SDL_Renderer* renderer, player* player, listEnemy* listeEnnemis
     double dt;
     int mouseX, mouseY;
     Uint32 mouseBitMask;
-
-
 
     while(is_playing){
         TTF_Font* font = load_font("assets/fonts/Minecraft.ttf",FONT_SIZE);
@@ -199,7 +211,7 @@ int main(){
     // Initialisation des structures
     SDL_Window* fenetre;
     SDL_Renderer* renderer;
-    bloc* listeBlocs = NULL;
+    bloc* listeBlocs;
     player joueur;
     listEnemy* listeEnnemis = initListEnemy();
     listBullet* listeBalles = initListBullet();
@@ -228,6 +240,7 @@ int main(){
         if(gameState == 0){
             // Liste des blocs initialisee normalement
             listeBlocs = initListBloc();
+
         }else if(gameState == 1 && type == 0) {
             //chargement de map
             const char *nomFichier = "assets/maps/MapLoad";
@@ -265,6 +278,7 @@ int main(){
         //Nettoyage
         destroyAllTextures(&joueur,listeEnnemis,listeBlocs,listeBalles);
         freeListBloc(listeBlocs);
+        listeBlocs = NULL;
 
         // Si le joueur n'a pas quitté le jeu
         if(gameState != 2){
@@ -277,6 +291,7 @@ int main(){
             gameState = afficherMenu(renderer, type);
         }
     }
+
 
     // Nettoyage final
     endSDL(fenetre, renderer);
