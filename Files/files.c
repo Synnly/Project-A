@@ -59,7 +59,6 @@ void writeFile(const char* nomFichier, bloc* ListeBloc){
 
                 // Blocs classiques
             else {
-                printf("%d\n", getBlocSpread(&ListeBloc[i]));
                 fprintf(fichier, "%d ", (getBlocSpread(&ListeBloc[i])/10)+1);
             }
         }

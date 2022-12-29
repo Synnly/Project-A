@@ -154,16 +154,16 @@ void boucleDeJeu(SDL_Renderer* renderer, player* player, listEnemy* listeEnnemis
         SDL_Event event;
         handleEvents(&event, &is_playing, player, listeBlocs, listeBalles, dt, &startFire, mouseX, mouseY, mouseBitMask, gameState);
 
+        //Fermeture du jeu
+        if(!is_playing){break;}
+
         bulletsCollidesEnemies(listeBalles, listeEnnemis, getPlayerScore(player));
         destroyToBeDestroyedBulletTextures(listeBalles);
         deleteBulletsToBeDestroyed(listeBalles);
 
-        destroyToBeDestroyedEnemyTextures(listeEnnemis);
+        //destroyToBeDestroyedEnemyTextures(listeEnnemis);
         deleteEnemiesToBeDestroyed(listeEnnemis);
 
-
-        //Fermeture du jeu
-        if(!is_playing){break;}
 
         //Rafraichissement de l'ecran
         SDL_RenderClear(renderer);
@@ -173,6 +173,7 @@ void boucleDeJeu(SDL_Renderer* renderer, player* player, listEnemy* listeEnnemis
 
         // Initialisation des textures des balles qui n'ont pas de textures
         initListBulletTextures(renderer, listeBalles);
+        initListEnemyTextures(renderer, listeEnnemis);
 
         drawListBulletSprites(renderer, listeBalles);
         drawListEnemySprites(renderer, listeEnnemis);
@@ -191,6 +192,8 @@ void boucleDeJeu(SDL_Renderer* renderer, player* player, listEnemy* listeEnnemis
             printScore(renderer,player,font);
         }
 
+        printf("%d\n", getPlayerLife(player));
+
         // Rendu
         SDL_RenderPresent(renderer);
 
@@ -202,6 +205,7 @@ void boucleDeJeu(SDL_Renderer* renderer, player* player, listEnemy* listeEnnemis
         if(getPlayerLife(player) <= 0){
             is_playing = 0;
         }
+
         clean_font(font);
     }
 }
@@ -218,7 +222,6 @@ int main(){
     init_ttf();
     int type = 0;
 
-
     SDL_SetMainReady();
     if(SDL_Init(SDL_INIT_VIDEO)){
         printf("Erreur d'initilisation de SDL : %s", SDL_GetError());
@@ -232,7 +235,6 @@ int main(){
     }
     SDL_SetWindowTitle(fenetre, "Segfault");
     SDL_SetRenderDrawColor(renderer, 32, 34, 37, SDL_ALPHA_OPAQUE);
-
 
     int gameState = afficherMenu(renderer,type);
 

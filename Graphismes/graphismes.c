@@ -22,7 +22,9 @@ void initListBlocTextures(SDL_Renderer* renderer, bloc* ListeBlocs){
 
 void initListEnemyTextures(SDL_Renderer* renderer, listEnemy* ListeEnnemis){
     if(!isEmptyLE(ListeEnnemis)){
-        setEnemyTexture(getEnemy(ListeEnnemis),loadSprite(renderer, "assets/img/enemy.bmp"));
+        if(getEnemyTexture(getEnemy(ListeEnnemis)) == NULL) {
+            setEnemyTexture(getEnemy(ListeEnnemis), loadSprite(renderer, "assets/img/enemy.bmp"));
+        }
         initListEnemyTextures(renderer, getNextE(ListeEnnemis));
     }
 }
