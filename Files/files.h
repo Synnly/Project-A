@@ -18,21 +18,14 @@ void writeFile(const char* nomFichier, bloc* ListeBloc);
 /**
  * @brief Ecris le score du joueur dans le fichier Leaderboard
  * @param score Le score du joueur
+ * @param nomFichier Le nom du fichier
  */
-void writeScore(int* score);
+void writeScore(const char* nomFichier, int* score);
 
 /**
  * @brief Trie dans l'ordre décroissant les valeurs du classement des scores
  * @param length Le nombre de ligne du classement
  */
 void sortLeaderboard(int length);
-
-/**
- * @brief Fonction qui trie un tableau de manière décroissante en utilisant la méthode quicksort
- * @param array Le tableau
- * @param start L'indice de la première valeur
- * @param end L'indice de la dernière valeur
- */
-void quickSortDesc(int* array, int start, int end);
 
 #endif //PROJECT_A_FILES_H

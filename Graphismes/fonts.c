@@ -45,7 +45,6 @@ void apply_text(SDL_Renderer *renderer,int x, int y, int w, int h, const char *t
     SDL_Color color = { 225, 225, 248 };
 
     SDL_Surface* surface = TTF_RenderText_Solid(font, text, color);
-    //printf("FFFFF\n");
 
     SDL_Texture* texture = SDL_CreateTextureFromSurface(renderer, surface);
     SDL_FreeSurface(surface);
