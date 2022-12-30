@@ -220,8 +220,6 @@ void boucleDeJeu(SDL_Renderer* renderer, player* player, listEnemy* listeEnnemis
             printScore(renderer,player,font);
         }
 
-        printf("%d\n", getPlayerLife(player));
-
         // Rendu
         SDL_RenderPresent(renderer);
 
@@ -274,11 +272,8 @@ int main(){
             listeBlocs = initListBloc();
 
         }else if(gameState == 1 && type == 0) {
-            //chargement de map
-            const char *nomFichier = "assets/maps/MapLoad";
-
             // Liste des blocs initialisee avec un fichier
-            listeBlocs = initListBlocFile(nomFichier);
+            listeBlocs = initListBlocFile("assets/save/MapLoad");
         }
 
         //Initialisation des données du jeu
@@ -302,7 +297,7 @@ int main(){
         boucleDeJeu(renderer, &joueur, listeEnnemis, listeBlocs, listeBalles, &gameState);
 
         //Sauvegarde de la map dans un fichier
-        writeFile("assets/maps/MapLoad", listeBlocs);
+        writeFile("assets/save/MapLoad", listeBlocs);
 
         //Passage au menu de game over
         type = 1;
@@ -325,7 +320,7 @@ int main(){
     }
 
     //Enregistrement du score du joueur
-    writeScore(getPlayerScore(&joueur));
+    writeScore("assets/save/leaderboard", getPlayerScore(&joueur));
 
     // Nettoyage final
     endSDL(fenetre, renderer);

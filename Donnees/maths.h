@@ -32,5 +32,12 @@ float pythagore(float c);
  */
 int floatEquals(float f1, float f2);
 
+/**
+ * @brief Fonction qui trie un tableau de manière décroissante en utilisant la méthode quicksort
+ * @param array Le tableau
+ * @param start L'indice de la première valeur
+ * @param end L'indice de la dernière valeur
+ */
+void quickSortDesc(int* array, int start, int end);
 
 #endif //PROJECT_A_MATHS_H
