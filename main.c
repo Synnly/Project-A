@@ -278,6 +278,9 @@ int main(){
         }
     }
 
+    //Enregistrement du score du joueur
+    writeScore(getPlayerScore(&joueur));
+
     // Nettoyage final
     endSDL(fenetre, renderer);
     freeListEnemy(listeEnnemis);
