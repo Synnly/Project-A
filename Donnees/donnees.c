@@ -170,13 +170,18 @@ void moveToPlayer(enemy* enemy, listEnemy* ListeEnnemis, bloc* ListeBlocs, playe
 void moveListEnemyToPlayer(listEnemy* ListeEnnemisActuelle, listEnemy* ListeEnnemis, bloc* ListeBlocs, player* player, double dt){
     if(!isEmptyLE(ListeEnnemisActuelle)){
         //Si pas en collision avec le joueur
-        if(!inCollision(getPlayerSprite(player), getEnemySprite(getEnemy(ListeEnnemisActuelle)))) {
-            moveToPlayer(getEnemy(ListeEnnemisActuelle), ListeEnnemis, ListeBlocs, player, dt);
-        }else{
+        if(inCollision(getPlayerSprite(player), getEnemySprite(getEnemy(ListeEnnemisActuelle)))) {
             setSpriteToBeDestroyed(getEnemySprite(getEnemy(ListeEnnemisActuelle)),1);
             playerTakeDamage(player,ENEMY_DMG);
+            fillListEnemy(ListeEnnemis, 1);
         }
-        moveListEnemyToPlayer(getNextE(ListeEnnemisActuelle), ListeEnnemis, ListeBlocs, player, dt);
+        else{
+            moveToPlayer(getEnemy(ListeEnnemisActuelle), ListeEnnemis, ListeBlocs, player, dt);
+        }
+
+        if(!isEmptyLE(ListeEnnemisActuelle)){
+            moveListEnemyToPlayer(getNextE(ListeEnnemisActuelle), ListeEnnemis, ListeBlocs, player, dt);
+        }
     }
 }
 
@@ -228,6 +233,7 @@ int bulletCollidesEnemies(bullet* Balle, listEnemy* listeEnnemis, int* score){
     if(!isEmptyLE(listeEnnemis)){
         if(inCollision(getBulletSprite(Balle), getEnemySprite(getEnemy(listeEnnemis)))){
             enemyTakeDamage(getEnemy(listeEnnemis),PISTOL_DMG);
+
             if(getEnemyLife(getEnemy(listeEnnemis)) == 0){
                 setSpriteToBeDestroyed(getEnemySprite(getEnemy(listeEnnemis)), 1);
                 *score+=NENEMY_SCORE_REWARD;

@@ -42,7 +42,9 @@ void freeListEnemy(listEnemy* ListeEnnemis){
 
 void deleteEnemiesToBeDestroyed(listEnemy * ListeEnnemis){
     if(!isEmptyLE(ListeEnnemis)){
+        printf("%d, %d|", (int)getEnemyPosX(getEnemy(ListeEnnemis)), (int)getEnemyPosY(getEnemy(ListeEnnemis)));
         if(getSpriteToBeDestroyed(getEnemySprite(getEnemy(ListeEnnemis)))){
+            printf("%#x, ", getEnemy(ListeEnnemis));
             listEnemy* temp = getNextE(ListeEnnemis);
 
             setEnemy(ListeEnnemis, *getEnemy(getNextE(ListeEnnemis)));

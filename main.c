@@ -10,11 +10,16 @@
 
 
 int afficherMenu(SDL_Renderer* renderer, int type){
+    int fps = 1;
+    int fpstimer = 0;
+    Uint32 start = SDL_GetTicks();
+
     // Buffer pour getMouseState
     int x,y;
     sprite Bouton1;
     sprite Bouton2;
     sprite Bouton3;
+
     if(type == 0){ // Menu principal
         // Sprites des boutons
         Bouton1 = initSprite(SCREEN_WIDTH/2 - 80 ,SCREEN_HEIGHT/2 - 40,40,160);
@@ -45,12 +50,22 @@ int afficherMenu(SDL_Renderer* renderer, int type){
     boutons[1] = Bouton2;
     boutons[2] = Bouton3;
 
-
-
-
-
     SDL_Event event;
+
     while(1){
+        Uint32 end = SDL_GetTicks();
+
+        //Cap à 60 fps
+        if(fpsCap(start,&end)) {continue;}
+
+        SDL_RenderClear(renderer);
+
+        // Affichage des boutons
+        for(int i = 0; i<NBBOUTONS; i++){
+            drawSprite(renderer, getSpritePosX(&boutons[i]), getSpritePosY(&boutons[i]), getSpriteWidth(&boutons[i]),
+                       getSpriteHeight(&boutons[i]), 0, getSpriteTexture(&boutons[i]));
+        }
+
         while(SDL_PollEvent(&event)){
 
             SDL_GetMouseState(&x,&y);
@@ -103,9 +118,31 @@ int afficherMenu(SDL_Renderer* renderer, int type){
                     break;
             }
         }
-        SDL_RenderPresent(renderer);
-    }
 
+        // La souris passe sur un bouton
+        for(int i = 0; i <NBBOUTONS;i++){
+
+            float xS = getSpritePosX(&boutons[i]);
+            float yS = getSpritePosY(&boutons[i]);
+            int wS = getSpriteWidth(&boutons[i]);
+            int hS = getSpriteHeight(&boutons[i]);
+
+            // Vérification des coordonnées de la souris pour voir si elles sont en collision avec un bouton
+            if(x>=xS && x<=wS + xS && y>=yS && y<=yS + hS){ // Si collision changement de la texture pour la texture de survol
+                drawSprite(renderer, xS,yS,wS,hS,1, getSpriteTexture(&boutons[i]));
+
+            }else{ //Sinon on redessine la texture normale
+                drawSprite(renderer, xS,yS,wS,hS,0, getSpriteTexture(&boutons[i]));
+            }
+        }
+
+        SDL_RenderPresent(renderer);
+
+        // Gestion des fps
+        fps++;
+        start = end;
+        fpsCounter(&fps,&fpstimer);
+    }
 }
 
 
@@ -142,11 +179,14 @@ void boucleDeJeu(SDL_Renderer* renderer, player* player, listEnemy* listeEnnemis
         SDL_Event event;
         handleEvents(&event, &is_playing, player, listeBlocs, listeBalles, dt, &startFire, mouseX, mouseY, mouseBitMask, gameState);
 
+        //Fermeture du jeu
+        if(!is_playing){break;}
+
         bulletsCollidesEnemies(listeBalles, listeEnnemis, getPlayerScore(player));
         destroyToBeDestroyedBulletTextures(listeBalles);
         deleteBulletsToBeDestroyed(listeBalles);
 
-        destroyToBeDestroyedEnemyTextures(listeEnnemis);
+        //destroyToBeDestroyedEnemyTextures(listeEnnemis);
         deleteEnemiesToBeDestroyed(listeEnnemis);
 
 
@@ -161,6 +201,7 @@ void boucleDeJeu(SDL_Renderer* renderer, player* player, listEnemy* listeEnnemis
 
         // Initialisation des textures des balles qui n'ont pas de textures
         initListBulletTextures(renderer, listeBalles);
+        initListEnemyTextures(renderer, listeEnnemis);
 
         drawListBulletSprites(renderer, listeBalles);
         drawListEnemySprites(renderer, listeEnnemis);
@@ -179,6 +220,8 @@ void boucleDeJeu(SDL_Renderer* renderer, player* player, listEnemy* listeEnnemis
             printScore(renderer,player,font);
         }
 
+        printf("%d\n", getPlayerLife(player));
+
         // Rendu
         SDL_RenderPresent(renderer);
 
@@ -190,6 +233,7 @@ void boucleDeJeu(SDL_Renderer* renderer, player* player, listEnemy* listeEnnemis
         if(getPlayerLife(player) <= 0){
             is_playing = 0;
         }
+
         clean_font(font);
     }
 }
@@ -199,7 +243,7 @@ int main(){
     // Initialisation des structures
     SDL_Window* fenetre;
     SDL_Renderer* renderer;
-    bloc* listeBlocs = NULL;
+    bloc* listeBlocs;
     player joueur;
     listEnemy* listeEnnemis = initListEnemy();
     listBullet* listeBalles = initListBullet();
@@ -228,6 +272,7 @@ int main(){
         if(gameState == 0){
             // Liste des blocs initialisee normalement
             listeBlocs = initListBloc();
+
         }else if(gameState == 1 && type == 0) {
             //chargement de map
             const char *nomFichier = "assets/maps/MapLoad";
@@ -265,6 +310,7 @@ int main(){
         //Nettoyage
         destroyAllTextures(&joueur,listeEnnemis,listeBlocs,listeBalles);
         freeListBloc(listeBlocs);
+        listeBlocs = NULL;
 
         // Si le joueur n'a pas quitté le jeu
         if(gameState != 2){

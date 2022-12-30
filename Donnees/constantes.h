@@ -15,7 +15,7 @@
 #define PLAYER_SPEED 200
 
 #define ENEMY_SIZE 40
-#define ENEMY_LIFE 1
+#define ENEMY_LIFE 2
 #define ENEMY_SPEED 200
 #define ENEMY_DMG 1
 #define NENEMY_SCORE_REWARD 1
