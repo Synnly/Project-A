@@ -138,10 +138,9 @@ void printScore(SDL_Renderer *renderer, player* Player, TTF_Font* font);
  * @brief Donne le nombre de fps
  * @param fps le nombre d'image par seconde
  * @param fpstimer l'image de la dernière seconde
- * @param renderer Le renderer
- * @param font La police
+ * @param framerate La variable qui va servir a afficher les fps sur la fenetre de jeu
  */
-void fpsCounter(int* fps, int* fpstimer,SDL_Renderer* renderer, TTF_Font* font);
+void fpsCounter(int* fps, int* fpstimer, int* framerate);
 
 /**
  * @brief Limite le nombre de fps à 60
@@ -157,7 +156,7 @@ int fpsCap(Uint32 start, Uint32* end);
  * @param fps Les fps
  * @param font La police
  */
-void printFPS(SDL_Renderer* renderer, int* fps, TTF_Font* font);
+void printFPS(SDL_Renderer* renderer, int fps, TTF_Font* font);
 
 
 #endif

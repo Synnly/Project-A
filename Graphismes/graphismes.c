@@ -167,11 +167,11 @@ void printScore(SDL_Renderer *renderer, player* Player, TTF_Font* font){
 
 /* ----- FPS ----- */
 
-void fpsCounter(int* fps, int* fpstimer, SDL_Renderer* renderer,TTF_Font* font){
+void fpsCounter(int* fps, int* fpstimer, int* framerate){
     int fpsNow = SDL_GetTicks();
     if(fpsNow > *fpstimer + 1000){
-        printFPS(renderer,fps,font);
         *fpstimer = fpsNow;
+        *framerate = *fps;
         *fps = 1;
     }
 }
@@ -184,15 +184,15 @@ int fpsCap(Uint32 start, Uint32* end){
     return 0;
 }
 
-void printFPS(SDL_Renderer* renderer, int* fps, TTF_Font* font){
+void printFPS(SDL_Renderer* renderer, int fps, TTF_Font* font){
     char *fps_str = malloc(sizeof(char)*3);     // Les FPS
-    SDL_itoa(*fps, fps_str, 10);      //Conversion des FPS en texte
+    SDL_itoa(fps, fps_str, 10);      //Conversion des FPS en texte
 
     int taille_txt = strlen("FPS : ");
 
     //Affichage
-    apply_text(renderer, 1000, 40, taille_txt*(FONT_SIZE), FONT_SIZE*2, "FPS : ", font);
-    apply_text(renderer, 1000 + taille_txt*(FONT_SIZE), 40, (FONT_SIZE)*strlen(fps_str), FONT_SIZE*2, fps_str, font);
+    apply_text(renderer, 1100, 40, taille_txt*(FONT_SIZE), FONT_SIZE*2, "FPS : ", font);
+    apply_text(renderer, 1100 + taille_txt*(FONT_SIZE), 40, (FONT_SIZE)*strlen(fps_str), FONT_SIZE*2, fps_str, font);
 
     free(fps_str);
 }

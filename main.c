@@ -12,6 +12,7 @@
 int afficherMenu(SDL_Renderer* renderer, int type){
     int fps = 1;
     int fpstimer = 0;
+    int framerate = 1;
     Uint32 start = SDL_GetTicks();
 
     // Buffer pour getMouseState
@@ -54,7 +55,6 @@ int afficherMenu(SDL_Renderer* renderer, int type){
 
     while(1){
         Uint32 end = SDL_GetTicks();
-        TTF_Font* font = load_font("assets/fonts/Minecraft.ttf",FONT_SIZE);
 
         //Cap à 60 fps
         if(fpsCap(start,&end)) {continue;}
@@ -142,8 +142,7 @@ int afficherMenu(SDL_Renderer* renderer, int type){
         // Gestion des fps
         fps++;
         start = end;
-        fpsCounter(&fps,&fpstimer,renderer,font);
-        clean_font(font);
+        fpsCounter(&fps,&fpstimer,&framerate);
     }
 }
 
@@ -154,6 +153,7 @@ void boucleDeJeu(SDL_Renderer* renderer, player* player, listEnemy* listeEnnemis
     int is_playing = 1;
     int fps = 1;
     int fpstimer = 0;
+    int framerate = 1;
     Uint32 start = SDL_GetTicks();
     double startFire = 0.;
     double dt;
@@ -223,9 +223,11 @@ void boucleDeJeu(SDL_Renderer* renderer, player* player, listEnemy* listeEnnemis
         }
 
         // Gestion des fps
+
         fps++;
         start = end;
-        fpsCounter(&fps,&fpstimer,renderer,font);
+        fpsCounter(&fps,&fpstimer,&framerate);
+        printFPS(renderer,framerate,font);
 
         // Rendu
         SDL_RenderPresent(renderer);
