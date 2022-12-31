@@ -54,6 +54,7 @@ int afficherMenu(SDL_Renderer* renderer, int type){
 
     while(1){
         Uint32 end = SDL_GetTicks();
+        TTF_Font* font = load_font("assets/fonts/Minecraft.ttf",FONT_SIZE);
 
         //Cap à 60 fps
         if(fpsCap(start,&end)) {continue;}
@@ -141,7 +142,8 @@ int afficherMenu(SDL_Renderer* renderer, int type){
         // Gestion des fps
         fps++;
         start = end;
-        fpsCounter(&fps,&fpstimer);
+        fpsCounter(&fps,&fpstimer,renderer,font);
+        clean_font(font);
     }
 }
 
@@ -220,13 +222,13 @@ void boucleDeJeu(SDL_Renderer* renderer, player* player, listEnemy* listeEnnemis
             printScore(renderer,player,font);
         }
 
-        // Rendu
-        SDL_RenderPresent(renderer);
-
         // Gestion des fps
         fps++;
         start = end;
-        fpsCounter(&fps,&fpstimer);
+        fpsCounter(&fps,&fpstimer,renderer,font);
+
+        // Rendu
+        SDL_RenderPresent(renderer);
 
         if(getPlayerLife(player) <= 0){
             is_playing = 0;

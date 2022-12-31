@@ -132,5 +132,32 @@ void printLives(SDL_Renderer* renderer, player* Player, TTF_Font* font);
  */
 void printScore(SDL_Renderer *renderer, player* Player, TTF_Font* font);
 
+/* ----- FPS ----- */
+
+/**
+ * @brief Donne le nombre de fps
+ * @param fps le nombre d'image par seconde
+ * @param fpstimer l'image de la dernière seconde
+ * @param renderer Le renderer
+ * @param font La police
+ */
+void fpsCounter(int* fps, int* fpstimer,SDL_Renderer* renderer, TTF_Font* font);
+
+/**
+ * @brief Limite le nombre de fps à 60
+ * @param start le tick de départ
+ * @param end le tick actuel
+ * @return 1 si on depasse les 60 fps et 0 sinon
+ */
+int fpsCap(Uint32 start, Uint32* end);
+
+/**
+ * @brief Affiche les fps
+ * @param renderer Le renderer
+ * @param fps Les fps
+ * @param font La police
+ */
+void printFPS(SDL_Renderer* renderer, int* fps, TTF_Font* font);
+
 
 #endif
