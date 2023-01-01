@@ -5,8 +5,10 @@
 #include "fonts.h"
 
 SDL_Texture* loadSprite(SDL_Renderer* renderer, const char* file){
+    //Création d'une surface à partir d'une image
     SDL_Surface* sprite = SDL_LoadBMP(file);
     SDL_SetColorKey(sprite, SDL_TRUE, SDL_MapRGB(sprite->format, 255, 0, 255));
+    //Création d'une texture à partir d'une surface
     SDL_Texture* textureSprite = SDL_CreateTextureFromSurface(renderer, sprite);
     SDL_FreeSurface(sprite);
     return textureSprite;
@@ -154,6 +156,7 @@ void printLives(SDL_Renderer* renderer, player* Player, TTF_Font* font){
 
 void printScore(SDL_Renderer *renderer, player* Player, TTF_Font* font){
     char *score_str = malloc(sizeof(char)*3);     //Score
+
     SDL_itoa(*getPlayerScore(Player), score_str, 10);      //Conversion du score en texte
 
     int taille_txt = strlen("Score : ");

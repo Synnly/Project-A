@@ -61,9 +61,10 @@ player initPLayer(){
 }
 
 void playerTakeDamage(player* Player, int dmg){
+    //Si les points de dégats sont supérieur aux pv du joueur alors on lui met ses pv a 0
     if(dmg > getPlayerLife(Player)){
         setPlayerLife(Player,0);
-    }else{
+    }else{// Sinon il prend le nombre de dégats donné
         setPlayerLife(Player, getPlayerLife(Player)-dmg);
     }
 }

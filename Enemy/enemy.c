@@ -67,22 +67,6 @@ enemy initEnemy(float posX, float posY, int type){
 
 /* ----- Autre ----- */
 
-int isSameEnemy(enemy* Enemy1, enemy* Enemy2){
-
-    if(Enemy1 == NULL || Enemy2 == NULL){
-        printf("Ennemi1 ou 2 null\n");
-        return 0;
-    }
-
-    else if((getEnemyPosX(Enemy1) == getEnemyPosX(Enemy2)) && (getEnemyPosY(Enemy1) == getEnemyPosY(Enemy2)) &&
-            (getEnemyHeight(Enemy1) == getEnemyHeight(Enemy2)) && (getEnemyWidth(Enemy1) == getEnemyWidth(Enemy2)) &&
-            (getEnemySpeed(Enemy1) == getEnemySpeed(Enemy2)) && (getEnemyLife(Enemy1) == getEnemyLife(Enemy2)) &&
-            (getEnemyType(Enemy1) == getEnemyType(Enemy2))){
-        return 1;
-    }
-    return 0;
-}
-
 void enemyTakeDamage(enemy* Enemy, int dmg){
     if(dmg > getEnemyLife(Enemy)){
         setEnemyLife(Enemy,0);

@@ -6,9 +6,6 @@
 #include <stdlib.h>
 
 
-
-/* ----- Autres ----- */
-
 void handleEvents(SDL_Event* event, int* is_playing, player* player, bloc* ListeBlocs, listBullet* listeBalles, double dt, double* startFire, int mouseX, int mouseY, Uint32 mouseBitMask, int* gameState) {
 
     // On retire tous les evenements sauf l'indication de fermer le jeu
@@ -123,7 +120,7 @@ void handleEvents(SDL_Event* event, int* is_playing, player* player, bloc* Liste
         *startFire += dt;
     }
 }
-
+/*-------- Déplacements et Collisions ---------*/
 void moveToPlayer(enemy* enemy, listEnemy* ListeEnnemis, bloc* ListeBlocs, player* player, double dt){
     //Distance de l'ennemi au joueur
     float distToPlayer = sqrt(pow(getPlayerPosX(player) - getEnemyPosX(enemy), 2) + pow(getPlayerPosY(player) - getEnemyPosY(enemy), 2));
@@ -267,6 +264,7 @@ void moveBullets(listBullet* ListeBalles, bloc* ListeBlocs, double dt){
     }
 }
 
+/*---------- Autres ----------*/
 bloc* initListBlocFile(const char* nomFichier){
     char* tabFichier = readFile(nomFichier);
 

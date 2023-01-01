@@ -141,14 +141,6 @@ enemy initEnemy(float posX, float posY, int type);
 /* ----- Autre ----- */
 
 /**
- * @brief Compare deux ennemis
- * @param Enemy1 le premier ennmi
- * @param Enemy2 le deuxieme ennemi
- * @return 1 si les deux ennemis sont les mêmes 0 sinon
- */
-int isSameEnemy(enemy * Enemy1, enemy * Enemy2);
-
-/**
  * @brief retire dmg points de vie a un enemy
  * @param Enemy L'enemy
  * @param dmg Le nombre de pv a retirer

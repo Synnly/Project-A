@@ -71,7 +71,7 @@ void spreadObstacles(bloc* ListeBlocs, int current){
     if(getBlocSpread(&ListeBlocs[current]) >= random){
         setBlocObstacle(&ListeBlocs[current]);
 
-        // pourcentage de change de contamination
+        // pourcentage de chance de contamination
         for(int pos = current-1; pos <= current+1; pos++){
 
             if (pos >= getListeWidth()) {
