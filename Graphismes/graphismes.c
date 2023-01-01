@@ -5,8 +5,10 @@
 #include "fonts.h"
 
 SDL_Texture* loadSprite(SDL_Renderer* renderer, const char* file){
+    //Création d'une surface à partir d'une image
     SDL_Surface* sprite = SDL_LoadBMP(file);
     SDL_SetColorKey(sprite, SDL_TRUE, SDL_MapRGB(sprite->format, 255, 0, 255));
+    //Création d'une texture à partir d'une surface
     SDL_Texture* textureSprite = SDL_CreateTextureFromSurface(renderer, sprite);
     SDL_FreeSurface(sprite);
     return textureSprite;
@@ -153,7 +155,8 @@ void printLives(SDL_Renderer* renderer, player* Player, TTF_Font* font){
 }
 
 void printScore(SDL_Renderer *renderer, player* Player, TTF_Font* font){
-    char *score_str = malloc(sizeof(char)*3);     //Score (max 999)
+    char *score_str = malloc(sizeof(char)*3);     //Score
+
     SDL_itoa(*getPlayerScore(Player), score_str, 10);      //Conversion du score en texte
 
     int taille_txt = strlen("Score : ");
@@ -163,4 +166,36 @@ void printScore(SDL_Renderer *renderer, player* Player, TTF_Font* font){
     apply_text(renderer, 20 + taille_txt*(FONT_SIZE), 40, (FONT_SIZE)*strlen(score_str), FONT_SIZE*2, score_str, font);
 
     free(score_str);
+}
+
+/* ----- FPS ----- */
+
+void fpsCounter(int* fps, int* fpstimer, int* framerate){
+    int fpsNow = SDL_GetTicks();
+    if(fpsNow > *fpstimer + 1000){
+        *fpstimer = fpsNow;
+        *framerate = *fps;
+        *fps = 1;
+    }
+}
+
+int fpsCap(Uint32 start, Uint32* end){
+    *end = SDL_GetTicks();
+    if (*end-start < 1000./FPS) {
+        return 1;
+    }
+    return 0;
+}
+
+void printFPS(SDL_Renderer* renderer, int fps, TTF_Font* font){
+    char *fps_str = malloc(sizeof(char)*3);     // Les FPS
+    SDL_itoa(fps, fps_str, 10);      //Conversion des FPS en texte
+
+    int taille_txt = strlen("FPS : ");
+
+    //Affichage
+    apply_text(renderer, 1100, 40, taille_txt*(FONT_SIZE), FONT_SIZE*2, "FPS : ", font);
+    apply_text(renderer, 1100 + taille_txt*(FONT_SIZE), 40, (FONT_SIZE)*strlen(fps_str), FONT_SIZE*2, fps_str, font);
+
+    free(fps_str);
 }

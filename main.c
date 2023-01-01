@@ -12,13 +12,14 @@
 int afficherMenu(SDL_Renderer* renderer, int type){
     int fps = 1;
     int fpstimer = 0;
+    int framerate = 1;
     Uint32 start = SDL_GetTicks();
-
-    // Buffer pour getMouseState
-    int x,y;
     sprite Bouton1;
     sprite Bouton2;
     sprite Bouton3;
+
+    // Buffer pour getMouseState
+    int x,y;
 
     if(type == 0){ // Menu principal
         // Sprites des boutons
@@ -84,6 +85,7 @@ int afficherMenu(SDL_Renderer* renderer, int type){
 
                     for(int i = 0; i <NBBOUTONS;i++){
 
+                        //Déclaration de variables pour alléger le code
                         float xS = getSpritePosX(&boutons[i]);
                         float yS = getSpritePosY(&boutons[i]);
                         int wS = getSpriteWidth(&boutons[i]);
@@ -102,6 +104,7 @@ int afficherMenu(SDL_Renderer* renderer, int type){
 
                     for(int i = 0; i<NBBOUTONS; i++){
 
+                        //Déclaration de variables pour alléger le code
                         float xS = getSpritePosX(&boutons[i]);
                         float yS = getSpritePosY(&boutons[i]);
                         int wS = getSpriteWidth(&boutons[i]);
@@ -122,6 +125,7 @@ int afficherMenu(SDL_Renderer* renderer, int type){
         // La souris passe sur un bouton
         for(int i = 0; i <NBBOUTONS;i++){
 
+            //Déclaration de variables pour alléger le code
             float xS = getSpritePosX(&boutons[i]);
             float yS = getSpritePosY(&boutons[i]);
             int wS = getSpriteWidth(&boutons[i]);
@@ -141,7 +145,7 @@ int afficherMenu(SDL_Renderer* renderer, int type){
         // Gestion des fps
         fps++;
         start = end;
-        fpsCounter(&fps,&fpstimer);
+        fpsCounter(&fps,&fpstimer,&framerate);
     }
 }
 
@@ -152,6 +156,7 @@ void boucleDeJeu(SDL_Renderer* renderer, player* player, listEnemy* listeEnnemis
     int is_playing = 1;
     int fps = 1;
     int fpstimer = 0;
+    int framerate = 1;
     Uint32 start = SDL_GetTicks();
     double startFire = 0.;
     double dt;
@@ -220,13 +225,15 @@ void boucleDeJeu(SDL_Renderer* renderer, player* player, listEnemy* listeEnnemis
             printScore(renderer,player,font);
         }
 
-        // Rendu
-        SDL_RenderPresent(renderer);
-
         // Gestion des fps
+
         fps++;
         start = end;
-        fpsCounter(&fps,&fpstimer);
+        fpsCounter(&fps,&fpstimer,&framerate);
+        printFPS(renderer,framerate,font);
+
+        // Rendu
+        SDL_RenderPresent(renderer);
 
         if(getPlayerLife(player) <= 0){
             is_playing = 0;

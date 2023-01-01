@@ -5,26 +5,6 @@
 #include "../Files/files.h"
 #include <stdlib.h>
 
-/* ----- FPS ----- */
-
-void fpsCounter(int* fps, int* fpstimer){
-    int fpsNow = SDL_GetTicks();
-    if(fpsNow > *fpstimer + 1000){
-        printf("%d fps\n", *fps);
-        *fpstimer = fpsNow;
-        *fps = 1;
-    }
-}
-
-int fpsCap(Uint32 start, Uint32* end){
-    *end = SDL_GetTicks();
-    if (*end-start < 1000./FPS) {
-        return 1;
-    }
-    return 0;
-}
-
-/* ----- Autres ----- */
 
 void handleEvents(SDL_Event* event, int* is_playing, player* player, bloc* ListeBlocs, listBullet* listeBalles, double dt, double* startFire, int mouseX, int mouseY, Uint32 mouseBitMask, int* gameState) {
 
@@ -140,7 +120,7 @@ void handleEvents(SDL_Event* event, int* is_playing, player* player, bloc* Liste
         *startFire += dt;
     }
 }
-
+/*-------- Déplacements et Collisions ---------*/
 void moveToPlayer(enemy* enemy, listEnemy* ListeEnnemis, bloc* ListeBlocs, player* player, double dt){
     //Distance de l'ennemi au joueur
     float distToPlayer = sqrt(pow(getPlayerPosX(player) - getEnemyPosX(enemy), 2) + pow(getPlayerPosY(player) - getEnemyPosY(enemy), 2));
@@ -284,6 +264,7 @@ void moveBullets(listBullet* ListeBalles, bloc* ListeBlocs, double dt){
     }
 }
 
+/*---------- Autres ----------*/
 bloc* initListBlocFile(const char* nomFichier){
     char* tabFichier = readFile(nomFichier);
 

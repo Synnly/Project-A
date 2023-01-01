@@ -2,7 +2,7 @@
 #include <stdlib.h>
 #include "../Bloc/listBloc.h"
 #include "files.h"
-#include "math.h"
+#include "../Donnees/maths.h"
 
 char* readFile(const char* nomFichier){
     FILE* fichier = fopen(nomFichier, "r");
@@ -114,16 +114,20 @@ void sortLeaderboard(int length){
         perror("Erreur d'ouverture du fichier");
     }
 
+    //Initialisation du tableau qui va contenir tous les scores
     int tab[length];
 
+    //Remplissage du tableau de score
     for(int i = 0; i < length; i++){
         fscanf(leaderboard, "%d", &tab[i]);
     }
 
+    //Triage du tableau de score
     quickSortDesc(tab,0,length-1);
     for(int j = 0; j < length; j++){
         fprintf(fichier,"%d%c",tab[j],'\n');
     }
+    //Fermeture des fichiers
     fclose(fichier);
     fclose(leaderboard);
     remove("assets/save/leaderboard");

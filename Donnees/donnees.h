@@ -21,22 +21,7 @@ typedef struct listBloc_t listBloc;
 typedef struct bullet_t bullet;
 typedef struct listBullet_t listBullet;
 
-/* ----- FPS ----- */
 
-/**
- * @brief Donne le nombre de fps
- * @param fps le nombre d'image par seconde
- * @param fpstimer l'image de la dernière seconde
- */
-void fpsCounter(int* fps, int* fpstimer);
-
-/**
- * @brief Limite le nombre de fps à 60
- * @param start le tick de départ
- * @param end le tick actuel
- * @return 1 si on depasse les 60 fps et 0 sinon
- */
-int fpsCap(Uint32 start, Uint32* end);
 
 /* ----- Autres ----- */
 
