@@ -2,7 +2,7 @@
 #include <stdlib.h>
 #include "../Bloc/listBloc.h"
 #include "files.h"
-#include "math.h"
+#include "../Donnees/maths.h"
 
 char* readFile(const char* nomFichier){
     FILE* fichier = fopen(nomFichier, "r");
