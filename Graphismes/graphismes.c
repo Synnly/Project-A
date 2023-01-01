@@ -8,6 +8,7 @@ SDL_Texture* loadSprite(SDL_Renderer* renderer, const char* file){
     //Création d'une surface à partir d'une image
     SDL_Surface* sprite = SDL_LoadBMP(file);
     SDL_SetColorKey(sprite, SDL_TRUE, SDL_MapRGB(sprite->format, 255, 0, 255));
+
     //Création d'une texture à partir d'une surface
     SDL_Texture* textureSprite = SDL_CreateTextureFromSurface(renderer, sprite);
     SDL_FreeSurface(sprite);
@@ -16,7 +17,7 @@ SDL_Texture* loadSprite(SDL_Renderer* renderer, const char* file){
 
 void initListBlocTextures(SDL_Renderer* renderer, bloc* ListeBlocs){
     if(!isEmptyLB(ListeBlocs)){
-        for(int i = 0; i < sizeOfListBloc(ListeBlocs); i ++){
+        for(int i = 0; i < sizeOfListBloc(); i ++){
             setBlocTexture(getBloc(ListeBlocs,i),loadSprite(renderer, "assets/img/wall.bmp"));
         }
     }
@@ -64,7 +65,7 @@ void drawSprite(SDL_Renderer* renderer, int x, int y, int w, int h, int spriteIn
 
 void drawListBlocSprites(SDL_Renderer* renderer, bloc* ListeBlocs){
     if(!isEmptyLB(ListeBlocs)){
-        for(int i = 0; i < sizeOfListBloc(ListeBlocs); i ++) {
+        for(int i = 0; i < sizeOfListBloc(); i ++) {
             drawSprite(renderer, getBlocPosX(getBloc(ListeBlocs,i)), getBlocPosY(getBloc(ListeBlocs,i)), PLAYER_SIZE,
                        PLAYER_SIZE, getBlocIsObstacle(getBloc(ListeBlocs,i)), getBlocTexture(getBloc(ListeBlocs,i)));
         }
@@ -87,7 +88,7 @@ void drawListBulletSprites(SDL_Renderer* renderer, listBullet * ListeBalle){
 
 void destroyListBlocTextures(bloc* ListeBlocs){
     if(!isEmptyLB(ListeBlocs)){
-        for(int i = 0; i < sizeOfListBloc(ListeBlocs); i ++) {
+        for(int i = 0; i < sizeOfListBloc(); i ++) {
             SDL_DestroyTexture(getBlocTexture(getBloc(ListeBlocs,i)));
         }
     }

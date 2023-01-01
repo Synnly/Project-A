@@ -1,24 +1,10 @@
 #include "fonts.h"
 
-
-
-/**
- * \brief La fonction initialise l'environnement TTF
-*/
-
 void init_ttf(){
     if(TTF_Init()==-1) {
         printf("TTF_Init: %s\n", TTF_GetError());
     }
 }
-
-
-/**
- * \brief La fonction charge une police
- * \param path le chemin du fichier correpondant à la police
- * \param font_size la taille de la police
- * \return la police chargée
-*/
 
 TTF_Font * load_font(const char *path, int font_size){
     TTF_Font *font = TTF_OpenFont(path, font_size);
@@ -27,19 +13,6 @@ TTF_Font * load_font(const char *path, int font_size){
     }
     return font;
 }
-
-
-/**
- * \brief La fonction applique un texte dans une certaine police sur le renderer à une certaine position et avec une certaine dimension
- * \param renderer le renderer
- * \param x abscisse du coin en haut à gauche du texte
- * \param y son abscisse
- * \param w la largeur du message
- * \param h sa hauteur
- * \param text le texte à afficher
- * \param font la police
-*/
-
 
 void apply_text(SDL_Renderer *renderer,int x, int y, int w, int h, const char *text, TTF_Font *font){
     SDL_Color color = { 225, 225, 248 };
@@ -50,7 +23,6 @@ void apply_text(SDL_Renderer *renderer,int x, int y, int w, int h, const char *t
     SDL_FreeSurface(surface);
     SDL_Rect dstrect2 = {x, y, w, h};
     SDL_RenderCopy(renderer, texture, NULL, &dstrect2);
-
 }
 
 void clean_font(TTF_Font * font){

@@ -96,7 +96,7 @@ void setBulletSpeeds(bullet* Balle, int x, int y);
 void drawLine(SDL_Renderer* renderer, float x1, float y1, float x2, float y2);
 
 /**
- * @brief Indique si la balle est en collision avec un ennemiw
+ * @brief Indique si la balle est en collision avec un ennemi
  * @param Balle La balle
  * @param listeEnnemis La liste des ennemis
  * @param score Le score du joueur

@@ -56,10 +56,9 @@ int isEmptyLB(bloc* ListeBlocs);
 void freeListBloc(bloc* ListeBlocs);
 /**
  * @brief Donne la taille de la liste
- * @param ListeBlocs
  * @return la taille de la liste
  */
-int sizeOfListBloc(bloc* ListeBlocs);
+int sizeOfListBloc();
 
 /**
  * @brief Transforme le bloc en obstacle avec assez de chance et transmets la contagion a ses plus proches voisins

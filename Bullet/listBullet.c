@@ -14,12 +14,8 @@ void setBullet(listBullet *ListeBalles, bullet Balle) {
     ListeBalles->Bullet = Balle;
 }
 
-int setNextBullet(listBullet * ListeBalles, listBullet * ListeBallesNext){
+void setNextBullet(listBullet * ListeBalles, listBullet * ListeBallesNext){
     ListeBalles->next = ListeBallesNext;
-    if(ListeBalles->next == ListeBallesNext){
-        return 0;
-    }
-    return -1;
 }
 
 /* ----- Initialisation ----- */

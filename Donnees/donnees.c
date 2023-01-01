@@ -2,7 +2,6 @@
 #include "donnees.h"
 #include "constantes.h"
 #include "maths.h"
-#include "../Files/files.h"
 #include <stdlib.h>
 
 
@@ -104,7 +103,7 @@ void handleEvents(SDL_Event* event, int* is_playing, player* player, bloc* Liste
             }
         }
 
-        if ((keystates[SDL_SCANCODE_SPACE] || mouseBitMask == SDL_BUTTON(SDL_BUTTON_LMASK)) && *startFire>0.25){
+        if ((keystates[SDL_SCANCODE_SPACE] || mouseBitMask == SDL_BUTTON(SDL_BUTTON_LMASK)) && *startFire>0.25){ // Tir
 
             // Initialisation et ajout de la balle dans la liste
             bullet Balle = initBullet(getPlayerPosX(player) + getSpriteWidth(getPlayerSprite(player)) / 2,getPlayerPosY(player) + getSpriteHeight(getPlayerSprite(player)) / 2, 0, 0, 0);
@@ -120,7 +119,9 @@ void handleEvents(SDL_Event* event, int* is_playing, player* player, bloc* Liste
         *startFire += dt;
     }
 }
+
 /*-------- Déplacements et Collisions ---------*/
+
 void moveToPlayer(enemy* enemy, listEnemy* ListeEnnemis, bloc* ListeBlocs, player* player, double dt){
     //Distance de l'ennemi au joueur
     float distToPlayer = sqrt(pow(getPlayerPosX(player) - getEnemyPosX(enemy), 2) + pow(getPlayerPosY(player) - getEnemyPosY(enemy), 2));
@@ -149,6 +150,7 @@ void moveToPlayer(enemy* enemy, listEnemy* ListeEnnemis, bloc* ListeBlocs, playe
 
 void moveListEnemyToPlayer(listEnemy* ListeEnnemisActuelle, listEnemy* ListeEnnemis, bloc* ListeBlocs, player* player, double dt){
     if(!isEmptyLE(ListeEnnemisActuelle)){
+
         //Si pas en collision avec le joueur
         if(inCollision(getPlayerSprite(player), getEnemySprite(getEnemy(ListeEnnemisActuelle)))) {
             setSpriteToBeDestroyed(getEnemySprite(getEnemy(ListeEnnemisActuelle)),1);
@@ -194,7 +196,7 @@ int inCollision(sprite* Sprite1, sprite* Sprite2) {
 
 int spriteCollidesWalls(sprite* Sprite, bloc* ListeBlocs){
     if(!isEmptyLB(ListeBlocs)){
-        for(int i = 0; i < sizeOfListBloc(ListeBlocs);i++){
+        for(int i = 0; i < sizeOfListBloc();i++){
             if(getBlocIsObstacle(getBloc(ListeBlocs,i)) && (inCollision(Sprite, getBlocSprite(getBloc(ListeBlocs,i))))){
                 return 1;
             }
@@ -211,6 +213,7 @@ void drawLine(SDL_Renderer* renderer, float x1, float y1, float x2, float y2){
 
 int bulletCollidesEnemies(bullet* Balle, listEnemy* listeEnnemis, int* score){
     if(!isEmptyLE(listeEnnemis)){
+
         if(inCollision(getBulletSprite(Balle), getEnemySprite(getEnemy(listeEnnemis)))){
             enemyTakeDamage(getEnemy(listeEnnemis),PISTOL_DMG);
 
@@ -243,7 +246,8 @@ int enemyIsCollidingListEnemy(enemy* Ennemi, listEnemy* ListeEnnemis){
             return enemyIsCollidingListEnemy(Ennemi, getNextE(ListeEnnemis));
         }
         else {
-            return inCollision(getEnemySprite(Ennemi), getEnemySprite(getEnemy(ListeEnnemis))) || enemyIsCollidingListEnemy(Ennemi, getNextE(ListeEnnemis));
+            return inCollision(getEnemySprite(Ennemi), getEnemySprite(getEnemy(ListeEnnemis))) ||
+                   enemyIsCollidingListEnemy(Ennemi, getNextE(ListeEnnemis));
         }
     }
     return 0;
@@ -268,6 +272,7 @@ void moveBullets(listBullet* ListeBalles, bloc* ListeBlocs, double dt){
 bloc* initListBlocFile(const char* nomFichier){
     char* tabFichier = readFile(nomFichier);
 
+    // Fichier vide
     if(tabFichier == NULL) {
         return NULL;
     }
@@ -275,7 +280,7 @@ bloc* initListBlocFile(const char* nomFichier){
     else {
         bloc* ListeBloc = malloc((getListeHeight() * getListeWidth()) * sizeof(bloc));
 
-        for (int i = 0; i < (sizeOfListBloc(ListeBloc)); i++) {
+        for (int i = 0; i < (sizeOfListBloc()); i++) {
             int posx = (i%getListeWidth()) * BLOC_SIZE;
             int posy = (i/getListeWidth()) * BLOC_SIZE;
             bloc newBloc = initBloc(posx, posy, 0);

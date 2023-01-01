@@ -1,6 +1,5 @@
 #include "sprite.h"
 #include "../Donnees/donnees.h"
-#include "../Donnees/constantes.h"
 
 /* ----- Getter ----- */
 

@@ -37,7 +37,7 @@ void writeFile(const char* nomFichier, bloc* ListeBloc){
         perror("Erreur d'overture du fichier\n");
     }
     else {
-        for(int i = 0; i<(sizeOfListBloc(ListeBloc)); i++){
+        for(int i = 0; i<(sizeOfListBloc()); i++){
             // Arret de ligne
             if(i%getListeWidth() == 0 && i != 0){
                 fprintf(fichier, "%c", '\n');

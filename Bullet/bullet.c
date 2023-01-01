@@ -1,6 +1,5 @@
 #include "bullet.h"
 #include "../Donnees/constantes.h"
-#include "../Donnees/maths.h"
 #include <SDL2/SDL.h>
 
 /* ----- Getter ----- */
@@ -59,6 +58,7 @@ bullet initBullet(float posX, float posY, int speedX, int speedY, int type){
         //à compléter plus tard (avec un peu de chance)
         case 1:
             break;
+
         default:
             setBulletXSpeed(&Balle, speedX);
             setBulletYSpeed(&Balle, speedY);

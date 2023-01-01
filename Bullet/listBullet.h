@@ -41,9 +41,8 @@ void setBullet(listBullet *ListeBalles, bullet Balle);
  * @brief Met à jour la balle suivante de la liste
  * @param ListeBalles La liste des balles
  * @param ListeBallesNext Le prochain maillon de la liste
- * @return int
  */
-int setNextBullet(listBullet * ListeBalles, listBullet * ListeBallesNext);
+void setNextBullet(listBullet * ListeBalles, listBullet * ListeBallesNext);
 
 /* ----- Initialisation ----- */
 
