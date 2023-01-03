@@ -2,7 +2,7 @@
 #define PROJECT_A_CONSTANTES_H
 
 #define NBBOUTONS 3
-#define EPSILON 1e-2
+#define EPSILON 1e-3
 #define FPS 60
 
 #define SCREEN_WIDTH 1280
@@ -28,6 +28,6 @@
 #define PISTOL_TYPE 0
 #define PISTOL_DMG 1
 
-#define NB_ENNEMIS 20
+#define NB_ENNEMIS 50
 
 #endif //PROJECT_A_CONSTANTES_H

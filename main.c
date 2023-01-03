@@ -164,9 +164,9 @@ void boucleDeJeu(SDL_Renderer* renderer, player* player, listEnemy* listeEnnemis
     Uint32 mouseBitMask;
 
 
+    TTF_Font* font = load_font("assets/fonts/Minecraft.ttf",FONT_SIZE);
 
     while(is_playing){
-        TTF_Font* font = load_font("assets/fonts/Minecraft.ttf",FONT_SIZE);
         Uint32 end = SDL_GetTicks();
         dt = (end-start)/1000.;
 
@@ -184,16 +184,14 @@ void boucleDeJeu(SDL_Renderer* renderer, player* player, listEnemy* listeEnnemis
         SDL_Event event;
         handleEvents(&event, &is_playing, player, listeBlocs, listeBalles, dt, &startFire, mouseX, mouseY, mouseBitMask, gameState);
 
-        //Fermeture du jeu
-        if(!is_playing){break;}
+
 
         bulletsCollidesEnemies(listeBalles, listeEnnemis, getPlayerScore(player));
         destroyToBeDestroyedBulletTextures(listeBalles);
         deleteBulletsToBeDestroyed(listeBalles);
 
-        //destroyToBeDestroyedEnemyTextures(listeEnnemis);
+        destroyToBeDestroyedEnemyTextures(listeEnnemis);
         deleteEnemiesToBeDestroyed(listeEnnemis);
-
 
         //Fermeture du jeu
         if(!is_playing){break;}
@@ -239,8 +237,8 @@ void boucleDeJeu(SDL_Renderer* renderer, player* player, listEnemy* listeEnnemis
             is_playing = 0;
         }
 
-        clean_font(font);
     }
+    clean_font(font);
 }
 
 
@@ -314,6 +312,9 @@ int main(){
         freeListBloc(listeBlocs);
         listeBlocs = NULL;
 
+        //Enregistrement du score du joueur
+        writeScore("assets/save/leaderboard", getPlayerScore(&joueur));
+
         // Si le joueur n'a pas quitté le jeu
         if(gameState != 2){
             gameState = afficherMenu(renderer,type);
@@ -325,9 +326,6 @@ int main(){
             gameState = afficherMenu(renderer, type);
         }
     }
-
-    //Enregistrement du score du joueur
-    writeScore("assets/save/leaderboard", getPlayerScore(&joueur));
 
     // Nettoyage final
     endSDL(fenetre, renderer);

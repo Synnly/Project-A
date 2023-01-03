@@ -79,7 +79,7 @@ void writeScore(const char* nomFichier, int* score){
     fprintf(fichier,"%d%c",*score,'\n');
     fclose(fichier);
 
-    fopen(nomFichier,"r");
+    fichier = fopen(nomFichier,"r");
 
     //Compte du nombre de ligne du classement
     char c = fgetc(fichier);

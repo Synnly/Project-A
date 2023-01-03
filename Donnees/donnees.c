@@ -103,7 +103,7 @@ void handleEvents(SDL_Event* event, int* is_playing, player* player, bloc* Liste
             }
         }
 
-        if ((keystates[SDL_SCANCODE_SPACE] || mouseBitMask == SDL_BUTTON(SDL_BUTTON_LMASK)) && *startFire>0.25){ // Tir
+        if ((keystates[SDL_SCANCODE_SPACE] || mouseBitMask == SDL_BUTTON(SDL_BUTTON_LMASK)) && *startFire>0.33){ // Tir
 
             // Initialisation et ajout de la balle dans la liste
             bullet Balle = initBullet(getPlayerPosX(player) + getSpriteWidth(getPlayerSprite(player)) / 2,getPlayerPosY(player) + getSpriteHeight(getPlayerSprite(player)) / 2, 0, 0, 0);
